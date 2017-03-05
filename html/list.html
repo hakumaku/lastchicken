@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>HTML list</title>
+	</head>
+
+	<body>
+	<style type="text/css">
+		ul{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #333333;
+		}
+		li{
+			float: lef;
+		}
+		li a{
+			display: block;
+			color: white;
+			text-align: center;
+			padding: 16px;
+			text-decoration: none;
+		}
+
+	</style>
+		<h2>Unordered list(&lt;ul&gt;)</h2>
+			<ul style="list-style-type: disc;">
+				<li><a href="#home">Home</a></li>
+			</ul>
+			<ul style="list-style-type: circle;">
+				<li><a href="#news">News</a></li>
+			</ul>
+			<ul style="list-style-type: square;">
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+			<ul>
+				<li><a href="#about">About</a></li>
+			</ul>
+		<h2>Ordered list(&lt;ol&gt;)</h2>
+		<!--
+			<div>: defines a section in a document(block-level)
+		-->
+		<div style="background-color: green; color: white; padding: 20px;">
+			<ol type="1">
+				<li>Coffee</li>
+					<ol type="A">
+						<li>Coffee</li>
+						<li>Tea</li>
+						<li>Milk</li>
+						<li>Sparkling</li>
+						<li>Icecream</li>
+					</ol>
+				<li>Tea</li>
+					<ol type="a">
+						<li>Coffee</li>
+						<li>Tea</li>
+						<li>Milk</li>
+						<li>Sparkling</li>
+						<li>Icecream</li>
+					</ol>
+				<li>Milk</li>
+					<ol type="I">
+						<li>Coffee</li>
+						<li>Tea</li>
+						<li>Milk</li>
+						<li>Sparkling</li>
+						<li>Icecream</li>
+					</ol>
+				<li>Sparkling</li>
+					<ol type="1">
+						<li>Coffee</li>
+						<li>Tea</li>
+						<li>Milk</li>
+						<li>Sparkling</li>
+						<li>Icecream</li>
+					</ol>
+				<li>Icecream</li>
+					<ol type="i">
+						<li>Coffee</li>
+						<li>Tea</li>
+						<li>Milk</li>
+						<li>Sparkling</li>
+						<li>Icecream</li>
+					</ol>
+			</ol>
+		</div>
+		<h2>Description list(&lt;dl&gt;)</h2>
+		<!--
+			<dt>: definition term
+			<dd>: defitnition description
+		-->
+		<dl>
+		<!--
+			<span>: defines a section in a document(in-line)
+		-->
+			<span style="color:red;"><dt>Coffee</dt></span>
+			<dd>- black hot drink</dd>
+			<dt>Milk</dt>
+			<dd>- white cold drink</dd>
+		</dl>
+	</body>
+
+</html>
