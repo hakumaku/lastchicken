@@ -1,4 +1,4 @@
-Basic HTML
+#Basic HTML
 <!DOCTYPE>  	Defines the document type
 <html> 		Defines an HTML document
 <title> 	Defines a title for the document
@@ -9,7 +9,7 @@ Basic HTML
 <hr> 		Defines a thematic change in the content
 <!--...--> 	Defines a comment
 
-Formatting
+#Formatting
 <abbr> 		Defines an abbreviation or an acronym
 <address> 	Defines contact information for the author/owner of a document/article
 <b> 		Defines bold text
@@ -44,7 +44,7 @@ Formatting
 <var> 		Defines a variable
 <wbr> 		Defines a possible line-break
 
-Forms and Input
+#Forms and Input
 <form> 		Defines an HTML form for user input
 <input> 	Defines an input control
 <textarea> 	Defines a multiline input control (text area)
@@ -59,10 +59,10 @@ Forms and Input
 <keygen> 	Defines a key-pair generator field (for forms)
 <output> 	Defines the result of a calculation
 
-Frame
+#Frame
 <iframe>	Defines an inline frame
 
-Images
+#Images
 <img> 		Defines an image
 <map> 		Defines a client-side image-map
 <area>		Defines an area inside an image-map
@@ -71,14 +71,14 @@ Images
 <figure> 	Specifies self-contained content
 <picture> 	Defines a container for multiple image resources
 
-Audio / Video
+#Audio / Video
 <audio> 	Defines sound content
 <source> 	Defines multiple media resources for media elements
 		(<video>, <audio> and <picture>)
 <track> 	Defines text tracks for media elements (<video> and <audio>)
 <video> 	Defines a video or movie
 
-Lists
+#Lists
 <ul> 		Defines an unordered list
 <ol> 		Defines an ordered list
 <li> 		Defines a list item
@@ -88,7 +88,7 @@ Lists
 <menu> 		Defines a list/menu of commands
 <menuitem> 	Defines a command/menu item that the user can invoke from a popup menu
 
-Tables
+#Tables
 <table> 	Defines a table
 <caption> 	Defines a table caption
 <th> 		Defines a header cell in a table
@@ -100,7 +100,7 @@ Tables
 <col> 		Specifies column properties for each column within a <colgroup> element
 <colgroup> 	Specifies a group of one or more columns in a table for formatting
 
-Styles and Semantics
+#Styles and Semantics
 <style> 	Defines style information for a document
 <div> 		Defines a section in a document
 <span> 		Defines a section in a document
@@ -115,12 +115,12 @@ Styles and Semantics
 <summary> 	Defines a visible heading for a <details> element
 <data> 		Links the given content with a machine-readable translation
 
-Meta Info
+#Meta Info
 <head> 	Defines information about the document
 <meta> 	Defines metadata about an HTML document
 <base> 	Specifies the base URL/target for all relative URLs in a document
 
-Programming
+#Programming
 <script> 	Defines a client-side script
 <noscript> 	Defines an alternate content for users that do not support client-side scripts
 <embed> 	Defines a container for an external (non-HTML) application
