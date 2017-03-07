@@ -25,6 +25,12 @@ del list_two[0]
 list_two.remove('cd')
 print('Deletion: {}'.format(list_two))
 
+#
+# Way better use list.pop(index)
+#
+print('\nlist.pop() ({})'.format(list_one))
+list_one.pop(1)
+print(list_one)
 
 #
 # Invalid Syntax: list_one[4] = 'xyz'
@@ -32,4 +38,14 @@ print('Deletion: {}'.format(list_two))
 #
 print('\nlist.append()')
 list_one.append('xyz')
+print(list_one)
+
+#
+# list.extend(list)
+# list.insert(index, value)
+#
+print('\nlist.extend() & list.insert()')
+list_one.extend([1, 2, 3])
+print(list_one)
+list_one.insert(0, 'pqrst')
 print(list_one)
