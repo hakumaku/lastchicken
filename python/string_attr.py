@@ -12,9 +12,9 @@ print('str.capitalize()\n' + str_one.capitalize() + '\n')
 # Returns a string padded wtih fillchar
 # with the original string centered
 #
-print('str.center() & str.ljust()')
+print('str.center() & str.rjust() & str.ljust()')
+print(str_one.ljust(30, '*'))
 print(str_one.center(30, '*'))
-# rjust... do not have ljust?..
 print(str_one.rjust(30, '*') + '\n')
 
 #
