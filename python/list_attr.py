@@ -77,3 +77,47 @@ temp = temp * 3
 temp_nested = [temp_nested] * 3
 print('temp : {}'.format(temp))					# [a,b,c, ... ,a,b,c]
 print('temp_nested : {}'.format(temp_nested))	# [[a,b,c], ... , [a,b,c]]
+
+#
+# List Comprehension
+# e.g)
+# 	- S = {x^2 : x in {0 ... 9}}
+#	- V = {1, 2, 4, 8, ... , 2^12}
+#	- M = {x | x in S and x even}
+#
+# For a simple list, it is not a bad idea to implement
+# in this way, but for a complicated and long-expression list
+# you should use for-loop.
+#
+S = [x**2 for x in range(10)]
+V = [2**i for i in range(13)]
+M = [x for x in S if x % 2 == 0]
+print('S : ' + str(S))
+print('V : ' + str(V))
+print('M : ' + str(M))
+
+m = [
+	[1, 2, 3],
+	[4, 5, 6],
+	[7, 8, 9]
+]
+
+#
+# matrix = []
+# for row in m:
+# 	for col in row:
+#		matrix.append(col + 10)
+#
+matrix = [col + 10 for row in m for col in row]
+print(matrix)
+
+#
+# matrix = []
+# for row in m:
+#	temp = []
+#	for col in row:
+#		temp.append(col + 10)
+#	matrix.append(temp)
+#
+matrix = [[col + 10 for col in row] for row in m]
+print(matrix)
