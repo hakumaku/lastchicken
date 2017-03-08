@@ -8,12 +8,12 @@
 #
 #*******************************************************************
 #
-# obj.__init__()	Constructor
-# obj.__del__()		Destructor
-# obj.__repr__()	the official representation as a string
-# obj.__str__()		the informal value as a string
-# obj.__bytes__()	the informal value as a byte array
-# obj.__format__()	the value as a formatted string
+# obj.__init__()				Constructor
+# obj.__del__()					Destructor
+# obj.__repr__()				the official representation as a string
+# obj.__str__()					the informal value as a string
+# obj.__bytes__()				the informal value as a byte array
+# obj.__format__()				the value as a formatted string
 # 
 # obj.__iter__()
 # obj.__next__()
