@@ -101,7 +101,7 @@ Tag | Description
 \<menu>|Defines a list/menu of commands
 \<menuitem>|Defines a command/menu item that the user can invoke from a popup menu
 
-#Tables
+###Tables
 Tag | Description
 ------------ | -------------
 \<table>|Defines a table
