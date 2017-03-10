@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<title>HTML map</title>
-	</head>
+<head>
 
-	<body>
-		<p>&lt;map&gt; tag to define an image-map, which has clickable areas</p>
-		<img src="./images/sample1.jpg" alt="./images/sample2.jpg"
-			usemap="#clickable" style="width: 200px; height: 400px;">
-		<!--
-			coords="value":
-				1)x1,y1,x2,y2
-				2)x,y,radius
-				3)x1,y1,x2,y2 ,..., xn,yn
-		-->
-		<map name="clickable">
-			<area title="link.html" shape="rect" coords="0,0,100,200" href="./link.html">
-			<area title="style.html" shape="rect" coords="100,0,200,200" href="./style.html">
-			<area title="basic.html" shape="circle" coords="200,400,30" href="./basic.html">
-		</map>
-	</body>
+<meta charset="utf-8">
+<title>HTML map</title>
+
+</head>
+
+<body>
+
+	<p>&lt;map&gt; tag to define an image-map, which has clickable areas</p>
+	<img src="./images/sample1.jpg" alt="./images/sample2.jpg"
+		usemap="#clickable" style="width: 200px; height: 400px;">
+	<!--
+		coords="value":
+			1)x1,y1,x2,y2
+			2)x,y,radius
+			3)x1,y1,x2,y2 ,..., xn,yn
+	-->
+	<map name="clickable">
+		<area title="link.html" shape="rect" coords="0,0,100,200" href="./link.html">
+		<area title="style.html" shape="rect" coords="100,0,200,200" href="./style.html">
+		<area title="basic.html" shape="circle" coords="200,400,30" href="./basic.html">
+	</map>
+	
+</body>
 
 </html>

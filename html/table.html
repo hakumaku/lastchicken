@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<title>HTML table</title>
-	</head>
+<head>
 
-	<body>
-	<!--
-		border-collapse: to make borders to collapse into one border
-	-->
-	<style type="text/css">
-		table#t01 {
-			border: 2px solid red;
-			border-collapse: collapse;
-			width: 500px;
-			background-color: #f1f1c1;
-		}
-		table#t01 tr:nth-child(even){
-			background-color: #eee;
-		}
-		table#t01 tr:nth-child(odd){
-			background-color: #fff;
-		}
-		table#t01 th{
-			color: white;
-			background-color: black;
-		}
-	</style>
-	<h1>&lt;table&gt; tag</h1>
-	<p>
-		Each table row(tr) is defined with the &lt;tr&gt;tag.<br>
-		A table header(th) is defined with the &lt;th&gt;tag.<br>
-		A table data(td) is defined with the &lt;td&gt;tag.<br>
-	</p>
-	<table id="t01" style="width: 500px">
-		<caption>Profile</caption>
-		<tr>
-			<th rowspan="3">rowspan</th>
-			<th>Firstname</th>
-			<th>Lastname</th>
-			<th>Age</th>
-			<th colspan="3">empty</th>
-		</tr>
-		<tr>
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>50</td>
-			<td colspan="3">colspan</td>
-		</tr>
-		<tr>
-			<td>Eve</td>
-			<td>Jackson</td>
-			<td>94</td>
-			<td>one</td>
-			<td>two</td>
-			<td>three</td>
-		</tr>
-	</table>
+<meta charset="utf-8">
+<title>HTML table</title>
+<!--
+	border-collapse: to make borders to collapse into one border
+-->
+<style type="text/css">
+	table#t01 {
+		border: 2px solid red;
+		border-collapse: collapse;
+		width: 500px;
+		background-color: #f1f1c1;
+	}
+	table#t01 tr:nth-child(even){
+		background-color: #eee;
+	}
+	table#t01 tr:nth-child(odd){
+		background-color: #fff;
+	}
+	table#t01 th{
+		color: white;
+		background-color: black;
+	}
+</style>
 
-	</body>
+</head>
+
+<body>
+<h1>&lt;table&gt; tag</h1>
+<p>
+	Each table row(tr) is defined with the &lt;tr&gt;tag.<br>
+	A table header(th) is defined with the &lt;th&gt;tag.<br>
+	A table data(td) is defined with the &lt;td&gt;tag.<br>
+</p>
+<table id="t01" style="width: 500px">
+	<caption>Profile</caption>
+	<tr>
+		<th rowspan="3">rowspan</th>
+		<th>Firstname</th>
+		<th>Lastname</th>
+		<th>Age</th>
+		<th colspan="3">empty</th>
+	</tr>
+	<tr>
+		<td>Jill</td>
+		<td>Smith</td>
+		<td>50</td>
+		<td colspan="3">colspan</td>
+	</tr>
+	<tr>
+		<td>Eve</td>
+		<td>Jackson</td>
+		<td>94</td>
+		<td>one</td>
+		<td>two</td>
+		<td>three</td>
+	</tr>
+</table>
+
+</body>
 
 </html>
