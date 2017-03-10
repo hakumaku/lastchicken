@@ -1,0 +1,83 @@
+h1 {
+	font-family: 'Varela Round', Helvetica, sans-serif;
+	background-color: #B3FF99;
+	color: black;
+	border-top: 3px solid black;
+	border-bottom: 3px solid black;
+	text-align: center;
+	width: 820px;
+}
+th {
+	font-family: seirf;
+	background-color: #CCEBFF;
+	border-top: 1px dashed black;
+	border-bottom: 1px dashed black;
+}
+table {
+	border: 1px solid black;
+	width: 200px;
+}
+li {
+	border-bottom: 1px solid black;
+	list-style-type: none;
+	text-align: center;
+}
+/*
+ * Also, there are ...
+ *
+ * ":first-of-type", ":last-of-type", ":nth-of-type",
+ *
+ * "a:link"		hasn't visited.
+ * "a:visited"	has visited.
+ * "a:hover"	pass the mouse over it
+ * "a:active"	pressing the mouse button
+ *
+ * ":focus", ":before", ":after", "::selection"
+ *
+ * Attribute Selectors
+ * 	tag[Attribute]
+ *	e.g) a[href^="https://"]
+ *
+ * Descendant Selector		: div p {};
+ * Child Selector			: div > p {};
+ * Adjacent Selector		: div + p {};
+ * General Sibling Selector	: div ~ p {};
+ * Not Selector				: ":not()"
+ *
+ */
+tr.test0 li:first-child {
+	background-color: silver;
+}
+tr.test1 li:last-child {
+	background-color: silver;
+}
+tr.test2 li:nth-child(odd) {
+	background-color: silver;
+}
+tr.test3 li:nth-child(even) {
+	background-color: silver;
+}
+tr.test4 li:nth-child(2) {
+	background-color: silver;
+}
+tr.test5 li:nth-child(5) {
+	background-color: silver;
+}
+tr.test6 li:nth-child(3n) {
+	background-color: silver;
+}
+tr.test7 li:nth-child(2n) {
+	background-color: silver;
+}
+tr.test8 li:nth-child(3n+1) {
+	background-color: silver;
+}
+tr.test9 li:nth-child(4n+2) {
+	background-color: silver;
+}
+tr.test10 li:nth-child(n+3) {
+	background-color: silver;
+}
+tr.test11 li:nth-child(-n+3) {
+	background-color: silver;
+}

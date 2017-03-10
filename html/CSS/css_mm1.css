@@ -1,0 +1,89 @@
+/*
+ *	'Declaration' consists of 'property' + 'value',
+ *	and don't forget semicolon at the end.
+ *
+ *	selector {
+ *		property = value;
+ *		property = value;
+ *	}
+ *
+ *	The pair of curly brackets is called 'Declaration Block'
+ *
+ *	There are 6 kinds of selectors.
+ *	Selectors: "Type", ".Class", "#ID",
+ *			",Group", "*Universal" and "Descendant"
+ *
+ *
+ */
+html {
+	padding-top: 25px;
+	background-image: url('./../images/sample1.jpg');
+}
+
+body {
+	width: 80%;
+	padding: 20px;
+	margin: 0 auto;
+	border-radius: 10px;
+	box-shadow: 10px 10px 10px 10px rgba(0,0,0,.5);
+	background-color: #E1EDEB;
+}
+h1 {
+	font-family: 'Varela Round', 'Arial Black', serif;
+	font-weight: noraml;
+	color: #6A94CC;
+	font-size: 3em;
+	margin: 0;
+}
+h2 {
+	color: #B1967C;
+	font-family: 'Varela Round', 'Arial Black', serif;
+	font-weight: normal;
+	font-size: 2.2em;
+	border-bottom: 2px white solid;
+	background: url(./../images/sample3.jpg) no-repeat 10px 10px;
+	padding: 0 0 2px 60px;
+	margin: 0;
+}
+.intro {
+	color: #666666;
+	font-family: 'Varela Round', Helvetica, sans-serif;
+	font-size: 1.2em;
+	margin-left: 0;
+	margin-bottom: 25px;
+}
+.name {
+	background-color: cyan;
+}
+#id_selector {
+	color: #666666;
+	font-family: Helvetica, sans-serif;
+	font-size: 1.2em;
+	margin-left: 25px;
+}
+p, address {
+	font-family: "palatino Linotype", Baskerville, serif;
+	font-size: 1.25em;
+	color: #616161;
+	line-height: 150%;
+	margin-top: 10px;
+	margin-left: 60px;
+}
+
+
+/*
+ * Descendant Selectors
+ *
+ * Any <strong> tag inside an h1 is blue and bold.
+ * Any <h2> and <p> in class='news'...
+ * It can be combined with classes.
+ *
+ */
+h1 strong { color: blue; font-weight: bold; }
+
+.news h2 { color: red; }
+.news p { color: blue; }
+
+.contact .name { font-weight: bold; }
+.contact .phone { color: blue; }
+.contact .address { color: red; }
