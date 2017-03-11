@@ -1,0 +1,39 @@
+table p {
+	text-align: center;
+	font-weight: bold;
+	font-style: italic;
+	background-color: silver;
+}
+ul.test0 {
+	list-style-type: square;
+}
+ul.test1 {
+	list-style-type: upper-alpha;
+}
+ul.test2 {
+	list-style-type: circle;
+}
+ul.test3 {
+	list-style-type: disc;
+}
+ul.test4 {
+	list-style-type: decimal;
+}
+ul.test5 {
+	list-style-type: decimal-leading-zero;
+}
+ul.test6 {
+	list-style-type: lower-alpha;
+}
+ul.test7 {
+	list-style-type: upper-roman;
+}
+ul.test8 {
+	list-style-type: lower-roman;
+}
+ul.test9 {
+	list-style-position: outside;
+}
+ul.test10 {
+	list-style-position: inside;
+}
