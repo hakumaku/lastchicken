@@ -84,3 +84,15 @@ td.rb {
 		url(./../images/scroll_middle.jpg) left top repeat-y;
 		
 }
+.display_inline {
+	border: 1px solid black;
+	display: inline;
+}
+.display_block {
+	border: 1px solid black;
+	display: block;
+}
+.display_inblock{
+	border: 1px solid black;
+	display: inline-block;
+}
