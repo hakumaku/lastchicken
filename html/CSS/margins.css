@@ -1,0 +1,75 @@
+/*
+ * content - padding - border - margin
+ * Top Right Bottom Left (TRBL)
+ *
+ */
+img.inset {
+	width: 500px;
+	height: 500px;
+	box-shadow: inset 4px 6px 8px rgba(0,0,0, .75)
+}
+img.outset {
+	width: 500px;
+	height: 500px;
+	box-shadow: 4px 6px 8px rgba(0,0,0, .75)
+}
+img {
+	background-color: silver;
+	padding: 10px 10px 10px 10px;
+	border: 10px 10px 10px 10px;
+	margin: 10px 10px 10px 10px;
+}
+td.test0 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px solid rgb(255, 0, 0);
+}
+td.test1 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px dashed rgb(255, 0, 0);
+}
+td.test2 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px dotted rgb(255, 0, 0);
+}
+td.test3 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px double rgb(255, 0, 0);
+}
+td.test4 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px groove rgb(255, 0, 0);
+}
+td.test5 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px inset rgb(255, 0, 0);
+}
+td.test6 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px outset rgb(255, 0, 0);
+}
+td.test7 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: 3px ridge rgb(255, 0, 0);
+}
+td.test8 {
+	padding: 35px 35px 35px 35px;
+	font-size: 50px;
+	text-align: center;
+	border: none;
+}

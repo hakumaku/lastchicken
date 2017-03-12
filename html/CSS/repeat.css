@@ -1,0 +1,86 @@
+.repeat_x {
+	background-image: url(./../images/grass.jpg);
+	background-repeat: repeat-x;
+}
+.repeat_y {
+	background-image: url(./../images/leaves.jpg);
+	background-repeat: repeat-y;
+}
+.repeat_no {
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+}
+td {
+	width: 160px;
+	height: 160px;
+	font-size: 20px;
+	font-weight: bold;
+	border: 2px solid black;
+	text-align: center;
+}
+td.lt {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+td.ct {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+td.rt {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+td.lc {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+td.cc {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+td.rc {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+td.lb {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+td.cb {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+td.rb {
+	background-size: 45px 45px;
+	background-image: url(./../images/sample4.jpg);
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+/*
+ * The ORDER of images matters!!!
+ *	The first images goes on the first layer,
+ *	the second goes on the second.. and so on.
+ */
+.scroll {
+	background:
+		url(./../images/scroll_top.jpg) left top no-repeat,
+		url(./../images/scroll_bottom.jpg) left bottom no-repeat,
+		url(./../images/scroll_middle.jpg) left top repeat-y;
+		
+}
