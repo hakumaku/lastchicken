@@ -31,6 +31,15 @@ book.topic					// => "JavaScript"
 book["fat"]					// => true: another way to access property values.
 book.author = "Flanagan";	// Create new properties by assignment.
 book.contents = {};			// {} is an empty array with no elements.
+
+// JavaScript also supports arrays (numerically indexed lists) of values:
+var primes = [2, 3, 5, 7];	// An array of 4 values, delimited with [ and ].
+primes[0]					// => 2: the first element (index 0) of the array.
+primes.length				// => 4: how many elements in the array.
+primes[primes.length-1]		// => 7: the last element of the array.
+primes[4] = 9;				// Add a new element by assignment.
+primes[4] = 11;				// Or alter an existing element by assginment.
+var empty = [];				// [] is an empty array with no elements.
 empty.length				// => 0
 
 // Arrays and objects can hold other arrays and objects:
@@ -49,7 +58,7 @@ var data = {				// An object with 2 properties.
 3 - 2						// => 1: subtraction
 3 * 2						// => 6: multiplication
 3 / 2						// => 1.5: division
-points[1]x. - points[0].x	// => 1: more complicated operands also work
+points[1].x - points[0].x	// => 1: more complicated operands also work
 "3" + "2"					// => "32": + adds numbers, concatenates strings
 
 // JaveScript defines some shorthand arithmetic operators.
@@ -69,21 +78,21 @@ x < y						// => true: less-than
 x <= y						// => true: less-than or equal
 x > y						// => false: greater-than
 x >= y						// => false: greater-than or equal
-"two" == "three"			// => false: the two strings are different
-"two" > "three"				// => true: "tw" is alphabtically greater than "th"
-false == (x > y)			// => true: false is equal to false
+"two" == "three";			// => false: the two strings are different
+"two" > "three";			// => true: "tw" is alphabtically greater than "th"
+false == (x > y);			// => true: false is equal to false
 
 // Logical operators combine or invert boolean values
-(x == 2) && (y == 3)		// => true: both comparisons are true. && is AND
-(x > 3) || (y < 3)			// => false: neither comparison is true. || is OR
-!(x == y)					// => true: ! inverts a boolean value
+(x == 2) && (y == 3);		// => true: both comparisons are true. && is AND
+(x > 3) || (y < 3);			// => false: neither comparison is true. || is OR
+!(x == y);					// => true: ! inverts a boolean value
 
 // Functions are parameterized blocks of JavaScript code that we can invoke.
 function plus1(x) {			// Define a function named "plus1" with aprameter "x"
 	return x+1;				// Return a value one larger than the value passed in
 }							// Functions are enclosed in curly braces
 
-plus(y)						// => 4: y is 3, so this invocation returns 3+1
+plus1(y);					// => 4: y is 3, so this invocation returns 3+1
 
 var square = function(x) {	// Functions are values and can be assigned to vars
 	return x*x;				// Compute the function's value
@@ -121,7 +130,7 @@ function abs(x) {			// A function to compute the absolute value
 }							// Note return statements nested inside if/else.
 
 function factorial(n) {		// A function to compute factorials
-	var = product = 1;		// Start with a product of 1
+	var product = 1;		// Start with a product of 1
 	while(n > 1) {			// Repeat statements in {} while expr in () is true
 		product *= n;		// Shortcut for product = product * n;
 		n--;				// Shortcut for n = n - 1;
@@ -132,7 +141,7 @@ factorial(4)				// => 24: 1*4*3*2
 
 function factorial2(n) {	// Another version using a different loop
 	var i, product = 1;		// Starts with 1
-	for(1=2; i <= n; 1++)	// Automatically increment i from 2 up to n
+	for(i=2; i <= n; i++)	// Automatically increment i from 2 up to n
 		product *= i;		// Do this each time. {} not needed for 1-line loops
 	return product;			// Return the factorial
 }
