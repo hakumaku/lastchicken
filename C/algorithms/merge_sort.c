@@ -1,14 +1,15 @@
 /*
  * Input: A sequence of n numbers
- * Ouput: A permutation of the input sequence such
- * that a1 <= a2 <= a3 <= ... <= an
+ * Ouput: A permutation of the input sequence
+ * such that a1 <= a2 <= a3 <= ... <= an
  *
  * Pseudocode
  *
  * param:
- *	p: the initial position of the left subarray.
- *	q: the initial position of the right subarray.
- *	r: the last position of its array.
+ *	p: the initial index of the left subarray.
+ *	q+1: it represents the last index of the left subarray.
+ *	q: the initial index of the right subarray.
+ *	r: the last index of its array.
  *
  * MERGE_SORT(A,p,r)
  *	if p < r
@@ -56,7 +57,11 @@ void merge_sort(int *arr, size_t len);
 void msort_divide(int *arr, size_t p, size_t r);
 void msort_merge(int *arr, size_t p, size_t q, size_t r);
 
-/*	Not using SENTINEL_VALUE	*/
+/*
+ * Not using SENTINEL_VALUE.
+ * Just to show what the implementation looks like
+ * if SENTINEL_VALUE is not given.
+ */
 void nsmerge_sort(int *arr, size_t len);
 void nsmsort_divide(int *arr, size_t p, size_t r);
 void nsmsort_merge(int *arr, size_t p, size_t q, size_t r);
@@ -87,7 +92,11 @@ int main(void)
 
 	return 0;
 }
-
+/*
+ * Do not get perplexed with its parameters.
+ * C always subscripts from 0, not 1,
+ * to n-1, not n, or A.length.
+ */
 void pseudo_msort(int *arr, size_t p, size_t r)
 {
 	if(p < r)
@@ -98,7 +107,7 @@ void pseudo_msort(int *arr, size_t p, size_t r)
 		pseudo_merge(arr, p, q, r);
 	}
 }
- void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
+void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 {
 	size_t len1 = q - p + 1;
 	size_t len2 = r - q;
@@ -132,6 +141,7 @@ void pseudo_msort(int *arr, size_t p, size_t r)
 	free(left);
 	free(right);
 }
+
 /*	Just a wrapper	*/
 void merge_sort(int *arr, size_t len)
 {
@@ -143,9 +153,9 @@ void msort_divide(int *arr, size_t p, size_t r)
 	if(p < r)
 	{
 		size_t q = (p + r) >> 1;
-		/*	the left subarray	*/
+		/*	Left subarray	*/
 		msort_divide(arr, p, q);
-		/*	the right subarray	*/
+		/*	Right subarray	*/
 		msort_divide(arr, q+1, r);
 		/*	Merge them	*/
 		msort_merge(arr, p, q, r);
@@ -154,6 +164,10 @@ void msort_divide(int *arr, size_t p, size_t r)
 /*	Merging	*/
 void msort_merge(int *arr, size_t p, size_t q, size_t r)
 {
+	/*
+	 * Note that it's using len2, which is 'r - q', not len1.
+	 * The reason is based on len1 >= len2.
+	 */
 	size_t len = r - q;
 	int i = 0, j = 0, k = p;
 	int *left = NULL, *right = NULL;
@@ -172,7 +186,10 @@ void msort_merge(int *arr, size_t p, size_t q, size_t r)
 	 * Since it divides a target into
 	 * p ~ q and q+1 ~ r, there are two cases
 	 * in which the left subarray is one-element longer
-	 * or the length of left is equal to that of right.
+	 * ,where q == p+1 holds,
+	 * or the length of left is equal to that of right
+	 * ,where p == q holds.
+	 * It doesn't matter if you make it vice versa.
 	 */
 	if(p == q)
 	{
@@ -203,6 +220,7 @@ void msort_merge(int *arr, size_t p, size_t q, size_t r)
 	free(left);
 	free(right);
 }
+
 void nsmerge_sort(int *arr, size_t len)
 {
 	nsmsort_divide(arr, 0, len - 1);

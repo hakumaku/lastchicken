@@ -1,7 +1,7 @@
 /*
  * Input: A sequence of n numbers
- * Ouput: A permutation of the input sequence such
- * that a1 <= a2 <= a3 <= ... <= an
+ * Ouput: A permutation of the input sequence
+ * such that a1 <= a2 <= a3 <= ... <= an
  *
  * Pseudocode
  * INSERTION_SORT(A):
