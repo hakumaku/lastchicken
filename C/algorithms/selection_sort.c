@@ -5,14 +5,14 @@
  *
  * Pseudocode
  * SELECTION_SORT(A):
- *		for i = 1 to A.length - 1
- *			min = i
- *			for j = i + 1 to A.length
- *				if A[j] < A[min]
- *					min = j;
- *			temp = A[i]
- *			A[i] = A[min]
- *			A[min] = temp
+ *	for i = 1 to A.length - 1
+ *		min = i
+ *		for j = i + 1 to A.length
+ *			if A[j] < A[min]
+ *				min = j;
+ *		temp = A[i]
+ *		A[i] = A[min]
+ *		A[min] = temp
  */
 
 #include <stdio.h>
@@ -27,6 +27,8 @@ int main(void)
 	selsort(test1, len1);
 	for(int i = 0; i < len1; i++)
 		printf("%d ", test1[i]);
+	putchar('\n');
+
 	return 0;
 }
 
