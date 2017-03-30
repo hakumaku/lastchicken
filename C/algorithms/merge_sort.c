@@ -134,6 +134,7 @@ void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 	size_t len2 = r - q;
 	int i = 0, j = 0, k = p;
 	int *left = NULL, *right = NULL;
+	/*	Extra one more space for SENTINEL_VALUE	*/
 	left = (int *)calloc(len1+1, sizeof(int));
 	right = (int *)calloc(len2+1, sizeof(int));
 
