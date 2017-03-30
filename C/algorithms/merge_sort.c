@@ -66,6 +66,15 @@ void nsmerge_sort(int *arr, size_t len);
 void nsmsort_divide(int *arr, size_t p, size_t r);
 void nsmsort_merge(int *arr, size_t p, size_t q, size_t r);
 
+/*
+ * Much improved.
+ * Much of explanation is omitted,
+ * better see previous functions first.
+ */
+void nmerge_sort(int *arr, size_t len);
+void nmsort_divide(int *arr, int *tmp, size_t p, size_t r);
+void nmsort_merge(int *arr, int *tmp, size_t p, size_t q, size_t r);
+
 int main(void)
 {
 	int test1[] = {100, 99, 98, 32, 23, 12, 7, 8, 9, 3, 1};
@@ -74,6 +83,8 @@ int main(void)
 	int len2 = sizeof(test2) / sizeof(int);
 	int test3[] = {100, 99, 98, 32, 23, 12, 7, 8, 9, 3, 1};
 	int len3 = sizeof(test3) / sizeof(int);
+	int test4[] = {100, 99, 98, 32, 23, 12, 7, 8, 9, 3, 1};
+	int len4 = sizeof(test4) / sizeof(int);
 	
 	pseudo_msort(test1, 0, len1-1);
 	for(int i = 0; i < len1; i++)
@@ -90,10 +101,16 @@ int main(void)
 		printf("%d ", test3[i]);
 	putchar('\n');
 
+	nmerge_sort(test4, len4);
+	for(int i = 0; i < len4; i++)
+		printf("%d ", test4[i]);
+	putchar('\n');
+
+
 	return 0;
 }
 /*
- * Do not get perplexed with its parameters.
+ * Do not get perplexed with its parameters: p, q, r.
  * C always subscripts from 0, not 1,
  * to n-1, not n, or A.length.
  */
@@ -101,6 +118,10 @@ void pseudo_msort(int *arr, size_t p, size_t r)
 {
 	if(p < r)
 	{
+		/*
+		 * Integer overflow can occur,
+		 * but will not deal with it.
+		 */
 		size_t q = (p + r) >> 1;
 		pseudo_msort(arr, p, q);
 		pseudo_msort(arr, q+1, r);
@@ -145,6 +166,9 @@ void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 /*	Just a wrapper	*/
 void merge_sort(int *arr, size_t len)
 {
+	/*
+	 * Note that it is NOT casting 'len', but 'len-1'.
+	 */
 	msort_divide(arr, 0, len-1);
 }
 /*	Dividing	*/
@@ -223,7 +247,7 @@ void msort_merge(int *arr, size_t p, size_t q, size_t r)
 
 void nsmerge_sort(int *arr, size_t len)
 {
-	nsmsort_divide(arr, 0, len - 1);
+	nsmsort_divide(arr, 0, len-1);
 }
 void nsmsort_divide(int *arr, size_t p, size_t r)
 {
@@ -252,7 +276,6 @@ void nsmsort_merge(int *arr, size_t p, size_t q, size_t r)
 	{
 		left[i] = arr[p + i];
 	}
-
 	for(i = j = 0; k <= r; k++)
 	{
 		/*
@@ -274,4 +297,60 @@ void nsmsort_merge(int *arr, size_t p, size_t q, size_t r)
 
 	free(left);
 	free(right);
+}
+/*
+ * It will not be allocating and freeing
+ * again and again, instead, it will hold one as big as
+ * the source until the end of its process.
+ */
+void nmerge_sort(int *arr, size_t len)
+{
+	int *tmp = NULL;
+	tmp = (int *)calloc(len, sizeof(int));
+
+	nmsort_divide(arr, tmp, 0, len-1);
+
+	free(tmp);
+}
+/*
+ * Not so much different except that it carries 'tmp',
+ * which has been pre-allocated.
+ */
+void nmsort_divide(int *arr, int *tmp, size_t p, size_t r)
+{
+	if(p < r)
+	{
+		size_t q = (p + r) >> 1;
+		nmsort_divide(arr, tmp, p, q);
+		nmsort_divide(arr, tmp, q+1, r);
+		nmsort_merge(arr, tmp, p, q, r);
+	}
+}
+void nmsort_merge(int *arr, int *tmp, size_t p, size_t q, size_t r)
+{
+	/*	It will take advantage of conditional move.	*/
+	int v1 = 0, v2 = 0, test = 0;
+	/*	left index, right index, source index	*/
+	int li = p, ri = q+1, si = p;
+
+	while(li <= q && ri <= r)
+	{
+		v1 = arr[li];
+		v2 = arr[ri];
+		test = v1 <= v2;
+		/*	Increment of source index occurs here.	*/
+		tmp[si++] = test ? v1 : v2;
+		/*	Whether li increases or ri increases	*/
+		li += test;
+		ri += (1-test);
+	}
+	/*	Copy rest of the left and the right subarray.	*/
+	while(li <= q)
+		tmp[si++] = arr[li++];
+	while(ri <= r)
+		tmp[si++] = arr[ri++];
+
+	/*	Write back the sorted result.	*/
+	for(si = p; si <= r; si++)
+		arr[si] = tmp[si];
 }
