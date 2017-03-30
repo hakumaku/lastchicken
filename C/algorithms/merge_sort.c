@@ -143,7 +143,7 @@ void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 	left[len1] = SENTINEL_VALUE;
 
 	for(; j < len2; j++)
-		right[j] = arr[q + 1 + j];
+		right[j] = arr[q+1 + j];
 	right[len2] = SENTINEL_VALUE;
 
 	for(i = j = 0; k <= r; k++)
