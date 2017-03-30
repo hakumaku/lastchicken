@@ -58,7 +58,7 @@ void msort_divide(int *arr, size_t p, size_t r);
 void msort_merge(int *arr, size_t p, size_t q, size_t r);
 
 /*
- * Not using SENTINEL_VALUE.
+ * Not using SENTINEL_VALUE(ns).
  * Just to show what the implementation looks like
  * if SENTINEL_VALUE is not given.
  */
@@ -67,7 +67,7 @@ void nsmsort_divide(int *arr, size_t p, size_t r);
 void nsmsort_merge(int *arr, size_t p, size_t q, size_t r);
 
 /*
- * Much improved.
+ * Much improved(new).
  * Much of explanation is omitted,
  * better see previous functions first.
  */
@@ -110,6 +110,7 @@ int main(void)
 	return 0;
 }
 /*
+ * Dividng step. Its name should be sth like 'divide'.
  * Do not get perplexed with its parameters: p, q, r.
  * C always subscripts from 0, not 1,
  * to n-1, not n, or A.length.
@@ -123,11 +124,15 @@ void pseudo_msort(int *arr, size_t p, size_t r)
 		 * but will not deal with it.
 		 */
 		size_t q = (p + r) >> 1;
+		/*	Left subarray	*/
 		pseudo_msort(arr, p, q);
+		/*	Right subarray	*/
 		pseudo_msort(arr, q+1, r);
+		/*	Merge them	*/
 		pseudo_merge(arr, p, q, r);
 	}
 }
+/*	Merging	*/
 void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 {
 	size_t len1 = q - p + 1;
@@ -172,21 +177,16 @@ void merge_sort(int *arr, size_t len)
 	 */
 	msort_divide(arr, 0, len-1);
 }
-/*	Dividing	*/
 void msort_divide(int *arr, size_t p, size_t r)
 {
 	if(p < r)
 	{
 		size_t q = (p + r) >> 1;
-		/*	Left subarray	*/
 		msort_divide(arr, p, q);
-		/*	Right subarray	*/
 		msort_divide(arr, q+1, r);
-		/*	Merge them	*/
 		msort_merge(arr, p, q, r);
 	}
 }
-/*	Merging	*/
 void msort_merge(int *arr, size_t p, size_t q, size_t r)
 {
 	/*
@@ -204,7 +204,7 @@ void msort_merge(int *arr, size_t p, size_t q, size_t r)
 	{
 		/*	left: p ~ q , right: q+1 ~ r	*/
 		left[i] = arr[p + i];
-		right[i] = arr[q + 1 + i];
+		right[i] = arr[q+1 + i];
 	}
 	right[i] = SENTINEL_VALUE;
 	/*
@@ -271,7 +271,7 @@ void nsmsort_merge(int *arr, size_t p, size_t q, size_t r)
 	for(; i < len; i++)
 	{
 		left[i] = arr[p + i];
-		right[i] = arr[q + 1 + i];
+		right[i] = arr[q+1 + i];
 	}
 	if(p != q)
 	{
