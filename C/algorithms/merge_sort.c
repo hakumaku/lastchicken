@@ -7,9 +7,9 @@
  *
  * param:
  *	p: the initial index of the left subarray.
- *	q+1: it represents the last index of the left subarray.
- *	q: the initial index of the right subarray.
- *	r: the last index of its array.
+ *	q: the last index of the left subarray.
+ *	q+1: it represents the initial index of the right subarray.
+ *	r: the last index of the right subarray.
  *
  * MERGE_SORT(A,p,r)
  *	if p < r
