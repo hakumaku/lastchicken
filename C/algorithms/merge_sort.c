@@ -137,7 +137,7 @@ void pseudo_merge(int *arr, size_t p, size_t q, size_t r)
 {
 	size_t len1 = q - p + 1;
 	size_t len2 = r - q;
-	int i = 0, j = 0, k = p;
+	size_t i = 0, j = 0, k = p;
 	int *left = NULL, *right = NULL;
 	/*	Extra one more space for SENTINEL_VALUE	*/
 	left = (int *)calloc(len1+1, sizeof(int));
@@ -194,7 +194,7 @@ void msort_merge(int *arr, size_t p, size_t q, size_t r)
 	 * The reason is based on len1 >= len2.
 	 */
 	size_t len = r - q;
-	int i = 0, j = 0, k = p;
+	size_t i = 0, j = 0, k = p;
 	int *left = NULL, *right = NULL;
 	left = (int *)calloc(len+2, sizeof(int));
 	right = (int *)calloc(len+1, sizeof(int));
@@ -263,7 +263,7 @@ void nsmsort_divide(int *arr, size_t p, size_t r)
 void nsmsort_merge(int *arr, size_t p, size_t q, size_t r)
 {
 	size_t len = r - q;
-	int i = 0, j = 0, k = p;
+	size_t i = 0, j = 0, k = p;
 	int *left = NULL, *right = NULL;
 	left = (int *)calloc(len+1, sizeof(int));
 	right = (int *)calloc(len, sizeof(int));
@@ -332,7 +332,7 @@ void nmsort_merge(int *arr, int *tmp, size_t p, size_t q, size_t r)
 	/*	It will take advantage of conditional move.	*/
 	int v1 = 0, v2 = 0, test = 0;
 	/*	left index, right index, source index	*/
-	int li = p, ri = q+1, si = p;
+	size_t li = p, ri = q+1, si = p;
 
 	while(li <= q && ri <= r)
 	{

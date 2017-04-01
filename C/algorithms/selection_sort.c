@@ -34,7 +34,8 @@ int main(void)
 
 void selsort(int *arr, size_t len)
 {
-	int i = 0, j = 0, min_index = 0, temp = 0;
+	size_t i = 0, j = 0, min_index = 0;
+	int temp = 0;
 	for(; i < len; i++)
 	{
 		min_index = i;
