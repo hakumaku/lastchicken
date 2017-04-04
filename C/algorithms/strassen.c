@@ -79,7 +79,7 @@ int main(void)
 
 	putchar('\n');
 
-	smul_matrix(mat_a, mat_b, mat_d);
+	imul_matrix(mat_a, mat_b, mat_d);
 
 	for(size_t i = 0, j = 0; i < ORDER; i++)
 	{
