@@ -118,12 +118,12 @@ void smul_matrix(int a[][ORDER], int b[][ORDER], int c[][ORDER])
 }
 /*
  * It takes advantage of spatial locality. (CS: APP pg681)
- * The function smuL_matrix computates ordinarily one by one 
+ * The function smuL_matrix computes ordinarily one by one 
  * whereas to increase sptial locality
  * the following function imul_matrix makes use of
  * the entire row, a[i][k], when it loads.
  * Therefore, the inner most loop does NOT complete
- * computating when it is done,
+ * computing when it is done,
  * but it does the entire single row of 'c' at the end of k-loop.
  */
 void imul_matrix(int a[][ORDER], int b[][ORDER], int c[][ORDER])
