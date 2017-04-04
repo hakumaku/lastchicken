@@ -1,8 +1,8 @@
-#Tag Reference
-###Basic HTML
+# Tag Reference
+### Basic HTML
 Tag | Description
 ------------ | -------------
-<!DOCTYPE>|Defines the document type
+\<!DOCTYPE>|Defines the document type
 \<html>|Defines an HTML document
 \<title>|Defines a title for the document
 \<body>|Defines the document's body
@@ -12,7 +12,7 @@ Tag | Description
 \<hr>|Defines a thematic change in the content
 \<!--...-->|Defines a comment
 
-###Formatting
+### Formatting
 Tag | Description
 ------------ | -------------
 \<abbr>|Defines an abbreviation or an acronym
@@ -48,7 +48,7 @@ Tag | Description
 \<var>|Defines a variable
 \<wbr>|Defines a possible line-break
 
-###Forms and Input
+### Forms and Input
 Tag | Description
 ------------ | -------------
 \<form>|Defines an HTML form for user input
@@ -65,12 +65,12 @@ Tag | Description
 \<keygen>|Defines a key-pair generator field (for forms)
 \<output>|Defines the result of a calculation
 
-###Frame
+### Frame
 Tag | Description
 ------------ | -------------
 \<iframe>|Defines an inline frame
 
-###Images
+### Images
 Tag | Description
 ------------ | -------------
 \<img>|Defines an image
@@ -81,7 +81,7 @@ Tag | Description
 \<figure>|Specifies self-contained content
 \<picture>|Defines a container for multiple image resources
 
-###Audio / Video
+### Audio / Video
 Tag | Description
 ------------ | -------------
 \<audio>|Defines sound content
@@ -89,7 +89,7 @@ Tag | Description
 \<track>|Defines text tracks for media elements (\<video> and \<audio>)
 \<video>|Defines a video or movie
 
-###Lists
+### Lists
 Tag | Description
 ------------ | -------------
 \<ul>|Defines an unordered list
@@ -101,7 +101,7 @@ Tag | Description
 \<menu>|Defines a list/menu of commands
 \<menuitem>|Defines a command/menu item that the user can invoke from a popup menu
 
-###Tables
+### Tables
 Tag | Description
 ------------ | -------------
 \<table>|Defines a table
@@ -115,7 +115,7 @@ Tag | Description
 \<col>|Specifies column properties for each column within a \<colgroup> element
 \<colgroup>|Specifies a group of one or more columns in a table for formatting
 
-###Styles and Semantics
+### Styles and Semantics
 Tag | Description
 ------------ | -------------
 \<style>|Defines style information for a document
@@ -132,14 +132,14 @@ Tag | Description
 \<summary>|Defines a visible heading for a \<details> element
 \<data>|Links the given content with a machine-readable translation
 
-###Meta Info
+### Meta Info
 Tag | Description
 ------------ | -------------
 \<head>|Defines information about the document
 \<meta>|Defines metadata about an HTML document
 \<base>|Specifies the base URL/target for all relative URLs in a document
 
-###Programming
+### Programming
 Tag | Description
 ------------ | -------------
 \<script>|Defines a client-side script
