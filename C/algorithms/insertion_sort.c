@@ -61,29 +61,29 @@ void isort_nd(int *arr, size_t len)
 	 * Note that 'j' starts from 1, not 0,
 	 * since it needs two elements to compare.
 	 */
-	size_t i = 0, j = 1;
+	size_t i = 1, j = 0;
 	int smaller = 0;
-	for(; j < len; j++)
+	for(; i < len; i++)
 	{
-		smaller = arr[j];
-		i = j - 1;
-		for(; i != (size_t)-1 && arr[i] > smaller; i--)
-			arr[i+1] = arr[i];
-		arr[i+1] = smaller;
+		smaller = arr[i];
+		j = i - 1;
+		for(; j != (size_t)-1 && arr[j] > smaller; j--)
+			arr[j+1] = arr[j];
+		arr[j+1] = smaller;
 	}
 }
 /*	The only difference is the comparison sign 	*/
 void isort_ni(int *arr, size_t len)
 {
-	size_t i = 0, j = 1;
+	size_t i = 1, j = 0;
 	int smaller = 0;
-	for(; j < len; j++)
+	for(; i < len; i++)
 	{
-		smaller = arr[j];
-		i = j - 1;
-		for(; i != (size_t)-1 && arr[i] < smaller; i--)
-			arr[i+1] = arr[i];
-		arr[i+1] = smaller;
+		smaller = arr[i];
+		j = i - 1;
+		for(; j != (size_t)-1 && arr[j] < smaller; j--)
+			arr[j+1] = arr[j];
+		arr[j+1] = smaller;
 	}
 }
 void isort_re(int *arr, size_t len)

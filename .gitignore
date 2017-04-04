@@ -1,4 +1,4 @@
 *.exe
 *.s
-test.c
+test*.c
 makefile

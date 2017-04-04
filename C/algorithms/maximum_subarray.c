@@ -55,7 +55,7 @@
  * If you want to know indices with sum,
  * you should pass a data structure like this.
  */
-typedef struct subarr_t{
+typedef struct {
 	size_t si;
 	size_t li;
 	int sum;
@@ -205,7 +205,7 @@ int max_subarray_kadane(int *arr, size_t len)
 		/*
 		 * It can be done with "else if(sum < sub_sum)"
 		 * ,but it seems it doesn't make big difference
-		 * since it creates cmov instruction.
+		 * since it generates cmov instruction.
 		 */
 		if(sum < sub_sum)
 			sum = sub_sum;
