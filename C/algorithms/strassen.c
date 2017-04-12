@@ -113,7 +113,7 @@
  * with static parameters like "int arr[][COL]", and cast as
  * "foo(arr)". However, for portability?..(or generality),
  * the function is done with "int *arr" and
- * subscripting should be performed in
+ * subscripting should be performed as
  * "arr[stride + j]" in which "stride" is equal to "row * i".
  */
 typedef struct {
