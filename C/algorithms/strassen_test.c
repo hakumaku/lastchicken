@@ -7,7 +7,7 @@
 #define BASE_BOUNDARY	50
 /*
  * intel(R) Core(TM) i5-6200U CPU @ 2.30GHz 2.40GHz
- * gcc -march=native test3.c
+ * gcc -march=native strassen_test.c
  *
  * The following test is NOT PRECISE, (and surely wrong)
  * just couple of minutes of running code is all of it.

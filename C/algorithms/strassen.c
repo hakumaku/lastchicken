@@ -1,5 +1,6 @@
 /*
- * A straightforward and intuitive.
+ * A straightforward and intuitive way,
+ * also known as ijk-product.
  * It takes O(n^3).
  *
  * Pseudocode
@@ -14,7 +15,7 @@
  *	return C
  *
  * The following code has a time complexity of O(n^3) as the above.
- * Not used in practice.
+ * Not used in practice, but inspires Strassen's algorithm.
  *
  * Pseudocode
  * SQUARE_MATRIX_MULTIPLY_RECURSIVE(A,B):
@@ -33,28 +34,34 @@
  *			+ SQUARE_MATRIX_MULTIPLY_RECURSIVE(A22,B22)
  *	return C
  *
- * Strassen's algorithm has O(n^2807).
+ * Strassen's algorithm has O(n^2.807).
  * The key to this method is to make the recursion tree slightly
- * less bushy. Instead of performing eight recursive multiplication
- * it does only seven.
+ * less bushy. Instead of performing "eight" recursive multiplication
+ * it does only "seven", substituting eight multiplication with senven 
+ * of that and some more addition, subtraction, and writing.
+ *
  * It might seem obscure that why it has
  * those S1 ~ S10 and that from which they are derived,
- * but it's mathematically come to so to reduce the number of steps
+ * but it's mathematically come to be so.. to reduce the number of steps
  * of recursion resulting in O(n^log7).
  * If you carefully add all the components of C11 ~ C22,
  * which are P1 ~ P7, it just boils down to
  * (A11*B11 + A12*B21), (A11*B12 + A12*B22),
  * (A21*B11 + A22*B21) and (A21*B12 + A22*B22).
+ *
  * Since it holds for the size of power of 2,
  * if that of the input is not equal to power of 2
  * the input needs adjusting:
- * it can be extended to the next power of 2 or to the least size m * 2^k
- * greater than the order of input, such that m < Q for Q
+ * it can be extended to the next power of 2
+ * or to the least size m * 2^k greater than the order of input,
+ * such that m < M (or <= M) for M
  * which is defined to be a certain point that the function
  * performs a standard implementation of multiplying matrices.
- * The former is deemed to be dynamic padding, which is inefficient,
- * the latter static padding, quite improved.
- * Also, the algorithm can be implemented in a variety.
+ * There are a variety of ways, though:
+ * those ways generally fall into "Dynamic" or "Static".
+ * The former is called when padding is applied in the first step of a function
+ * whereas the latter is when each resursion invokes padding process.
+ * Instead of padding zeros, it could peel off, but.. idk.
  *
  * Pseudocode
  * SQUARE_MATRIX_MULTIPLY_STRASSEN(A,B):
@@ -86,31 +93,26 @@
  *		C22 = P5 + P1 - P3 - P7
  *	return C
  *
- *
- *
  * Coppersmith-Winogrand[Vi-no-grah-nd]'s algorithm
  *	-O(n^2.376)
  *	-According to wiki, it is theoretically faster
- *	but impractical, since it holds effective when it comes to
- *	matrices so large for modern hardware.
- *
+ *	but impractical, since it holds effective as far as
+ *	dealing with matrices so large for modern hardware.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 
 #define ORDER			5
 #define BIG_ORDER		18
 #define BASE_BOUNDARY	7
-
 /*
- * It contains its array and its order.
+ * It contains elements of a matrix and the order of that.
  * The purpose of this data structure is to
  * figure out how long its row is for subscripting
  * its elements. For instance, the algorithm can be done
  * with static parameters like "int arr[][COL]", and cast as
- * "foo(arr)". However, for portability, the function is
- * done with "int *arr" and
+ * "foo(arr)". However, for portability?..(or generality),
+ * the function is done with "int *arr" and
  * subscripting should be performed in
  * "arr[stride + j]" in which "stride" is equal to "row * i".
  */
@@ -120,19 +122,21 @@ typedef struct {
 }mat_t;
 
 
-/*	Straightforward and intuitive	*/
+/*	Straightforward and intuitive, also known as ijk-product	*/
 void smul_matrix(int a[][ORDER], int b[][ORDER], int c[][ORDER]);
 
-/*	Improved	*/
+/*	Improved, also known as ikj-product	*/
 void imul_matrix(int a[][BIG_ORDER], int b[][BIG_ORDER], int c[][BIG_ORDER]);
 
 /*	Strassen's algorithm	*/
 mat_t *make_empty_sqmat(size_t order);
 void free_sqmat(mat_t *src);
-/*	print_sqmat is not necessarily needed	*/
+/*	print_sqmat is not necessarily needed.	*/
 void print_sqmat(mat_t *src);
+/*	This function is invoked to multiply.	*/
 void stmul_matrix(mat_t *a, mat_t *b, mat_t *c);
 size_t get_least_size(size_t order, size_t basecase_order);
+/*	Recursion	*/
 void stmul_divide(mat_t *a, mat_t *b, mat_t *c);
 void stmul_base(mat_t *a, mat_t *b, mat_t *c);
 
@@ -248,7 +252,7 @@ void smul_matrix(int a[][ORDER], int b[][ORDER], int c[][ORDER])
  * Therefore, the inner most loop does NOT complete
  * computing when it is done,
  * but it does the entire single row of 'c' at the end of k-loop.
- * The forer is also known as ijk-product,
+ * The former is also known as ijk-product,
  * the latter ikj-product.
  */
 void imul_matrix(int a[][BIG_ORDER], int b[][BIG_ORDER], int c[][BIG_ORDER])
@@ -341,7 +345,7 @@ void stmul_matrix(mat_t *a, mat_t *b, mat_t *c)
 	}
 }
 /*
- * It computes the least size of a matrix padded with zero.
+ * It computes the least size of a matrix padded with zeros.
  */
 size_t get_least_size(size_t order, size_t basecase_order)
 {
@@ -358,6 +362,21 @@ size_t get_least_size(size_t order, size_t basecase_order)
 	}
 	return order << cnt;
 }
+/*
+ * This is all I tried,
+ * it can be coded way better by some other experts..
+ * I found out some problems of implementing it:
+ *	1) The process of dynamically allocating and writing
+ *	for submatrices is "inevitable", for s1 ~ s10, p1 ~ p7
+ *	2) and "additionally" a11, b22, b11 and b22. Passing a set of index
+ *	results in a weird function. Perhaps, implmenting it with another
+ *	"struct" can be done. In that case, some kind of flag will be essential
+ *	that tells whether it is the source or temporary data.
+ *	3) The process also costs a lot, really a lot.
+ *	4) Adding and subtracting two matrices also have O(n^2),
+ *	which are concealed by big O notation.
+ *	5) It looks ugly...
+ */
 void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 {
 	/*	Base case	*/
@@ -531,6 +550,9 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			}
 		}
 
+		/*
+		 * It might be helpful that p[x] == s[x+13]
+		 */
 		/*	P1(s[14]) = A11 * S1	*/
 		stmul_divide(s[10], s[0], s[14]);
 		/*	P2(s[15]) = S2 * B22	*/
@@ -548,7 +570,7 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 
 		/*
 		 * "stride_b" is reused, it is supposed to be
-		 * named as "trimmed_order".
+		 * named as "trimmed_order", or something better.
 		 *
 		 * For some cases, the result of "c" looks like:
 		 *
@@ -573,6 +595,8 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 		 * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┴ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
 		 * <---submat_order---> <---submat_order--->
 		 *
+		 * This is why it needs to distinguish two boundaries
+		 * of loops.
 		 */
 		stride_size = c->order;
 		stride_b = stride_size - submat_order;
