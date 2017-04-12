@@ -365,7 +365,7 @@ size_t get_least_size(size_t order, size_t basecase_order)
 /*
  * This is all I tried,
  * it can be coded way better by some other experts..
- * I found out some problems of implementing it:
+ * I found out some problems when implementing it:
  *	1) The process of dynamically allocating and writing
  *	for submatrices is "inevitable", for s1 ~ s10, p1 ~ p7
  *	2) and "additionally" a11, b22, b11 and b22. Passing a set of index
