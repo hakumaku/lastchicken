@@ -321,7 +321,6 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			for(j = 0; j < stride_b; j++)
 				c->arr[stride_ret + j] = s[14]->arr[stride_a + j] + s[15]->arr[stride_a + j];
 		}
-		/*	stride_b = stride_size - submat_order;	*/
 		for(size_t i = 0, j = 0; i < stride_b; i++)
 		{
 			stride_ret = (i + submat_order) * stride_size;
