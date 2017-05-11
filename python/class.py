@@ -14,7 +14,7 @@
 # obj.__str__()					the informal value as a string
 # obj.__bytes__()				the informal value as a byte array
 # obj.__format__()				the value as a formatted string
-# 
+#
 # obj.__iter__()
 # obj.__next__()
 # obj.__reversed__()
@@ -102,3 +102,67 @@ if __name__ == '__main__':
 			pass
 	# hero = Rastan()
 	# hero.swim()						# This is never gonna be made.
+
+	#
+	# Class variables vs Instance variables
+	# Remember, Python always checks variables in the instance first,
+	# then when it figures out there is none, it goes up to its 'class'.
+	#
+	class NewKlass:
+		var = 10
+		def increase(self):
+			self.var += 1
+
+	x = NewKlass()
+	y = NewKlass()
+
+	# It does NOT increase 'var' in 'NewKlass',
+	# instead it creates a new attribute 'self.var',
+	# then increase it which leads to 'x.var == 11'.
+	x.increase()
+	print(x.var, y.var)
+	# If you intended to increase 'var' in NewKlass
+	NewKlass.increase(NewKlass)
+	NewKlass.increase(NewKlass)
+	# NewKlass.var is now 12
+	print(y.var)
+	z = NewKlass()
+	print(z.var)
+	# However, x.var is still 11.
+	print(x.var)
+
+	# super() in 3.X (new)
+	# super(self.__class__, self) in 2.X (old)
+	class BaseKlass():
+
+		def __init__(self):
+			self.new = 1
+
+		def method(self):
+			print(self.new)
+
+	# Inheritance
+	class KlassA(BaseKlass):
+		pass
+
+	# Override
+	class KlassB(BaseKlass):
+		def __init__(self):
+			# Invalid syntax
+			# self.new += 1
+			self.new = 2
+
+	# super()
+	class KlassC(BaseKlass):
+		def __init__(self):
+			super().__init__()
+			# 'new' has been created from super().
+			self.new += 1
+
+	new1 = KlassA()
+	new2 = KlassB()
+	new3 = KlassC()
+
+	new1.method()
+	new2.method()
+	new3.method()
