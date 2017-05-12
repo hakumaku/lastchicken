@@ -37,7 +37,7 @@
  * Strassen's algorithm has O(n^2.807).
  * The key to this method is to make the recursion tree slightly
  * less bushy. Instead of performing "eight" recursive multiplication
- * it does only "seven", substituting eight multiplication with senven 
+ * it does only "seven", substituting eight multiplication with senven
  * of that and some more addition, subtraction, and writing.
  *
  * It might seem obscure that why it has
@@ -184,7 +184,7 @@ int main(void)
 			mat_h->arr[row + j] = 2;
 		}
 	}
-	
+
 	smul_matrix(mat_a, mat_b, mat_c);
 	printf("smul_matrix : \n");
 	for(size_t i = 0, j = 0; i < ORDER; i++)
@@ -195,7 +195,7 @@ int main(void)
 		printf("%3d]\n", mat_c[i][j]);
 	}
 	putchar('\n');
-	
+
 	imul_matrix(mat_d, mat_e, mat_f);
 	printf("imul_matrix : \n");
 	for(size_t i = 0, j = 0; i < BIG_ORDER; i++)
@@ -409,7 +409,7 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			{
 				s[0]->arr[stride_ret + j] = b->arr[stride_a + j] - b->arr[stride_b + j];
 			}
-		}	
+		}
 		/*	A11 + A12	*/
 		for(size_t i = 0; i < submat_order; i++)
 		{
@@ -577,21 +577,21 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 		 * <------------extended__order------------>
 		 * <-----1st loop-----><-2ndloop->
 		 * ┌───────────────────┬─────────┬ ─ ─ ─ ─ ┐
-		 * │                   │         │         |
-		 * │                   │         │         |
-		 * │                   │         │         |
-		 * │       C11         │   C12   │         |
-		 * │                   │         │         |
-		 * │                   │         │         |
-		 * │                   │         │         |
+		 * │                   │         │         │
+		 * │                   │         │         │
+		 * │                   │         │         │
+		 * │       C11         │   C12   │         │
+		 * │                   │         │         │
+		 * │                   │         │         │
+		 * │                   │         │         │
 		 * ├───────────────────┼─────────┼ ─ ─ ─ ─ ┤
-		 * │                   │         │         |
-		 * │       C21         │   C22   │         |
-		 * │                   │         │         |
-		 * ├───────────────────┼─────────┘         |
-		 * |                   |                   |
-		 * |                   |                   |
-		 * |                   |                   |
+		 * │                   │         │         │
+		 * │       C21         │   C22   │         │
+		 * │                   │         │         │
+		 * ├───────────────────┼─────────┘         │
+		 * │                   │                   │
+		 * │                   │                   │
+		 * │                   │                   │
 		 * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┴ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
 		 * <---submat_order---> <---submat_order--->
 		 *
@@ -614,7 +614,7 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 									- s[15]->arr[stride_a + j] + s[19]->arr[stride_a + j];
 			}
 			/*
-			 * C12 = P1 + P2
+			 * C21 = P1 + P2
 			 * s[14] + s[15]
 			 */
 			stride_ret += submat_order;
@@ -629,7 +629,7 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			stride_ret = (i + submat_order) * stride_size;
 			stride_a = i * submat_order;
 			/*
-			 * C21 = P3 + P4
+			 * C12 = P3 + P4
 			 * s[16] + s[17]
 			 */
 			for(j = 0; j < submat_order; j++)
