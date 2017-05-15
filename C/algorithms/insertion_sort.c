@@ -54,20 +54,18 @@ int main(void)
  */
 void isort_nd(int *arr, size_t len)
 {
-	/*	
+	/*
 	 * A[1..j-1]: the ordered subarray.
 	 * A[j]: the current index.
 	 * A[j+1..n]: the rest which needs ordered.
 	 * Note that 'j' starts from 1, not 0,
 	 * since it needs two elements to compare.
 	 */
-	size_t i = 1, j = 0;
 	int smaller = 0;
-	for(; i < len; i++)
+	for(size_t i = 1, j = 0; i < len; i++)
 	{
 		smaller = arr[i];
-		j = i - 1;
-		for(; j != (size_t)-1 && arr[j] > smaller; j--)
+		for(j = i - 1; j != (size_t)-1 && arr[j] > smaller; j--)
 			arr[j+1] = arr[j];
 		arr[j+1] = smaller;
 	}
@@ -75,13 +73,11 @@ void isort_nd(int *arr, size_t len)
 /*	The only difference is the comparison sign 	*/
 void isort_ni(int *arr, size_t len)
 {
-	size_t i = 1, j = 0;
 	int smaller = 0;
-	for(; i < len; i++)
+	for(size_t i = 1, j = 0; i < len; i++)
 	{
 		smaller = arr[i];
-		j = i - 1;
-		for(; j != (size_t)-1 && arr[j] < smaller; j--)
+		for(j = i - 1; j != (size_t)-1 && arr[j] < smaller; j--)
 			arr[j+1] = arr[j];
 		arr[j+1] = smaller;
 	}

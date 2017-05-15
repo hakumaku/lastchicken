@@ -34,15 +34,14 @@ int main(void)
 
 void selsort(int *arr, size_t len)
 {
-	size_t i = 0, j = 0, min_index = 0;
 	int temp = 0;
-	for(; i < len; i++)
+	for(size_t i = 0, j = 0, min_index = 0; i < len; i++)
 	{
 		min_index = i;
 		/*	Finding the smallest one of its subarray	*/
 		for(j = i + 1; j < len; j++)
 		{
-			
+
 			if(arr[j] < arr[min_index])
 				min_index = j;
 		}
