@@ -18,7 +18,8 @@
  * Q) Why does it start from 'floor(A.length/2)' instead of '1'?
  * A) Since it works under the assumption that the subtrees rooted at the two
  * children also are both 'Max heaps', you cannot make 'i' start from '1' and
- * increase it to 'floor(A.length/2)'.
+ * increase it to 'floor(A.length/2)'. Also, a leaf node itself is already
+ * a heap, you do not have to start at the bottom of a tree.
  *
  * Pseudocode
  * MAX_HEAPIFY(A,i):
@@ -123,9 +124,7 @@ int main(void)
 		/*	var1->keys[var1->heap_size++] = i	*/
 		var1->keys[i] = i;
 		var1->heap_size++;
-		printf("%d ", i);
 	}
-	putchar('\n');
 	var2->keys[0] = 5;
 	var2->keys[1] = 3;
 	var2->keys[2] = 17;
@@ -200,6 +199,7 @@ void max_heapify(heap_t *src, size_t i)
 	size_t left = LEFT(i);
 	size_t right = RIGHT(i);
 	size_t largest = i;
+	/*	If it is in the valid range.	*/
 	size_t valid = src->heap_size;
 
 	/*
@@ -222,7 +222,7 @@ void max_heapify(heap_t *src, size_t i)
 }
 void build_maxheap(heap_t *src)
 {
-	for(size_t i = (src->length >> 1); i != (size_t)-1; i--)
+	for(size_t i = (src->length>>1) - 1; i != (size_t)-1; i--)
 		max_heapify(src, i);
 }
 void heapsort(heap_t *src)
