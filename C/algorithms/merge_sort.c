@@ -1,8 +1,4 @@
 /*
- * Input: A sequence of n numbers
- * Ouput: A permutation of the input sequence
- * such that a1 <= a2 <= a3 <= ... <= an
- *
  * Pseudocode
  *
  * param:
@@ -85,7 +81,7 @@ int main(void)
 	int len3 = sizeof(test3) / sizeof(int);
 	int test4[] = {100, 99, 98, 32, 23, 12, 7, 8, 9, 3, 1};
 	int len4 = sizeof(test4) / sizeof(int);
-	
+
 	pseudo_msort(test1, 0, len1-1);
 	for(int i = 0; i < len1; i++)
 		printf("%d ", test1[i]);

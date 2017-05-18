@@ -1,8 +1,4 @@
 /*
- * Input: A sequence of n numbers
- * Ouput: A permutation of the input sequence
- * such that a1 <= a2 <= a3 <= ... <= an
- *
  * Pseudocode
  * SELECTION_SORT(A):
  *	for i = 1 to A.length - 1
@@ -41,7 +37,6 @@ void selsort(int *arr, size_t len)
 		/*	Finding the smallest one of its subarray	*/
 		for(j = i + 1; j < len; j++)
 		{
-
 			if(arr[j] < arr[min_index])
 				min_index = j;
 		}

@@ -1,8 +1,4 @@
 /*
- * Input: A sequence of n numbers
- * Ouput: A permutation of the input sequence
- * such that a1 <= a2 <= a3 <= ... <= an
- *
  * Pseudocode
  * INSERTION_SORT(A):
  *	for j = 2 to A.length
