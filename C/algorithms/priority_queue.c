@@ -46,7 +46,7 @@
 #define LEFT(i)		((i<<1) + 1)
 #define RIGHT(i)	(LEFT(i) + 1)
 
-#define NEG_INF (~((unsigned)-1 >> 1))
+#define NEG_INF (~(-1U >> 1))
 #define TRUE	1
 #define FALSE	0
 
@@ -126,8 +126,12 @@ heap_t *make_heap(size_t input_length)
 }
 void free_heap(heap_t *src)
 {
-	free(src->keys);
-	free(src);
+	if(src)
+	{
+		if(src->keys)
+			free(src->keys);
+		free(src);
+	}
 }
 void max_heapify(heap_t *src, size_t i)
 {
@@ -222,7 +226,6 @@ void heap_increase_key(heap_t *src, size_t i, int key)
 		i = parent;
 		parent = PARENT(i);
 	}
-
 }
 void max_heap_insert(heap_t *src, int key)
 {

@@ -284,20 +284,23 @@ mat_t *make_empty_sqmat(size_t order)
 }
 void free_sqmat(mat_t *src)
 {
-	if(src->arr)
-		free(src->arr);
-	free(src);
+	if(src)
+	{
+		if(src->arr)
+			free(src->arr);
+		free(src);
+	}
 }
 void print_sqmat(mat_t *src)
 {
 	size_t order = src->order;
 	for(size_t i = 0, j = 0, stride = 0; i < order; i++)
 	{
-		stride = order * i;
 		putchar('[');
 		for(j = 0; j < order - 1; j++)
 			printf("%3d ", src->arr[stride + j]);
 		printf("%3d]\n", src->arr[stride + j]);
+		stride += order;
 	}
 	putchar('\n');
 }
@@ -322,13 +325,13 @@ void stmul_matrix(mat_t *a, mat_t *b, mat_t *c)
 		/*	Copying	*/
 		for(size_t i = 0, stride_a = 0, stride_b = 0; i < order; i++)
 		{
-			stride_a = extended_order * i;
-			stride_b = order * i;
 			for(size_t j = 0; j < order; j++)
 			{
 				pad_a->arr[stride_a + j] = a->arr[stride_b + j];
 				pad_b->arr[stride_a + j] = b->arr[stride_b + j];
 			}
+			stride_a += extended_order;
+			stride_b += order;
 		}
 
 		/*	Computing	*/
@@ -389,8 +392,8 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 	{
 		/*	s1 ~ s10, p1 ~ p7 AND a11, a22, b11 and b22	*/
 		mat_t *s[21] = { NULL };
-		size_t stride_size = a->order;
-		size_t submat_order = stride_size >> 1;
+		size_t mat_order = a->order;
+		size_t submat_order = mat_order >> 1;
 		size_t stride_a = 0, stride_b = 0, stride_ret = 0;
 
 		/*	Callocating 21 submatrices.	*/
@@ -400,154 +403,230 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 		}
 
 		/*	B12 - B22	*/
+		stride_ret = 0;
+		stride_a = submat_order;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size + submat_order;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order + submat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[0]->arr[stride_ret + j] = b->arr[stride_a + j] - b->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A11 + A12	*/
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = submat_order;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
-			stride_b = i * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
+			// stride_b = i * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[1]->arr[stride_ret + j] = a->arr[stride_a + j] + a->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A21 + A22	*/
+		stride_ret = 0;
+		stride_a = submat_order * mat_order;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = (i + submat_order) * stride_size;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = (i + submat_order) * mat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[2]->arr[stride_ret + j] = a->arr[stride_a + j] + a->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	B21 - B11	*/
+		stride_ret = 0;
+		stride_a = submat_order * mat_order;
+		stride_b = 0;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = (i + submat_order) * stride_size;
-			stride_b = i * stride_size;
+			// stride_ret = i * submat_order;
+			// stride_a = (i + submat_order) * mat_order;
+			// stride_b = i * mat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[3]->arr[stride_ret + j] = b->arr[stride_a + j] - b->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A11 + A22	*/
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[4]->arr[stride_ret + j] = a->arr[stride_a + j] + a->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	B11 + B22	*/
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[5]->arr[stride_ret + j] = b->arr[stride_a + j] + b->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A12 - A22	*/
+		stride_ret = 0;
+		stride_a = submat_order;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size + submat_order;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order + submat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[6]->arr[stride_ret + j] = a->arr[stride_a + j] - a->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	B21 + B22	*/
+		stride_ret = 0;
+		stride_a = submat_order * mat_order;
+		stride_b = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = (i + submat_order) * stride_size;
-			stride_b = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = (i + submat_order) * mat_order;
+			// stride_b = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[7]->arr[stride_ret + j] = b->arr[stride_a + j] + b->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A11 - A21	*/
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = submat_order * mat_order;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
-			stride_b = (i + submat_order) * stride_size;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
+			// stride_b = (i + submat_order) * mat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[8]->arr[stride_ret + j] = a->arr[stride_a + j] - a->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	B11 + B12	*/
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = submat_order;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
-			stride_b = i * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
+			// stride_b = i * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[9]->arr[stride_ret + j] = b->arr[stride_a + j] + b->arr[stride_b + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
+			stride_b += mat_order;
 		}
 		/*	A11	*/
+		stride_ret = 0;
+		stride_a = 0;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[10]->arr[stride_ret + j] = a->arr[stride_a + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
 		}
 		/*	A22	*/
+		stride_ret = 0;
+		stride_a = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[11]->arr[stride_ret + j] = a->arr[stride_a + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
 		}
 		/*	B11	*/
+		stride_ret = 0;
+		stride_a = 0;
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = i * stride_size;
+			// stride_ret = i * submat_order;
+			// stride_a = i * mat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[12]->arr[stride_ret + j] = b->arr[stride_a + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
 		}
 		/*	B22	*/
+		stride_ret = 0;
+		stride_a = submat_order * (mat_order+1);
 		for(size_t i = 0; i < submat_order; i++)
 		{
-			stride_ret = i * submat_order;
-			stride_a = (i + submat_order) * stride_size + submat_order;
+			// stride_ret = i * submat_order;
+			// stride_a = (i + submat_order) * mat_order + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 			{
 				s[13]->arr[stride_ret + j] = b->arr[stride_a + j];
 			}
+			stride_ret += submat_order;
+			stride_a += mat_order;
 		}
 
 		/*
@@ -598,12 +677,15 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 		 * This is why it needs to distinguish two boundaries
 		 * of loops.
 		 */
-		stride_size = c->order;
-		stride_b = stride_size - submat_order;
+		mat_order = c->order;
+
+		stride_ret = 0;
+		stride_a = 0;
+		stride_b = mat_order - submat_order;
 		for(size_t i = 0, j = 0; i < submat_order; i++)
 		{
-			stride_ret = i * stride_size;
-			stride_a = i * submat_order;
+			// stride_ret = i * mat_order;
+			// stride_a = i * submat_order;
 			/*
 			 * C11 = P5 + P4 - P2 + P6
 			 * s[18] + s[17] - s[15] - s[19]
@@ -622,12 +704,17 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			{
 				c->arr[stride_ret + j] = s[14]->arr[stride_a + j] + s[15]->arr[stride_a + j];
 			}
+			stride_ret -= submat_order;
+			stride_ret += mat_order;
+			stride_a += submat_order;
 		}
-		/*	stride_b = stride_size - submat_order;	*/
+		stride_ret = submat_order * mat_order;
+		stride_a = 0;
+		/*	stride_b = mat_order - submat_order;	*/
 		for(size_t i = 0, j = 0; i < stride_b; i++)
 		{
-			stride_ret = (i + submat_order) * stride_size;
-			stride_a = i * submat_order;
+			// stride_ret = (i + submat_order) * mat_order;
+			// stride_a = i * submat_order;
 			/*
 			 * C12 = P3 + P4
 			 * s[16] + s[17]
@@ -646,6 +733,9 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 				c->arr[stride_ret + j] = s[18]->arr[stride_a + j] + s[14]->arr[stride_a + j]
 									- s[16]->arr[stride_a + j] - s[20]->arr[stride_a + j];
 			}
+			stride_ret -= submat_order;
+			stride_ret += mat_order;
+			stride_a += submat_order;
 		}
 
 		/*	Freeing s1 ~ s21	*/
@@ -661,10 +751,11 @@ void stmul_base(mat_t *a, mat_t *b, mat_t *c)
 
 	for(size_t i = 0; i < stride_size; i++)
 	{
-		stride_a = stride_size * i;
+		// stride_a = stride_size * i;
+		stride_b = 0;
 		for(size_t k = 0; k < stride_size; k++)
 		{
-			stride_b = stride_size * k;
+			// stride_b = stride_size * k;
 			/*	a[i][k]	*/
 			row = a->arr[stride_a + k];
 			for(size_t j = 0; j < stride_size; j++)
@@ -672,6 +763,8 @@ void stmul_base(mat_t *a, mat_t *b, mat_t *c)
 				/*	c[i][j] & b[k][j]	*/
 				c->arr[stride_a + j] += row * b->arr[stride_b + j];
 			}
+			stride_b += stride_size;
 		}
+		stride_a += stride_size;
 	}
 }

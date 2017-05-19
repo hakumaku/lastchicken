@@ -187,8 +187,12 @@ heap_t *make_heap(size_t input_length)
 }
 void free_heap(heap_t *src)
 {
-	free(src->keys);
-	free(src);
+	if(src)
+	{
+		if(src->keys)
+			free(src->keys);
+		free(src);
+	}
 }
 /*
  * If you want to make 'min_heapify',

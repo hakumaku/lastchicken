@@ -110,9 +110,12 @@ mat_t *make_empty_sqmat(size_t order)
 }
 void free_sqmat(mat_t *src)
 {
-	if(src->arr)
-		free(src->arr);
-	free(src);
+	if(src)
+	{
+		if(src->arr)
+			free(src->arr);
+		free(src);
+	}
 }
 void print_sqmat(mat_t *src)
 {
@@ -194,7 +197,7 @@ void stmul_divide(mat_t *a, mat_t *b, mat_t *c)
 			stride_b = (i + submat_order) * stride_size + submat_order;
 			for(size_t j = 0; j < submat_order; j++)
 				s[0]->arr[stride_ret + j] = b->arr[stride_a + j] - b->arr[stride_b + j];
-		}	
+		}
 		for(size_t i = 0; i < submat_order; i++)
 		{
 			stride_ret = i * submat_order;
