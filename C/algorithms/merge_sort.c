@@ -85,10 +85,6 @@ int main(void)
 	int len3 = sizeof(test3) / sizeof(int);
 	int test4[] = {100, 99, 98, 32, 23, 12, 7, 8, 9, 3, 1};
 	int len4 = sizeof(test4) / sizeof(int);
-	int test5[] = {100, 99, 98, 11, 13, 44, 47, 72, 31, 91, 32, 23, 12, 7, 8, 9, 3, 1};
-	int len5 = sizeof(test5) / sizeof(int);
-	int test6[] = {100, 99, 98, 11, 22, 33, 44, 55, 66, 77, 88, 87, 85, 83, 81 ,32, 23, 12, 7, 8, 9, 3, 1};
-	int len6 = sizeof(test6) / sizeof(int);
 
 	pseudo_msort(test1, 0, len1-1);
 	for(int i = 0; i < len1; i++)
@@ -103,16 +99,6 @@ int main(void)
 	nsmerge_sort(test3, len3);
 	for(int i = 0; i < len3; i++)
 		printf("%d ", test3[i]);
-	putchar('\n');
-
-	nsmerge_sort(test5, len5);
-	for(int i = 0; i < len5; i++)
-		printf("%d ", test5[i]);
-	putchar('\n');
-
-	nsmerge_sort(test6, len6);
-	for(int i = 0; i < len6; i++)
-		printf("%d ", test6[i]);
 	putchar('\n');
 
 	nmerge_sort(test4, len4);
