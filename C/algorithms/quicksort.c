@@ -84,6 +84,13 @@
  *		Thus, p <= j and j < r.
  *	3) Every element of A[p..j] is less than or equal to every
  *	element of A[j+1..r] when HOARE_PARTITION terminates.
+ *
+ * Pseudocode:
+ * TAIL_RECURSIVE_QUICKSORT(A,p,r):
+ *	while p < r
+ *		q = PARTITION(A,p,r)
+ *		TAIL_RECURSIVE_QUICKSORT(A,p,q-1)
+ *		p = q + 1
  */
 
 #include <stdio.h>
@@ -110,6 +117,12 @@ size_t hoare_partition(int *arr, size_t p, size_t r);
 void quick_sort_prime(int *arr, size_t p, size_t r);
 pivot_t partition_prime(int *arr, size_t p, size_t r);
 
+void tail_quick_sort(int *arr, size_t p, size_t r);
+void tail_quick_sort_modified(int *arr, size_t p, size_t r);
+
+void median_quick_sort(int *arr, size_t p, size_t r);
+size_t median_partition(int *arr, size_t p, size_t r);
+
 int main(void)
 {
 	int var1[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
@@ -120,6 +133,12 @@ int main(void)
 	int var6[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 	int var7[TEST_VAL1] = {13, 11, 11, 5, 12, 8, 7, 4, 11, 11, 11, 11};
 	int var8[TEST_VAL1] = {12, 8, 10, 9, 8, 8, 8, 5, 4, 3, 8, 1};
+	int var9[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
+	int var10[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+	int var11[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
+	int var12[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+	int var13[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
+	int var14[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
 	quick_sort(var1, 0, TEST_VAL1);
 	quick_sort(var2, 0, TEST_VAL1);
@@ -129,6 +148,13 @@ int main(void)
 	hoare_quick_sort(var6, 0, TEST_VAL1);
 	quick_sort_prime(var7, 0, TEST_VAL1);
 	quick_sort_prime(var8, 0, TEST_VAL1);
+	tail_quick_sort(var9, 0, TEST_VAL1);
+	tail_quick_sort(var10, 0, TEST_VAL1);
+	tail_quick_sort_modified(var11, 0, TEST_VAL1);
+	tail_quick_sort_modified(var12, 0, TEST_VAL1);
+	median_quick_sort(var13, 0, TEST_VAL1);
+	median_quick_sort(var14, 0, TEST_VAL1);
+
 
 	for(size_t i = 0; i < TEST_VAL1; i++)
 	{
@@ -168,6 +194,36 @@ int main(void)
 	for(size_t i = 0; i < TEST_VAL1; i++)
 	{
 		printf("%d ", var8[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var9[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var10[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var11[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var12[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var13[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var14[i]);
 	}
 	putchar('\n');
 	return 0;
@@ -352,4 +408,79 @@ pivot_t partition_prime(int *arr, size_t p, size_t r)
 	pivot_t pivot = {i, t};
 
 	return pivot;
+}
+
+void tail_quick_sort(int *arr, size_t p, size_t r)
+{
+	for(size_t q = 0; p+1 < r; p = q+1)
+	{
+		q = partition(arr, p, r);
+		tail_quick_sort(arr, p, q);
+	}
+}
+/*
+ * If you want to see the difference,
+ * uncomment 'stack_count' lines.
+ * Since choosing the smaller one during the loop,
+ * it is likely to invoke 'partition' more
+ * resulting in decreament of the stack depth.
+ */
+void tail_quick_sort_modified(int *arr, size_t p, size_t r)
+{
+	// static int stack_count = 0;
+	// printf("stack_count:%d\n", ++stack_count);
+	while(p+1 < r)
+	{
+		size_t q = partition(arr, p, r);
+		/*	Reverse the symbol and observe the result.	*/
+		if(q < (p+r)>>1)
+		{
+			tail_quick_sort_modified(arr, p, q);
+			p = q+1;
+		}
+		else
+		{
+			tail_quick_sort_modified(arr, q+1, r);
+			r = q;
+		}
+	}
+	// printf("stack_count:%d\n", --stack_count);
+}
+/*
+ * The performance of quicksort depends on the pivot;
+ * the better the pivot value is, the faster the function sorts.
+ * Although the cost of creating three random varaibles is expensive,
+ * it is highly expected to run in the average case.
+ */
+void median_quick_sort(int *arr, size_t p, size_t r)
+{
+	if(p+1 < r)
+	{
+		size_t q = median_partition(arr, p, r);
+		median_quick_sort(arr, p, q);
+		median_quick_sort(arr, q+1, r);
+	}
+}
+size_t median_partition(int *arr, size_t p, size_t r)
+{
+	srand(time(NULL));
+	size_t v1 = random(p, r);
+	size_t v2 = random(p, r);
+	size_t v3 = random(p, r);
+	size_t median = v1;
+	int temp = 0;
+
+	if(arr[median] < arr[v2])
+		median = v2;
+	if(arr[median] < arr[v3])
+	{
+		median = v1 ^ v2 ^ median;
+		if(arr[median] < arr[v3])
+			median = v3;
+	}
+	temp = arr[r-1];
+	arr[r-1] = arr[median];
+	arr[median] = temp;
+
+	return partition(arr, p, r);
 }
