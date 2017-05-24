@@ -69,6 +69,12 @@
  * Note that the above HEAPSORT function includes BUILD_MAX_HEAP.
  * BUILD_MAX_HEAP takes time O(n) and each of the n - 1 calls
  * to MAX_HEAPIFY takes time O(lgn) resulting in time O(nlgn).
+ *
+ * Pseudocode
+ * HEAP_DELETE(A, i):
+ *	A[i] = A[A.heap-size]
+ *	A.heap-size -= 1
+ *	MAX-HEAPIFY(A, i)
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -106,6 +112,7 @@ heap_t *make_heap(size_t input_length);
 void free_heap(heap_t *src);
 void max_heapify(heap_t *src, size_t i);
 void build_maxheap(heap_t *src);
+void delete_heap(heap_t *src, size_t i);
 void heapsort(heap_t *src);
 
 int main(void)
@@ -161,6 +168,13 @@ int main(void)
 	}
 	putchar('\n');
 
+	delete_heap(var2, 3);
+	for(size_t i = 0; i < TEST_VAL2; i++)
+	{
+		printf("%d ", var2->keys[i]);
+	}
+	putchar('\n');
+
 	heapsort(var3);
 	for(size_t i = 0; i < TEST_VAL3; i++)
 	{
@@ -207,7 +221,7 @@ void max_heapify(heap_t *src, size_t i)
 	size_t valid = src->heap_size;
 
 	/*
-	 * 'largest' was previously initialized as 'i'
+	 * 'largest' was previously initialized as 'i'.
 	 * This is selecting the maximum of three.
 	 */
 	if(left < valid && src->keys[left] > src->keys[largest])
@@ -229,6 +243,15 @@ void build_maxheap(heap_t *src)
 	for(size_t i = (src->length>>1) - 1; i != (size_t)-1; i--)
 		max_heapify(src, i);
 }
+void delete_heap(heap_t *src, size_t i)
+{
+	if(i < src->heap_size)
+	{
+		src->keys[i] = src->keys[--src->heap_size];
+		max_heapify(src, i);
+	}
+}
+
 void heapsort(heap_t *src)
 {
 

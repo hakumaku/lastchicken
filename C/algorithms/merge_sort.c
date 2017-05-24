@@ -181,7 +181,9 @@ void msort_divide(int *arr, size_t p, size_t r)
 	if(p < r)
 	{
 		size_t q = (p + r) >> 1;
+		/*	[p,q]	*/
 		msort_divide(arr, p, q);
+		/*	[q+1,r]	*/
 		msort_divide(arr, q+1, r);
 		msort_merge(arr, p, q, r);
 	}
