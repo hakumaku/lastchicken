@@ -92,6 +92,11 @@
 
 #define TEST_VAL1	12
 
+typedef struct {
+	size_t q;
+	size_t t;
+}pivot_t;
+
 void quick_sort(int *arr, size_t p, size_t r);
 size_t partition(int *arr, size_t p, size_t r);
 
@@ -102,6 +107,9 @@ size_t random(size_t a, size_t b);
 void hoare_quick_sort(int *arr, size_t p, size_t r);
 size_t hoare_partition(int *arr, size_t p, size_t r);
 
+void quick_sort_prime(int *arr, size_t p, size_t r);
+pivot_t partition_prime(int *arr, size_t p, size_t r);
+
 int main(void)
 {
 	int var1[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
@@ -110,6 +118,8 @@ int main(void)
 	int var4[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 	int var5[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
 	int var6[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+	int var7[TEST_VAL1] = {13, 11, 11, 5, 12, 8, 7, 4, 11, 11, 11, 11};
+	int var8[TEST_VAL1] = {12, 8, 10, 9, 8, 8, 8, 5, 4, 3, 8, 1};
 
 	quick_sort(var1, 0, TEST_VAL1);
 	quick_sort(var2, 0, TEST_VAL1);
@@ -117,6 +127,9 @@ int main(void)
 	random_quick_sort(var4, 0, TEST_VAL1);
 	hoare_quick_sort(var5, 0, TEST_VAL1);
 	hoare_quick_sort(var6, 0, TEST_VAL1);
+	quick_sort_prime(var7, 0, TEST_VAL1);
+	quick_sort_prime(var8, 0, TEST_VAL1);
+
 	for(size_t i = 0; i < TEST_VAL1; i++)
 	{
 		printf("%d ", var1[i]);
@@ -147,6 +160,16 @@ int main(void)
 		printf("%d ", var6[i]);
 	}
 	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var7[i]);
+	}
+	putchar('\n');
+	for(size_t i = 0; i < TEST_VAL1; i++)
+	{
+		printf("%d ", var8[i]);
+	}
+	putchar('\n');
 	return 0;
 }
 
@@ -172,10 +195,11 @@ size_t partition(int *arr, size_t p, size_t r)
 {
 	int temp = 0;
 	int x = arr[r-1];
-	size_t i = p;
+	size_t i = p, j = p;
 	/*	Until the penultimate element.	*/
-	for(size_t j = p; j < r-1; j++)
+	for(; j < r-1; j++)
 	{
+		/*	The last element will always be swapped.	*/
 		if(arr[j] <= x)
 		{
 			temp = arr[i];
@@ -184,10 +208,9 @@ size_t partition(int *arr, size_t p, size_t r)
 			i++;
 		}
 	}
-	/*	The last element will always be swapped.	*/
-	temp = arr[i];
-	arr[i] = arr[r-1];
-	arr[r-1] = temp;
+	temp = arr[j];
+	arr[j] = arr[i];
+	arr[i] = temp;
 
 	return i;
 }
@@ -286,4 +309,47 @@ size_t hoare_partition(int *arr, size_t p, size_t r)
 		else
 			return j;
 	}
+}
+void quick_sort_prime(int *arr, size_t p, size_t r)
+{
+	if(p+1 < r)
+	{
+		pivot_t pivot = partition_prime(arr, p, r);
+		quick_sort_prime(arr, p, pivot.q);
+		quick_sort_prime(arr, pivot.t+1, r);
+	}
+}
+pivot_t partition_prime(int *arr, size_t p, size_t r)
+{
+	int temp = 0, x = arr[r-1];
+	size_t i = p, j = p, t = 0;
+
+	for(; j < r-1; j++)
+	{
+		if(arr[j] < x)
+		{
+			temp = arr[j];
+			arr[j] = arr[i];
+			arr[i] = temp;
+			i++;
+		}
+	}
+	temp = arr[j];
+	arr[j] = arr[i];
+	arr[i] = temp;
+
+	for(t = i, j = i+1; j < r; j++)
+	{
+		if(arr[j] == x)
+		{
+			t++;
+			temp = arr[j];
+			arr[j] = arr[t];
+			arr[t] = temp;
+		}
+	}
+
+	pivot_t pivot = {i, t};
+
+	return pivot;
 }
