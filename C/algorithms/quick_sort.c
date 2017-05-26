@@ -123,6 +123,8 @@ void tail_quick_sort_modified(int *arr, size_t p, size_t r);
 void median_quick_sort(int *arr, size_t p, size_t r);
 size_t median_partition(int *arr, size_t p, size_t r);
 
+void print_array(int *arr, size_t len);
+
 int main(void)
 {
 	int var1[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
@@ -155,77 +157,42 @@ int main(void)
 	median_quick_sort(var13, 0, TEST_VAL1);
 	median_quick_sort(var14, 0, TEST_VAL1);
 
+	putchar('\n');
 
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var1[i]);
-	}
+	puts("quick_sort");
+	print_array(var1, TEST_VAL1);
+	print_array(var2, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var2[i]);
-	}
+
+	puts("random_quick_sort");
+	print_array(var3, TEST_VAL1);
+	print_array(var4, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var3[i]);
-	}
+
+	puts("hoare_quick_sort");
+	print_array(var5, TEST_VAL1);
+	print_array(var6, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var4[i]);
-	}
+
+	puts("quick_sort_prime");
+	print_array(var7, TEST_VAL1);
+	print_array(var8, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var5[i]);
-	}
+
+	puts("tail_quick_sort");
+	print_array(var9, TEST_VAL1);
+	print_array(var10, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var6[i]);
-	}
+
+	puts("tail_quick_sort_modified");
+	print_array(var11, TEST_VAL1);
+	print_array(var12, TEST_VAL1);
 	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var7[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var8[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var9[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var10[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var11[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var12[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var13[i]);
-	}
-	putchar('\n');
-	for(size_t i = 0; i < TEST_VAL1; i++)
-	{
-		printf("%d ", var14[i]);
-	}
-	putchar('\n');
+
+	puts("median_quick_sort");
+	print_array(var13, TEST_VAL1);
+	print_array(var14, TEST_VAL1);
+
 	return 0;
 }
 
@@ -464,23 +431,32 @@ void median_quick_sort(int *arr, size_t p, size_t r)
 size_t median_partition(int *arr, size_t p, size_t r)
 {
 	srand(time(NULL));
-	size_t v1 = random(p, r);
-	size_t v2 = random(p, r);
-	size_t v3 = random(p, r);
-	size_t median = v1;
-	int temp = 0;
+	size_t i1 = random(p, r);
+	size_t i2 = random(p, r);
+	size_t i3 = random(p, r);
+	int median = i1;
+	int median2 = i1 ^ i2;
+	/*	Does not generate 'cmov', but still seems not bad.	*/
+	if(arr[median] < arr[i2])
+		median = i2;
+	median2 ^= median;
 
-	if(arr[median] < arr[v2])
-		median = v2;
-	if(arr[median] < arr[v3])
-	{
-		median = v1 ^ v2 ^ median;
-		if(arr[median] < arr[v3])
-			median = v3;
-	}
-	temp = arr[r-1];
+	if(arr[median2] < arr[i3])
+		median2 = i3;
+
+	if(arr[median2] < arr[median])
+		median = median2;
+
+	int temp = arr[r-1];
 	arr[r-1] = arr[median];
 	arr[median] = temp;
 
 	return partition(arr, p, r);
+}
+
+void print_array(int *arr, size_t len)
+{
+	for(size_t i = 0; i < len; i++)
+		printf("%d ", arr[i]);
+	putchar('\n');
 }

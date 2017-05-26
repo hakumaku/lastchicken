@@ -5,7 +5,7 @@ int largest(int a, int b, int c);
 
 int main(void)
 {
-	int a = 10, b = 3, c = 21;
+	int a = 5, b = 9, c = 13;
 	printf("a:%d b:%d c:%d\n", a, b, c);
 	printf("largest:%d\n", largest(a,b,c));
 	printf("largest:%d\n", largest(a,c,b));
@@ -27,15 +27,29 @@ int main(void)
 int median(int a, int b, int c)
 {
 	int median = a;
+	int median2 = a ^ b;
 
+	/*
+	 * 1) median = a, median2 = b
+	 * 2) median = b, median2 = a
+	 */
 	if(median < b)
 		median = b;
-	if(median > c)
-	{
-		median = a ^ b ^ median;
-		if(median < c)
-			median = c;
-	}
+	median2 ^= median;
+
+	/*
+	 * 1) median = a, median2 = max(b,c)
+	 * 2) median = b, median2 = max(a,c)
+	 */
+	if(median2 < c)
+		median2 = c;
+
+	/*
+	 * median2 < median ? <-> is median the largest?
+	 * then, select median2 which is either max(b,c) or max(a,c).
+	 */
+	if(median2 < median)
+		median = median2;
 
 	return median;
 }
