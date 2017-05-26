@@ -60,7 +60,11 @@ int main(void)
 
 	return 0;
 }
-
+/*
+ * It assumes all elements are non-negative integers no larger than 'len'.
+ * It does not seem 'very useful' due to its assumption,
+ * but it gets remarkably impressive when implemented with 'radix sort'.
+ */
 void counting_sort(int *src, int *dest, int len)
 {
 	int *table = (int *)calloc(len, sizeof(int));
@@ -76,7 +80,13 @@ void counting_sort(int *src, int *dest, int len)
 	for(size_t i = len-1; i != (size_t)-1; i--)
 	{
 		src_val = src[i];
-		dest[table[src_val]] = src_val;
+		/*
+		 * If you initialized elements in 'table' to -1,
+		 * subtracting one is not required.
+		 */
+		dest[table[src_val]-1] = src_val;
 		table[src_val]--;
 	}
+
+	free(table);
 }
