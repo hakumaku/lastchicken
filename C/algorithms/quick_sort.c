@@ -69,6 +69,7 @@
  *		else
  *			return j
  *
+ * (Sir Tony Hoare developed quick sort.)
  * Don't get confused with 'until' and COMPARISON SYMBOLS.
  * THREE PROPERTIES you should be aware of:
  *	1) The indices i and j are such that
