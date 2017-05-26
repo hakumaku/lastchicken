@@ -92,6 +92,10 @@
  *		q = PARTITION(A,p,r)
  *		TAIL_RECURSIVE_QUICKSORT(A,p,q-1)
  *		p = q + 1
+ *
+ * On my desktop intel i5-4460 @ 3.20Ghz,
+ * 43343 calls of 'quick_sort' halts the program,
+ * whereas this implementation works fine.
  */
 
 #include <stdio.h>
