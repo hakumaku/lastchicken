@@ -222,7 +222,6 @@ size_t partition(int *arr, size_t p, size_t r)
 	/*	Until the penultimate element.	*/
 	for(; j < r-1; j++)
 	{
-		/*	The last element will always be swapped.	*/
 		if(arr[j] <= x)
 		{
 			temp = arr[i];
@@ -231,6 +230,7 @@ size_t partition(int *arr, size_t p, size_t r)
 			i++;
 		}
 	}
+	/*	The last element will always be swapped.	*/
 	temp = arr[j];
 	arr[j] = arr[i];
 	arr[i] = temp;
