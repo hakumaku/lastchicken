@@ -58,7 +58,7 @@ void radix_sort(int *arr, size_t len)
 	 * are less than or eqaul to its length.
 	 * In this code, it coerces the assumption to always hold true
 	 * by masking arr[i] and then
-	 * shifting it to the least significant bit position,
+	 * shifting it to the least significant digit position,
 	 * yieding a value less than (mask+1).
 	 */
 	while(mask)
@@ -86,6 +86,7 @@ void radix_sort(int *arr, size_t len)
 
 		mask <<= radix;
 		lsb_pos += radix;
+		prev = table;
 	}
 
 	free(buf);
