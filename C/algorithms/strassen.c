@@ -317,7 +317,6 @@ void stmul_matrix(mat_t *a, mat_t *b, mat_t *c)
 	{
 		/*	Extending	*/
 		size_t order = a->order;
-		size_t elements_size = order * order;
 
 		pad_a = make_empty_sqmat(extended_order);
 		pad_b = make_empty_sqmat(extended_order);
