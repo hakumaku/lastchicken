@@ -44,7 +44,7 @@
  * Kadane's algorithm:
  *
  * Simple idea of the Kadane's algorithm is to look for
- * all positive contiguous segments of the array 
+ * all positive contiguous segments of the array
  */
 #include <stdio.h>
 
@@ -77,10 +77,10 @@ int max_subarray_kadane(int *arr, size_t len);
 int main(void)
 {
 	//The answer is 6
-	int test1[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4};
+	// int test1[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4};
 	//The answer is 7
 	int test2[] = {-2, -3, 4, -1, -2, 1, 5, -3};
-    int len1 = sizeof(test1) / sizeof(int);
+	// int len1 = sizeof(test1) / sizeof(int);
     int len2 = sizeof(test2) / sizeof(int);
     int ret1 = 0, ret2 = 0, ret3 = 0;
 	ret1 = max_subarray_dq(test2, 0, len2-1);
@@ -197,7 +197,7 @@ int max_subarray_kadane(int *arr, size_t len)
 	{
 		sub_sum += arr[i];
 		/*
-		 * If it gets below 0, 
+		 * If it gets below 0,
 		 * it just throws it away.
 		 */
 		if(sub_sum < 0)

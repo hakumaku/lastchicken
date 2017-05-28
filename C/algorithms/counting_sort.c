@@ -46,7 +46,7 @@
 
 #define TEST_VAL1	11
 
-void counting_sort(int *src, int *dest, int len);
+void counting_sort(int *src, int *dest, size_t len);
 
 int main(void)
 {
@@ -65,7 +65,7 @@ int main(void)
  * It does not seem 'very useful' due to its assumption,
  * but it gets remarkably impressive when implemented with 'radix sort'.
  */
-void counting_sort(int *src, int *dest, int len)
+void counting_sort(int *src, int *dest, size_t len)
 {
 	int *table = (int *)calloc(len, sizeof(int));
 	int *prev = table;

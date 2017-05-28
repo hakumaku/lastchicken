@@ -79,7 +79,7 @@ void bucket_sort(int *arr, size_t len)
 	{
 		/*	Insertion sort	*/
 		int *list = bucket[i].arr;
-		int boundary = bucket[i].count;
+		size_t boundary = bucket[i].count;
 		int smaller = 0;
 		for(size_t j = 1, k = 0; j < boundary; j++)
 		{
