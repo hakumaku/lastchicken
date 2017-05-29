@@ -6,8 +6,23 @@
  *		if min > A[i]
  *			min = A[i]
  *	return min
+ *
+ * Pseudocode
+ * RANDOMIZED_SELECT(A,p,r,i):
+ *	if p == r
+ *		return A[p]
+ *	q = RANDOMIZED_PARTITION(A,p,r)
+ *	k = q - p + 1
+ *	if i == k
+ *		return A[q]
+ *	elseif i < k
+ *		return RANDOMIZED_SELECT(A,p,q-1,i)
+ *	else
+ *		return RANDOMIZED_SELECT(A,q+1,r,i-k)
  */
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define TEST_VAL1	500
 
@@ -19,6 +34,11 @@ typedef struct {
 int minimum(int *arr, size_t len);
 int maximum(int *arr, size_t len);
 pair_t min_max(int *arr, size_t len);
+
+int randomized_select(int *arr, size_t p, size_t r, size_t i);
+size_t randomized_partition(int *arr, size_t p, size_t r);
+size_t partition(int *arr, size_t p, size_t r);
+size_t random(size_t a, size_t b);
 
 int main(void)
 {
@@ -49,10 +69,12 @@ int main(void)
 	,1598,1152,350,197,801,695,672,416,268,1152,1578,1325,338,1135,755,989,667,1731,222,1671
 	,1332,471,1483,186,200,1204,577,737,69,1426,1136,1664,1856,1295,1075,346,1961,1537,1815,306
 	};
+	int order = 4;
 	pair_t ret = {0 ,0};
 	ret = min_max(test1, TEST_VAL1);
 	printf("min:%d max:%d\n", minimum(test1, TEST_VAL1), maximum(test1, TEST_VAL1));
 	printf("min:%d max:%d\n", ret.min, ret.max);
+	printf("%dth min:%d\n", order, randomized_select(test1, 0, TEST_VAL1, order));
 
 	return 0;
 }
@@ -126,4 +148,82 @@ pair_t min_max(int *arr, size_t len)
 		i += 2;
 	}
 	return pair;
+}
+/*
+ * Returns the i th smallest element in the array.
+ * i such that 1 <= i <= A.length
+ */
+int randomized_select(int *arr, size_t p, size_t r, size_t i)
+{
+	/*	[p, r)	*/
+	if(p+1 == r)
+		return arr[p];
+	/*
+	 * x1 < q < x2;
+	 * any x1 in [p, q) such that x1 < q
+	 * any x2 in (q, r) such that q < x2
+	 */
+	size_t q = randomized_partition(arr, p, r);
+	/*
+	 * k such that 1<= k <= A.length
+	 * 'q' here can be ranged from 0 to A.length-1.
+	 */
+	size_t k = q - p + 1;
+	if(i == k)
+		return arr[q];
+	else if(i < k)
+		return randomized_select(arr, p, q, i);
+	/*
+	 * In the case where i > k,
+	 * the i th smallest element of the entire array is
+	 * the same as the (i-k) th smallest element of the subarray
+	 * the size of which is k.
+	 */
+	else
+		return randomized_select(arr, q+1, r, i-k);
+}
+size_t randomized_partition(int *arr, size_t p, size_t r)
+{
+	srand(time(NULL));
+	size_t i = random(p, r);
+	int temp = arr[r-1];
+	arr[r-1] = arr[i];
+	arr[i] = temp;
+
+	return partition(arr, p, r);
+}
+size_t partition(int *arr, size_t p, size_t r)
+{
+	int temp = 0;
+	int pivot = arr[r-1];
+	size_t i = p, j = p;
+	for(; j < r-1; j++)
+	{
+		if(arr[j] <= pivot)
+		{
+			temp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = temp;
+			i++;
+		}
+	}
+
+	temp = arr[j];
+	arr[j] = arr[i];
+	arr[i] = temp;
+
+	return i;
+}
+size_t random(size_t a, size_t b)
+{
+	size_t ret = 0;
+	size_t range = b - a;
+	if(b < a)
+		return 0;
+
+	do {
+		ret = rand();
+	} while(ret >= (RAND_MAX - RAND_MAX % range));
+
+	return (ret % range) + a;
 }
