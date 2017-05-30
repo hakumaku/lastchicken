@@ -35,72 +35,9 @@
  * one has elements greater than x,
  * one has elements to be determined,
  * the last one has a pivot value.
- *
- * Pseudocode
- * RANDOMIZED_PARTITION(A,p,r):
- *	i = RANDOM(p,r)
- *	exchange A[r] with A[i]
- *	return PARTITION(A,p,r)
- *
- * Pseudocode
- * RANDOMIZED_QUICKSORT(A,p,r):
- *	if p < r
- *		q = RANDOMIZED_PARTITION(A,p,r)
- *		RANDOMIZED_QUICKSORT(A,p,q-1)
- *		RANDOMIZED_QUICKSORT(A,q+1,r)
- *
- * In order to obtain good expected performance over all inputs,
- * it explicitly permutates the input.
- *
- * Pseudocode
- * HOARE_PARTITION(A,p,r):
- *	x = A[p]
- *	i = p - 1
- *	j = r + 1
- *	while TRUE
- *		repeat
- *			j = j - 1
- *		until A[j] <= x
- *		repeat
- *			i = i + 1
- *		until A[i] >= x
- *		if i < j
- *			exchange A[i] with A[j]
- *		else
- *			return j
- *
- * (Sir Tony Hoare developed quick sort.)
- * Don't get confused with 'until' and COMPARISON SYMBOLS.
- * THREE PROPERTIES you should be aware of:
- *	1) The indices i and j are such that
- *	we never access an element of A outside the subarray A[p..r].
- *		-'x', or A[p], is the key to the termination condition.
- *		Either 'i' or 'j' will never exceed the index 'p' which is between
- *		'i' and 'j', since A[p] cannot be greater than itself or less than.
- *	2) When HOARE_PARTITION terminates,
- *	it returns a value j such that p <= j < r.
- *		-Since 'j' starts from the last element 'r-1', it is obvious that
- *		j < r holds. Also, when there are no appropriate values so that
- *		j equals to p, A[j] cannot be greater than itself, A[p].
- *		Thus, p <= j and j < r.
- *	3) Every element of A[p..j] is less than or equal to every
- *	element of A[j+1..r] when HOARE_PARTITION terminates.
- *
- * Pseudocode:
- * TAIL_RECURSIVE_QUICKSORT(A,p,r):
- *	while p < r
- *		q = PARTITION(A,p,r)
- *		TAIL_RECURSIVE_QUICKSORT(A,p,q-1)
- *		p = q + 1
- *
- * On my desktop intel i5-4460 @ 3.20Ghz,
- * 43343 calls of 'quick_sort' halts the program,
- * whereas this implementation works fine.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 #define TEST_VAL1	12
 
@@ -112,91 +49,18 @@ typedef struct {
 void quick_sort(int *arr, size_t p, size_t r);
 size_t partition(int *arr, size_t p, size_t r);
 
-void random_quick_sort(int *arr, size_t p, size_t r);
-size_t random_partition(int *arr, size_t p, size_t r);
-size_t random(size_t a, size_t b);
-
-void hoare_quick_sort(int *arr, size_t p, size_t r);
-size_t hoare_partition(int *arr, size_t p, size_t r);
-
-void quick_sort_prime(int *arr, size_t p, size_t r);
-pivot_t partition_prime(int *arr, size_t p, size_t r);
-
-void tail_quick_sort(int *arr, size_t p, size_t r);
-void tail_quick_sort_modified(int *arr, size_t p, size_t r);
-
-void median_quick_sort(int *arr, size_t p, size_t r);
-size_t median_partition(int *arr, size_t p, size_t r);
-
 void print_array(int *arr, size_t len);
 
 int main(void)
 {
 	int var1[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
 	int var2[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-	int var3[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
-	int var4[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-	int var5[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
-	int var6[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-	int var7[TEST_VAL1] = {13, 11, 11, 5, 12, 8, 7, 4, 11, 11, 11, 11};
-	int var8[TEST_VAL1] = {12, 8, 10, 9, 8, 8, 8, 5, 4, 3, 8, 1};
-	int var9[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
-	int var10[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-	int var11[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
-	int var12[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-	int var13[TEST_VAL1] = {13, 19, 9, 5, 12, 8, 7, 4, 21, 2, 6, 11};
-	int var14[TEST_VAL1] = {12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
 	quick_sort(var1, 0, TEST_VAL1);
 	quick_sort(var2, 0, TEST_VAL1);
-	random_quick_sort(var3, 0, TEST_VAL1);
-	random_quick_sort(var4, 0, TEST_VAL1);
-	hoare_quick_sort(var5, 0, TEST_VAL1);
-	hoare_quick_sort(var6, 0, TEST_VAL1);
-	quick_sort_prime(var7, 0, TEST_VAL1);
-	quick_sort_prime(var8, 0, TEST_VAL1);
-	tail_quick_sort(var9, 0, TEST_VAL1);
-	tail_quick_sort(var10, 0, TEST_VAL1);
-	tail_quick_sort_modified(var11, 0, TEST_VAL1);
-	tail_quick_sort_modified(var12, 0, TEST_VAL1);
-	median_quick_sort(var13, 0, TEST_VAL1);
-	median_quick_sort(var14, 0, TEST_VAL1);
 
-	putchar('\n');
-
-	puts("quick_sort");
 	print_array(var1, TEST_VAL1);
 	print_array(var2, TEST_VAL1);
-	putchar('\n');
-
-	puts("random_quick_sort");
-	print_array(var3, TEST_VAL1);
-	print_array(var4, TEST_VAL1);
-	putchar('\n');
-
-	puts("hoare_quick_sort");
-	print_array(var5, TEST_VAL1);
-	print_array(var6, TEST_VAL1);
-	putchar('\n');
-
-	puts("quick_sort_prime");
-	print_array(var7, TEST_VAL1);
-	print_array(var8, TEST_VAL1);
-	putchar('\n');
-
-	puts("tail_quick_sort");
-	print_array(var9, TEST_VAL1);
-	print_array(var10, TEST_VAL1);
-	putchar('\n');
-
-	puts("tail_quick_sort_modified");
-	print_array(var11, TEST_VAL1);
-	print_array(var12, TEST_VAL1);
-	putchar('\n');
-
-	puts("median_quick_sort");
-	print_array(var13, TEST_VAL1);
-	print_array(var14, TEST_VAL1);
 
 	return 0;
 }
@@ -219,6 +83,9 @@ void quick_sort(int *arr, size_t p, size_t r)
 		quick_sort(arr, q+1, r);
 	}
 }
+/*
+ * Lomuto partition scheme.
+ */
 size_t partition(int *arr, size_t p, size_t r)
 {
 	int temp = 0;
@@ -242,223 +109,6 @@ size_t partition(int *arr, size_t p, size_t r)
 
 	return i;
 }
-void random_quick_sort(int *arr, size_t p, size_t r)
-{
-	if(p+1 < r)
-	{
-		size_t q = random_partition(arr, p, r);
-		/*	[p,q)	*/
-		random_quick_sort(arr, p, q);
-		/*	(q,r)	*/
-		random_quick_sort(arr, q+1, r);
-	}
-}
-size_t random_partition(int *arr, size_t p, size_t r)
-{
-	srand(time(NULL));
-	size_t i = random(p, r);
-	int temp = arr[r-1];
-	arr[r-1] = arr[i];
-	arr[i] = temp;
-
-	return partition(arr, p, r);
-}
-/*	returns x in [a, b)	*/
-size_t random(size_t a, size_t b)
-{
-	size_t ret = 0;
-	size_t range = b - a;
-	if(b < a)
-		return 0;
-
-	do {
-		ret = rand();
-	} while(ret >= (RAND_MAX - RAND_MAX % range));
-
-	return (ret % range) + a;
-}
-void hoare_quick_sort(int *arr, size_t p, size_t r)
-{
-	if(p+1 < r)
-	{
-		size_t q = hoare_partition(arr, p, r);
-		hoare_quick_sort(arr, p, q);
-		hoare_quick_sort(arr, q+1, r);
-	}
-}
-/*
- * If you read the pseudocode again, you will find out that
- * the first loop always fails; 'x' is assigned 'arr[p]', and
- * it compares 'x' with 'arr[i]' such that 'i' is 'p'.
- * The first swapping occurs when the suitable 'j' is found in the array,
- * in which 'i' < 'j' holds.
- * It returns 'j', or 'q', the entry of which is in the sorted positiion.
- * e.g)
- * p:0 r:12 q:11
- * 1 11 10 9 8 7 6 5 4 3 2 12
- * p:0 r:11 q:0
- * 1 11 10 9 8 7 6 5 4 3 2 12
- * p:1 r:11 q:10
- * 1 2 10 9 8 7 6 5 4 3 11 12
- * p:1 r:10 q:1
- * 1 2 10 9 8 7 6 5 4 3 11 12
- * p:2 r:10 q:9
- * 1 2 3 9 8 7 6 5 4 10 11 12
- * p:2 r:9 q:2
- * 1 2 3 9 8 7 6 5 4 10 11 12
- * p:3 r:9 q:8
- * 1 2 3 4 8 7 6 5 9 10 11 12
- * p:3 r:8 q:3
- * 1 2 3 4 8 7 6 5 9 10 11 12
- * p:4 r:8 q:7
- * 1 2 3 4 5 7 6 8 9 10 11 12
- * p:4 r:7 q:4
- * 1 2 3 4 5 7 6 8 9 10 11 12
- * p:5 r:7 q:6
- * 1 2 3 4 5 6 7 8 9 10 11 12
- */
-size_t hoare_partition(int *arr, size_t p, size_t r)
-{
-	int temp = 0;
-	int x = arr[p];
-	size_t i = p, j = r-1;
-	while(1)
-	{
-		while(arr[j] > x)
-			j--;
-		if(i < j)
-		{
-			temp = arr[i];
-			arr[i] = arr[j];
-			arr[j] = temp;
-			while(arr[i] < x)
-				i++;
-		}
-		else
-			return j;
-	}
-}
-void quick_sort_prime(int *arr, size_t p, size_t r)
-{
-	if(p+1 < r)
-	{
-		pivot_t pivot = partition_prime(arr, p, r);
-		quick_sort_prime(arr, p, pivot.q);
-		quick_sort_prime(arr, pivot.t+1, r);
-	}
-}
-pivot_t partition_prime(int *arr, size_t p, size_t r)
-{
-	int temp = 0, x = arr[r-1];
-	size_t i = p, j = p, t = 0;
-
-	for(; j < r-1; j++)
-	{
-		if(arr[j] < x)
-		{
-			temp = arr[j];
-			arr[j] = arr[i];
-			arr[i] = temp;
-			i++;
-		}
-	}
-	temp = arr[j];
-	arr[j] = arr[i];
-	arr[i] = temp;
-
-	for(t = i, j = i+1; j < r; j++)
-	{
-		if(arr[j] == x)
-		{
-			t++;
-			temp = arr[j];
-			arr[j] = arr[t];
-			arr[t] = temp;
-		}
-	}
-
-	pivot_t pivot = {i, t};
-
-	return pivot;
-}
-
-void tail_quick_sort(int *arr, size_t p, size_t r)
-{
-	for(size_t q = 0; p+1 < r; p = q+1)
-	{
-		q = partition(arr, p, r);
-		tail_quick_sort(arr, p, q);
-	}
-}
-/*
- * If you want to see the difference,
- * uncomment 'stack_count' lines.
- * Since choosing the smaller one during the loop,
- * it is likely to invoke 'partition' more
- * resulting in decreament of the stack depth.
- */
-void tail_quick_sort_modified(int *arr, size_t p, size_t r)
-{
-	// static int stack_count = 0;
-	// printf("stack_count:%d\n", ++stack_count);
-	while(p+1 < r)
-	{
-		size_t q = partition(arr, p, r);
-		/*	Reverse the symbol and observe the result.	*/
-		if(q < (p+r)>>1)
-		{
-			tail_quick_sort_modified(arr, p, q);
-			p = q+1;
-		}
-		else
-		{
-			tail_quick_sort_modified(arr, q+1, r);
-			r = q;
-		}
-	}
-	// printf("stack_count:%d\n", --stack_count);
-}
-/*
- * The performance of quicksort depends on the pivot;
- * the better the pivot value is, the faster the function sorts.
- * Although the cost of creating three random varaibles is expensive,
- * it is highly expected to run in the average case.
- */
-void median_quick_sort(int *arr, size_t p, size_t r)
-{
-	if(p+1 < r)
-	{
-		size_t q = median_partition(arr, p, r);
-		median_quick_sort(arr, p, q);
-		median_quick_sort(arr, q+1, r);
-	}
-}
-size_t median_partition(int *arr, size_t p, size_t r)
-{
-	srand(time(NULL));
-	size_t i1 = random(p, r);
-	size_t i2 = random(p, r);
-	size_t i3 = random(p, r);
-	int median = i1;
-	int median2 = i1 ^ i2;
-	/*	Does not generate 'cmov', but still seems not bad.	*/
-	if(arr[median] < arr[i2])
-		median = i2;
-	median2 ^= median;
-
-	if(arr[median2] < arr[i3])
-		median2 = i3;
-
-	if(arr[median2] < arr[median])
-		median = median2;
-
-	int temp = arr[r-1];
-	arr[r-1] = arr[median];
-	arr[median] = temp;
-
-	return partition(arr, p, r);
-}
-
 void print_array(int *arr, size_t len)
 {
 	for(size_t i = 0; i < len; i++)
