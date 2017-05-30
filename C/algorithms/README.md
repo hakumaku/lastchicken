@@ -1,7 +1,7 @@
-### Algorithm source code
+## Algorithm source code
 *mostly base on Introduction to Algorithm and Wiki*
 
-*Sorting*
+#### Sorting
 1. Bubble sort
 	* Gnome sort
 	* Comb sort
@@ -20,7 +20,7 @@
 	* Radix sort
 	* Bucket sort
 
-*etc*
+#### etc
 1. Strassen
 1. Maximum Subarray
 1. Random
