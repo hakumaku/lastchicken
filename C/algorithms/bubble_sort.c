@@ -1,5 +1,8 @@
+/*
+ * A simple sorting algorithm.
+ * Usually not used in practice.
+ */
 #include <stdio.h>
-#include <stdlib.h>
 
 #define TEST_VAL1 11
 
