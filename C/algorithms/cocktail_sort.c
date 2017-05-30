@@ -27,7 +27,7 @@ void cocktail_sort(int *arr, size_t len)
 	size_t low = 0, high = len-1;
 	/*	Pointer	*/
 	size_t mov = 0;
-	int temp;
+	int temp = 0;
 	while(low < high)
 	{
 		for(size_t i = low; i < high; i++)

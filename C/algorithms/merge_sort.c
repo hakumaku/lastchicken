@@ -348,10 +348,22 @@ void nmsort_merge(int *arr, int *tmp, size_t p, size_t q, size_t r)
 		ri += (1-test);
 	}
 	/*	Copy rest of the left and the right subarray.	*/
-	while(li < q)
-		tmp[si++] = arr[li++];
-	while(ri < r)
-		tmp[si++] = arr[ri++];
+	if(li < q)
+	{
+		do {
+			tmp[si++] = arr[li++];
+		} while(li < q);
+	}
+	else
+	{
+		do {
+			tmp[si++] = arr[ri++];
+		} while(ri < r);
+	}
+	// while(li < q)
+	// 	tmp[si++] = arr[li++];
+	// while(ri < r)
+	// 	tmp[si++] = arr[ri++];
 
 	/*	Write back the sorted result.	*/
 	for(si = p; si < r; si++)
