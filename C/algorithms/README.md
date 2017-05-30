@@ -1,5 +1,5 @@
 ## Algorithm source code
-*mostly base on Introduction to Algorithm and Wiki*
+*mostly based on Introduction to Algorithm and Wiki*
 
 #### Sorting
 1. Bubble sort
