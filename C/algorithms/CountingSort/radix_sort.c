@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define RADIX	8
+
 #define TEST_VAL1 21
 
 void radix_sort(int *arr, size_t len);
@@ -34,24 +36,17 @@ int main(void)
 
 void radix_sort(int *arr, size_t len)
 {
-	size_t radix = 0, table_len = 0;
+	size_t table_len = 0;
 	int mask = 0, lsb_pos = 0;
 	int *buf = NULL, *table = NULL, *prev = NULL;
 	int arr_pos = 0, arr_val = 0;
 
-	/*
-	 * It just simply chooses 'r'.
-	 * Other strageties can be applied.
-	 */
-	for(size_t n = len; n; n >>= 1)
-		radix++;
-	mask = (1 << radix) - 1;
+	mask = (1 << RADIX) - 1;
 	table_len = mask+1;
 
 	buf = (int *)calloc(len, sizeof(int));
 	table = (int *)calloc(table_len, sizeof(int));
 	prev = table;
-
 	/*
 	 * In 'counting_sort.c', it was simply 'table[arr[i]]++;'
 	 * with a strong assumption that all elements in the array
@@ -84,8 +79,8 @@ void radix_sort(int *arr, size_t len)
 		for(size_t i = 0; i < len; i++)
 			arr[i] = buf[i];
 
-		mask <<= radix;
-		lsb_pos += radix;
+		mask <<= RADIX;
+		lsb_pos += RADIX;
 		prev = table;
 	}
 
