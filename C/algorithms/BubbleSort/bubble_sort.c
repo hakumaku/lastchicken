@@ -20,17 +20,21 @@ int main(void)
 }
 void bubble_sort(int *arr, size_t len)
 {
-	int temp = 0;
+	int v1 = 0, v2 = 0;
 	for(size_t i = 1; i < len; i++)
 	{
 		for(size_t j = 0; j < len - i; j++)
 		{
-			if(arr[j] > arr[j+1])
-			{
-				temp = arr[j];
-				arr[j] = arr[j+1];
-				arr[j+1] = temp;
-			}
+			v1 = arr[j];
+			v2 = arr[j+1];
+			arr[j] = v1 > v2 ? v2 : v1;
+			arr[j+1] = v1 > v2 ? v1 : v2;
+			// if(arr[j] > arr[j+1])
+			// {
+			// 	int temp = arr[j];
+			// 	arr[j] = arr[j+1];
+			// 	arr[j+1] = temp;
+			// }
 		}
 	}
 }

@@ -82,6 +82,7 @@ void enqueue_head(queue_t *src, int x)
 		return;
 
 	size_t head = src->head;
+	/*	It assumes that src->size != UINT_MAX.	*/
 	size_t v1 = head-1, v2 = v1 + src->size;
 	head = v2 < v1 ? v2 : v1;
 
