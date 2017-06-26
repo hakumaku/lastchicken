@@ -7,9 +7,9 @@
 
 typedef struct {
 	int *keys;
-	/*	From top to bottom	*/
+	/* From top to bottom */
 	size_t ti;
-	/*	From bottom to top(original)	*/
+	/* From bottom to top(original) */
 	size_t bi;
 	size_t count;
 	size_t size;
@@ -74,7 +74,7 @@ bool stack_full(stack_t *src)
 		return true;
 	return false;
 }
-/*	The original push	*/
+/* The original push */
 void push_top(stack_t *src, int x)
 {
 	if(stack_full(src))
@@ -82,7 +82,7 @@ void push_top(stack_t *src, int x)
 	src->keys[src->ti++] = x;
 	src->count++;
 }
-/*	The opposite of the original push	*/
+/* The opposite of the original push */
 void push_bottom(stack_t *src, int x)
 {
 	if(stack_full(src))
@@ -90,7 +90,7 @@ void push_bottom(stack_t *src, int x)
 	src->keys[src->bi++] = x;
 	src->count++;
 }
-/*	The original pop	*/
+/* The original pop */
 int pop_top(stack_t *src)
 {
 	if(stack_empty(src))
@@ -100,7 +100,7 @@ int pop_top(stack_t *src)
 
 	return pop_val;
 }
-/*	The opposite of the original pop	*/
+/* The opposite of the original pop */
 int pop_bottom(stack_t *src)
 {
 	if(stack_empty(src))

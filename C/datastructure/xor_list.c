@@ -4,7 +4,7 @@
 
 #define XOR(a,b)	((node_t *)((unsigned long)a ^ (unsigned long)b))
 
-/*	Doubly linked list	*/
+/* Doubly linked list */
 typedef struct node{
 	struct node *ptr;
 	int key;
@@ -118,7 +118,7 @@ void insert_node(list_t *src, int key)
 
 	if(!tail)
 		src->head = new;
-	/*	XOR(tail->ptr,NULL)--tail--new	*/
+	/* XOR(tail->ptr,NULL)--tail--new */
 	if(tail)
 		tail->ptr = XOR(new,XOR(tail->ptr,NULL));
 
@@ -130,14 +130,14 @@ void delete_node(list_t *src, int key)
 	node_t *node = src->head;
 	node_t *next = NULL;
 
-	/*	Searching	*/
+	/* Searching */
 	while(node && node->key != key)
 	{
 		next = XOR(node->ptr, prev);
 		prev = node;
 		node = next;
 	}
-	/*	When it found	*/
+	/* When it found */
 	/*
 	 * Always make sure that a ptr to be dereferenced is not NULL.
 	 */
@@ -152,7 +152,7 @@ void delete_node(list_t *src, int key)
 			src->tail = prev;
 		else
 			next->ptr = XOR(prev, XOR(next->ptr, node));
-		/*	Free the target	*/
+		/* Free the target */
 		free(node);
 	}
 }
