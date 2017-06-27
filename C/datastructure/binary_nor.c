@@ -1,5 +1,5 @@
 /*
- * Binary Tree
+ * Non recursive Binary tree
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +9,12 @@ typedef struct node {
 	struct node *left;
 	struct node *right;
 }node_t;
+
+#define STACK_SIZE	255
+typedef struct stack {
+	node_t *node_ptr[STACK_SIZE];
+	unsigned size;
+}stack_t;
 
 /* For print_binary_tree */
 typedef struct qdata {
@@ -23,18 +29,18 @@ typedef struct queue {
 
 node_t *make_node(int value);
 void free_binary_tree(node_t *src);
+void insert_key(node_t *root, int key);
+void delete_key(node_t *root, int key);
 node_t *search_key(node_t *src, int key);
 node_t *search_prev_min(node_t *src);
 node_t *search_prev_max(node_t *src);
-node_t *insert_key(node_t *src, int key);
-node_t *delete_key(node_t *src, int key);
+
 
 /* Printing set */
 void print_binary_tree(node_t *root);
 qdata_t *make_qdata(node_t *src);
 void enqueue(queue_t *src, node_t *data);
 node_t *dequeue(queue_t *src);
-
 
 int main(void)
 {
@@ -54,13 +60,15 @@ int main(void)
 	insert_key(root, 85);
 	insert_key(root, 100);
 
-	root = delete_key(root, 80);
 	print_binary_tree(root);
 
-	root = delete_key(root, 95);
+	delete_key(root, 80);
 	print_binary_tree(root);
 
-	root = delete_key(root, 37);
+	delete_key(root, 95);
+	print_binary_tree(root);
+
+	delete_key(root, 37);
 	print_binary_tree(root);
 
 	free_binary_tree(root);
@@ -88,20 +96,23 @@ void free_binary_tree(node_t *src)
 }
 node_t *search_key(node_t *src, int key)
 {
-	/* It does not exist. */
-	if(!src)
-		return NULL;
-	/* Successfully found. */
-	if(src->key == key)
-		return src;
-	/*	Go left	*/
-	else if(src->key > key)
-		return search_key(src->left, key);
-	/*	Go right	*/
-	else
-		return search_key(src->right, key);
+	node_t *target = src;
+	node_t **next = NULL;
+
+	while(target && target->key != key)
+	{
+		next = &(target->left);
+		if(target->key < key)
+			next = &(target->right);
+
+		target = *next;
+	}
+	/*
+	 * if target == NULL, it returns NULL
+	 * otherwise it has found one, returns the node.
+	 */
+	return target;
 }
-/* Assuems that 'src' is not NULL */
 node_t *search_prev_min(node_t *src)
 {
 	node_t *prev = src;
@@ -112,7 +123,6 @@ node_t *search_prev_min(node_t *src)
 	}
 	return prev;
 }
-/* Assuems that 'src' is not NULL */
 node_t *search_prev_max(node_t *src)
 {
 	node_t *prev = src;
@@ -123,99 +133,95 @@ node_t *search_prev_max(node_t *src)
 	}
 	return prev;
 }
-node_t *insert_key(node_t *src, int key)
+/* Assumes the root is not empty. */
+void insert_key(node_t *root, int key)
 {
-	/* Proper location */
-	if(!src)
-		return make_node(key);
+	node_t *temp = root;
+	node_t **next = NULL;
 
-	/* The smaller goes left. */
-	if(src->key >= key)
-		src->left = insert_key(src->left, key);
-	/* The bigger goes left. */
-	else
-		src->right = insert_key(src->right, key);
-
-	return src;
-}
-
-/*
- * 1) When it is a leaf node.
- * 2) When it has only one child node.
- * 3) When it has two child nodes.
- */
-node_t *delete_key(node_t *src, int key)
-{
-	if(!src)
-		return NULL;
-
-	/* The smaller goes left. */
-	if(src->key > key)
-		src->left = delete_key(src->left, key);
-	/* The bigger goes left. */
-	else if(src->key < key)
-		src->right = delete_key(src->right, key);
-	/* When it found. */
-	else
+	while(temp)
 	{
-		int mask1 = src->left ? 2 : 0;
-		int mask2 = src->right ? 1 : 0;
-		int node_type = mask1 | mask2;
+		next = &(temp->left);
+		if(temp->key < key)
+			next = &(temp->right);
 
-		/* 'temp': the node to be freed. */
-		node_t *prev = NULL;
-		node_t *temp = src;
-		switch (node_type)
-		{
-			/* When it is a leaf node. */
-			case 0:
-				src = NULL;
-				break;
-			/* When it has a right child node only. */
-			case 1:
-				src = src->right;
-				break;
-			/* When it has a left child node only. */
-			case 2:
-				src = src->left;
-				break;
-			/* When it has two nodes. */
-			case 3:
-				/*
-				 * There are two strategies:
-				 * one is to find min value in the right,
-				 * the other is to find max value in the left.
-				 */
-				/* 'prev' can be a leaf node. */
-				// prev = search_prev_min(src->right);
-				// temp = prev;
-				// if(prev->left)
-				// {
-				// 	temp = prev->left;
-				// 	prev->left = NULL;
-				// }
-				// else
-				// 	src->right = NULL;
-				prev = search_prev_max(src->left);
-				temp = prev;
-				if(prev->right)
-				{
-					temp = prev->right;
-					prev->right = NULL;
-				}
-				else
-					src->left = NULL;
-				/*
-				 * It actually assigns a suitable key,
-				 * and deletes another node.
-				 */
-				src->key = temp->key;
-				break;
-		}
-		free(temp);
+		temp = *next;
 	}
+	*next = make_node(key);
+}
+void delete_key(node_t *root, int key)
+{
+	node_t *src = root;
+	node_t **next = NULL;
 
-	return src;
+	while(src && src->key != key)
+	{
+		next = &(src->left);
+		if(src->key < key)
+			next = &(src->right);
+
+		src = *next;
+	}
+	/* There is no matching key */
+	if(!src)
+		return;
+
+	int mask1 = src->left ? 2 : 0;
+	int mask2 = src->right ? 1 : 0;
+	int node_type = mask1 | mask2;
+	node_t *temp = src;
+	node_t *prev = NULL;
+
+	switch (node_type)
+	{
+		/* When it is a leaf node. */
+		case 0:
+			*next = NULL;
+			break;
+		/* When it has a right child node only. */
+		case 1:
+			*next = temp->right;
+			break;
+		/* When it has a left child node only. */
+		case 2:
+			*next = temp->left;
+			break;
+		/* When it has two nodes. */
+		case 3:
+			/*
+			 * There are two strategies:
+			 * one is to find min value in the right,
+			 * the other is to find max value in the left.
+			 */
+			/* 'prev' can be a leaf node. */
+			// prev = search_prev_min(temp->right);
+			// temp = prev;
+			// if(prev->left)
+			// {
+			// 	temp = prev->left;
+			// 	prev->left = NULL;
+			// }
+			// else
+			// 	src->right = NULL;
+			prev = search_prev_max(temp->left);
+			temp = prev;
+			if(prev->right)
+			{
+				temp = prev->right;
+				prev->right = NULL;
+			}
+			else
+				src->left = NULL;
+			/*
+			 * It actually assigns a suitable key,
+			 * and deletes another node.
+			 */
+			src->key = temp->key;
+
+			break;
+	}
+	free(temp);
+
 }
 
 #define SELECT(xor,a,b) (queue_t*)((unsigned long)(xor) ^ (unsigned long)(a) ^ (unsigned long)(b))
