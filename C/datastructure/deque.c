@@ -75,14 +75,14 @@ bool queue_full(queue_t *src)
 		return true;
 	return false;
 }
-/*	The opposite of the original enqueue	*/
+/* The opposite of the original enqueue */
 void enqueue_head(queue_t *src, int x)
 {
 	if(queue_full(src))
 		return;
 
 	size_t head = src->head;
-	/*	It assumes that src->size != UINT_MAX.	*/
+	/* It assumes that src->size != UINT_MAX. */
 	size_t v1 = head-1, v2 = v1 + src->size;
 	head = v2 < v1 ? v2 : v1;
 
@@ -90,14 +90,14 @@ void enqueue_head(queue_t *src, int x)
 	src->head = head;
 	src->count++;
 }
-/*	The original enqueue	*/
+/* The original enqueue */
 void enqueue_tail(queue_t *src, int x)
 {
 	if(queue_full(src))
 		return;
 
 	size_t tail = src->tail;
-	/*	It assumes that src->size != UINT_MAX.	*/
+	/* It assumes that src->size != UINT_MAX. */
 	size_t v1 = tail+1, v2 = v1 - src->size;
 	src->keys[tail] = x;
 
@@ -105,7 +105,7 @@ void enqueue_tail(queue_t *src, int x)
 	src->tail = tail;
 	src->count++;
 }
-/*	The original dequeue	*/
+/* The original dequeue */
 int dequeue_head(queue_t *src)
 {
 	if(queue_empty(src))
@@ -121,7 +121,7 @@ int dequeue_head(queue_t *src)
 
 	return dequeue_val;
 }
-/*	The opposite of the original dequeue	*/
+/* The opposite of the original dequeue */
 int dequeue_tail(queue_t *src)
 {
 	if(queue_empty(src))
