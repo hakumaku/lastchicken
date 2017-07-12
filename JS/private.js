@@ -7,11 +7,11 @@ function counter() {
 }
 
 var foo = counter(), bar = counter();
-console.log(foo.count()); // foo 1
-console.log(foo.count());
-console.log(foo.count());
-console.log(bar.count());
-console.log(bar.count());
-bar.reset();
-console.log(bar.count());
-console.log(foo.count());
+console.log(foo.count());	// foo 1
+console.log(foo.count());	// foo 2
+console.log(foo.count()); 	// foo 3
+console.log(bar.count());	// bar 1
+console.log(bar.count());	// bar 2
+bar.reset();				// bar 0
+console.log(bar.count());	// bar 1
+console.log(foo.count());	// foo 3
