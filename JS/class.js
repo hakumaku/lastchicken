@@ -1,7 +1,16 @@
 /* Common way of defining Class */
 function Range(from, to) {
+	/* Private variable */
+	var privateVariable = "foo";
+
+	/* Public variable */
 	this.from = from;
 	this.to = to;
+
+	/* Public method */
+	this.publicMethod = function() {
+		console.log("Spam!");
+	}
 }
 /* One is.. */
 Range.prototype = {
