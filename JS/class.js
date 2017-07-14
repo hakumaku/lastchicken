@@ -12,9 +12,14 @@ function Range(from, to) {
 		console.log("Spam!");
 	}
 }
+/* This is a static method. */
+Range.classMethod = function () {
+	console.log("I am classMethod");
+}
 /* One is.. */
 Range.prototype = {
 	constructor: Range,
+	/* These are all instance methods. */
 	includes: function (x) {
 		return this.from <= x && x <= this.to;
 	},
