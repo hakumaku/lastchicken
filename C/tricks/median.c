@@ -23,33 +23,28 @@ int main(void)
 
 	return 0;
 }
-
+/*
+ * Strategy: find out which argument is the largest,
+ * and exclude it. After that return the larger of
+ * the rest two.
+ */
 int median(int a, int b, int c)
 {
 	int median = a;
-	int median2 = a ^ b;
+	int min = a ^ b;
 
-	/*
-	 * 1) median = a, median2 = b
-	 * 2) median = b, median2 = a
-	 */
+	/* max(a,b) */
 	if(median < b)
 		median = b;
-	median2 ^= median;
+	min ^= median;
 
-	/*
-	 * 1) median = a, median2 = max(b,c)
-	 * 2) median = b, median2 = max(a,c)
-	 */
-	if(median2 < c)
-		median2 = c;
+	/* min(max(a,b), c) */
+	if(c < median)
+		median = c;
 
-	/*
-	 * median2 < median ? <-> is median the largest?
-	 * then, select median2 which is either max(b,c) or max(a,c).
-	 */
-	if(median2 < median)
-		median = median2;
+	/* max(min, min(max(a,b), c)) */
+	if(median < min)
+		median = min;
 
 	return median;
 }

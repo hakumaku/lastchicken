@@ -28,7 +28,7 @@ Range.prototype = {
 			f(x);
 	},
 	toString: function() {
-		return "(" + this.from + "..." + this.to ")";
+		return "(" + this.from + "..." + this.to + ")";
 	}
 }
 /* The other is.. */
