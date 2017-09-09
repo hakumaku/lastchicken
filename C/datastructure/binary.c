@@ -8,18 +8,18 @@ typedef struct node {
 	int key;
 	struct node *left;
 	struct node *right;
-}node_t;
+} node_t;
 
 /* For print_binary_tree */
 typedef struct qdata {
 	node_t *node_ptr;
 	struct qdata *next;
-}qdata_t;
+} qdata_t;
 
 typedef struct queue {
 	qdata_t *head;
 	qdata_t *tail;
-}queue_t;
+} queue_t;
 
 node_t *make_node(int value);
 void free_binary_tree(node_t *src);
