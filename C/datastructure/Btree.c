@@ -277,36 +277,40 @@ void insert_nonfull_btree(node_t *src, size_t key)
 }
 /*
  * pre-condition:
- *           [ src ]
- *       [  src->c[i]  ]
+ *           [ prnt ]
+ *       [  prnt->c[i]  ]
  *
  * post-condition:
- *           [ src ]
- * [left(old)]     [right(old)]
+ *           [ prnt ]
+ * [left(old)]      [right(old)]
  */
-void split_btree(node_t *src, size_t i)
+void split_btree(node_t *prnt, size_t i)
 {
 	/*
 	 * To beautify its output,
 	 * it will assign 0 or null to deleted keys or pointers.
 	 * In real practice, it is not essential.
 	 */
-	node_t *left = src->c[i],
+	node_t *left = prnt->c[i],
 		   *right = allocate_node();
 	unsigned t = BTREE_KEY_MIN_COUNT;
 
 	/* Shift right to get a space for the new key. */
-	for (size_t j = src->n; j > i; j--)
+	for (size_t j = prnt->n; j > i; j--)
 	{
+		/*
+		 * Index for the array of key is one smaller
+		 * than that of pointers.
+		 */
 		size_t k = j-1;
-		src->key[k] = src->key[k-1];
-		src->c[j] = src->c[j-1];
+		prnt->key[k] = prnt->key[k-1];
+		prnt->c[j] = prnt->c[j-1];
 	}
 	/* Move the median key to its parent. */
-	src->key[i] = left->key[t];
+	prnt->key[i] = left->key[t];
 	left->key[t] = 0;
-	src->c[i+1] = right;
-	src->n++;
+	prnt->c[i+1] = right;
+	prnt->n++;
 
 	/* Copy its status and length. */
 	right->leaf = left->leaf;
@@ -344,7 +348,7 @@ void split_btree(node_t *src, size_t i)
 	}
 	// DISK_WRITE(y);
 	// DISK_WRITE(z);
-	// DISK_WRITE(src);
+	// DISK_WRITE(prnt);
 }
 
 void free_btree(btree_t *src)
