@@ -1,4 +1,5 @@
 *.exe
 *.s
+*.json
 test*.c
 makefile
