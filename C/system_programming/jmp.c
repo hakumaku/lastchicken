@@ -20,20 +20,24 @@ int main(void)
 	static int called = 1;
 	volatile int volatileVal = 10;
 	auto int autoVal = 10;
+	register int registerVal = 10;
 
 	int value = setjmp(mark);
 
 	printf("Line 18 reached: %d\n\n", called++);
 	if (value)
 	{
-		printf("After jumping...\nlocal = %d\nvolatileVal = %d\n\n", autoVal, volatileVal);
+		printf("After jumping...\nlocal = %d\nvolatileVal = %d\nregisterVal = %d\n\n",
+				autoVal, volatileVal, registerVal);
 		exit(value);
 	}
 	else
 	{
 		autoVal = 20;
 		volatileVal = 20;
-		printf("Before jumping...\nautoVal = %d\nvolatileVal = %d\n\n", autoVal, volatileVal);
+		registerVal = 20;
+		printf("Before jumping...\nautoVal = %d\nvolatileVal = %d\nregisterVal = %d\n\n",
+				autoVal, volatileVal, registerVal);
 		test_func();
 	}
 
