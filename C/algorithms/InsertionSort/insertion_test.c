@@ -35,12 +35,12 @@ int main(int argc, const char *argv[])
 	s = clock();
 		isort_old(test1, test_val);
 	e = clock();
-	printf("isort_old: %Lf\n", difftime(e, s)/CLOCKS_PER_SEC);
+	printf("isort_old: %lf\n", difftime(e, s)/CLOCKS_PER_SEC);
 
 	s = clock();
 		isort_new(test2, test_val);
 	e = clock();
-	printf("isort_new %Lf\n", difftime(e, s)/CLOCKS_PER_SEC);
+	printf("isort_new %lf\n", difftime(e, s)/CLOCKS_PER_SEC);
 
 	free(test1), free(test2);
 	return 0;
