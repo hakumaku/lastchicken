@@ -30,32 +30,22 @@ int main(void)
  */
 int median(int a, int b, int c)
 {
-	int median = a;
-	int min = a ^ b;
+	int v1 = a;
+	int v2 = a ^ b;
 
-	/* max(a,b) */
-	if(median < b)
-		median = b;
-	min ^= median;
+	v1 = v1 < b ? b : v1;
+	v2 ^= v1;
 
-	/* min(max(a,b), c) */
-	if(c < median)
-		median = c;
+	v1 = c < v1 ? c : v1;
 
-	/* max(min, min(max(a,b), c)) */
-	if(median < min)
-		median = min;
-
-	return median;
+	return v1 < v2 ? v2 : v1;
 }
 int largest(int a, int b, int c)
 {
 	int largest = a;
 
-	if(largest < b)
-		largest = b;
-	if(largest < c)
-		largest = c;
+	largest = largest < b ? b : largest;
+	largest = largest < c ? c : largest;
 
 	return largest;
 }
