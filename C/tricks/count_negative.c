@@ -21,8 +21,8 @@ size_t count_negative(int *arr, size_t len)
 		/*
 		 * cmpl	$-2147483648, (%rdi)
 		 *	(Compare 0 with *arr.
-		 *	Also, it can be interpreted as subtract *arr - 0
-		 *	in a binary way. The carry flag would be set.)
+		 *	Also, it can be interpreted as subtract *arr - weight
+		 *	in respect of binary. The carry flag would be set in that sense.)
 		 * sbbq	$-1, %rax
 		 *	(Subtract *arr - (-1) - CF.
 		 *	If CF == 1 meaning *arr is positive
