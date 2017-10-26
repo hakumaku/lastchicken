@@ -81,17 +81,43 @@ int main(int argc, const char *argv[])
 	putchar('\n');
 
 	printf("Result(cut_rod): \t%ld", cut_rod(table, LENGTH));
-	printf("\t(called: %ld)\n", count1);
+	printf("\t(called: %ld)\n\n", count1);
 
 	printf("Result(mcut_rod): \t%ld", mcut_rod(table, LENGTH));
-	printf("\t(called: %ld)\n", count2);
+	printf("\t(called: %ld)\n\n", count2);
 
 	printf("Result(bucut_rod): \t%ld", bucut_rod(table, LENGTH));
-	printf("\t(called: %ld)\n", count3);
+	printf("\t(called: %ld)\n\n", count3);
 
 	return 0;
 }
-
+/*
+ * It is the most intuitive but inefficient way
+ * of solving the problem.
+ * It cuts a rod into two subrods
+ * enumerating all the cases
+ * and picks the maximum outcome.
+ * For instance, assume it is 1-based array,
+ * p[1] + p[n-1]
+ * p[2] + p[n-2]
+ * p[3] + p[n-3]
+ * ...
+ * p[n-1] + p[1]
+ *
+ * and for p[n-1], p[n-2], ..., p[1]
+ *
+ * p[1] + p[n-1-1]
+ * p[2] + p[n-1-2]
+ * ...
+ * p[n-1-1] + p[1]
+ *
+ * p[1] + p[n-2-1]
+ * p[2] + p[n-2-2]
+ * ...
+ * p[n-2-1] + p[1]
+ *
+ * so on.
+ */
 size_t cut_rod(size_t *table, size_t len)
 {
 	count1++;
@@ -115,10 +141,28 @@ size_t mcut_rod(size_t *table, size_t len)
 	size_t *memo = (size_t *)calloc(len, sizeof(size_t));
 	size_t ret = mcut_rod_aux(table, len, memo);
 
+	puts("top-down memoized table: ");
+	for (size_t i = 0; i < len; i++)
+	{
+		printf("%ld ", memo[i]);
+	}
+	putchar('\n');
+
 	free(memo);
 
 	return ret;
 }
+/*
+ * The index + 1 of the auxiliary array refers to
+ * the length of a rod and the value the maximum revenue.
+ * Thus, r[0] = 1 means cutting a rod of length 0+1
+ * results in $1.
+ * It compares values in the following way:
+ *	i=0, p[0]+0
+ *	i=1, p[0]+r[0], p[1]+0
+ *	i=2, p[0]+r[1], p[1]+r[0], p[2]+0
+ *	so on.
+ */
 size_t mcut_rod_aux(size_t *table, size_t len, size_t *memo)
 {
 	count2++;
@@ -127,24 +171,38 @@ size_t mcut_rod_aux(size_t *table, size_t len, size_t *memo)
 	{
 		return 0;
 	}
-
-	size_t known_value = memo[len-1];
-
-	if (known_value > 0)
+	else
 	{
-		return known_value;
+		size_t known_value = memo[len-1];
+
+		if (known_value > 0)
+		{
+			return known_value;
+		}
+
+		size_t rev = 0;
+
+		for (size_t i = 0; i < len; i++)
+		{
+			rev = max(rev, table[i]+mcut_rod_aux(table, len-1-i, memo));
+		}
+		memo[len-1] = rev;
+
+		return rev;
 	}
-
-	size_t rev = 0;
-
-	for (size_t i = 0; i < len; i++)
-	{
-		rev = max(rev, table[i]+mcut_rod_aux(table, len-i-1, memo));
-	}
-	memo[len-1] = rev;
-
-	return rev;
 }
+/*
+ * The index of the auxiliary array refers to
+ * the length of a rod and the value the maximum revenue.
+ * Thus, r[0] = 0 is obvious, and if you want to know
+ * the result, the last value of the array should be
+ * looked up.
+ * It compares values in the following way:
+ *	i=0, p[0]+r[0]
+ *	i=1, p[0]+r[1], p[1]+r[0]
+ *	i=2, p[0]+r[2], p[1]+r[1], p[2]+r[0]
+ *	so on.
+ */
 size_t bucut_rod(size_t *table, size_t len)
 {
 	count3++;
@@ -162,6 +220,13 @@ size_t bucut_rod(size_t *table, size_t len)
 	}
 
 	rev = temp[len];
+
+	puts("bottom-up memoized table: ");
+	for (size_t i = 0; i < len+1; i++)
+	{
+		printf("%ld ", temp[i]);
+	}
+	putchar('\n');
 
 	free(temp);
 
