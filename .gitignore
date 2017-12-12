@@ -2,4 +2,4 @@
 *.s
 *.json
 test*.c
-makefile
+Makefile
