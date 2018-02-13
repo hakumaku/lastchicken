@@ -1,5 +1,8 @@
 *.exe
+*.out
+*.swp
 *.s
 *.json
 test*.c
 Makefile
+
