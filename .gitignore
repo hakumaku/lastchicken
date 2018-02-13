@@ -4,5 +4,4 @@
 *.s
 *.json
 test*.c
-Makefile
 
