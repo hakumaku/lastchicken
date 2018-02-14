@@ -1,7 +1,8 @@
-#ifndef AVLTREE_REC_H
-#define AVLTREE_REC_H
+#ifndef AVLTREE_H
+#define AVLTREE_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <wchar.h>
 #include <locale.h>
 
