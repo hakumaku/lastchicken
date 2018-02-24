@@ -269,7 +269,6 @@ static void delete(AVLNode **src, int key_to_del, int *flag)
 				*src = temp->left != NULL ? temp->left : temp->right;
 				free(temp);
 			}
-
 		}
 
 	}

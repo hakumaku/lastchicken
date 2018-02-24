@@ -6,14 +6,14 @@
 #include <wchar.h>
 #include <locale.h>
 
-typedef struct avltree_node AVLNode;
+typedef struct avltree AVLTree;
 
 #define USE_SUCCESSOR
 
-void avl_insert(AVLNode **src, int new_key);
-void avl_delete(AVLNode **src, int key_to_del);
-void destroy_tree(AVLNode *root);
+void avl_insert(AVLTree *src, int new_key);
+void avl_delete(AVLTree *src, int key_to_del);
+void destroy_tree(AVLTree *src);
 
-void print_tree(AVLNode *src);
+void print_tree(AVLTree *src);
 
 #endif
