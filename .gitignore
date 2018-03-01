@@ -3,5 +3,6 @@
 *.swp
 *.s
 *.json
+*.h.gch
 test*.c
 
