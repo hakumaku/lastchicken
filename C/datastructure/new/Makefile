@@ -49,13 +49,24 @@ avltree_main.o: $(MAIN4)
 avltree.o: $(SRC4)
 	$(CC) $(CFLAGS) -c $^
 
+# Binary Tree (new)
+DIR5 = bitree_new
+SRC5 := $(addprefix $(DIR5)/, bitree.c bitree.h)
+MAIN5 := $(addprefix $(DIR5)/, main.c)
+OBJ5 = bitree.o bitree_main.o
+
+bitree_main.o: $(MAIN5)
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+bitree.o: $(SRC5)
+	$(CC) $(CFLAGS) -c $^
 
 all: bitree_rec bitree avltree_rec
 
 bitree_rec: $(OBJ1)
 	$(CC) $(CFLAGS) -o $@.out $^
 
-bitree: $(OBJ2) 
+bitree: $(OBJ2)
 	$(CC) $(CFLAGS) -o $@.out $^
 
 avltree_rec: $(OBJ3)
@@ -64,9 +75,13 @@ avltree_rec: $(OBJ3)
 avltree: $(OBJ4)
 	$(CC) $(CFLAGS) -o $@.out $^
 
+bitree_new: $(OBJ5)
+	$(CC) $(CFLAGS) -o $@.out $^
+
 clean:
 	rm -f *.o
 	rm -f $(DIR1)/*.h.gch
 	rm -f $(DIR2)/*.h.gch
 	rm -f $(DIR3)/*.h.gch
+	rm -f $(DIR5)/*.h.gch
 
