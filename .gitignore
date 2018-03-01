@@ -1,8 +1,9 @@
 *.exe
 *.out
 *.swp
+*.h.gch
+*.o
 *.s
 *.json
-*.h.gch
 test*.c
 
