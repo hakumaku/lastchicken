@@ -143,41 +143,6 @@ static void insert(AVLNode **src, int new_key, int *flag)
 	}
 }
 
-/*
- * Unlike the condition of rotating in insertion
- * in which you can unambiguously select between LL and LR,
- * when it comes to deleting, there is a case
- * in which you can apply either LL or LR, maintaining
- * its balance.
- *
- * e.g)
- *      x
- *    /   \
- *   y     z
- *  / \
- * a   b
- * (There is only one node to be deleted, 'z'.)
- * (There can be three cases: a only, b only, and both a and b.)
- *
- * LL applied:
- *     x       y
- *    /       / \
- *   y   ==> a   x
- *  / \         /
- * a   b       b
- *
- * LR applied:
- *     x         b
- *    /         / \
- *   y   ==>   y   x
- *  / \       /
- * a   b     a
- *
- * If you are to implement with LL-first,
- * you should check the balance factor of x after it is rotated,
- * which can be either 0 or +1,
- * if LR-first, that of y needs to be examined.
- */
 static void delete(AVLNode **src, int key_to_del, int *flag)
 {
 	AVLNode *temp = *src;

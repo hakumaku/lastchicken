@@ -9,6 +9,13 @@ int main(int argc, const char *argv[])
 		avl_insert(root, i);
 		avl_print(root);
 	}
+	/*
+	for (int i = 1; i < 32; i++)
+	{
+		avl_delete(root, i);
+		avl_print(root);
+	}
+	*/
 
 
 	return 0;

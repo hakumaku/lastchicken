@@ -52,9 +52,28 @@ static inline void swap(int *a, int *b)
 	*b = t;
 }
 
-static inline void set_parent(BinNode *node, BinNode *parent)
+static inline void set_parent(BinNode *parent, BinNode *node)
 {
 	node->parent = parent;
+}
+
+static inline void change_child(BinNode *old, BinNode *new, BinNode *parent, BinNode **root)
+{
+	if (parent)
+	{
+		if (parent->left == old)
+		{
+			parent->left = new;
+		}
+		else
+		{
+			parent->right = new;
+		}
+	}
+	else
+	{
+		*root = new;
+	}
 }
 
 static inline BinNode *bin_parent(BinNode *node)
@@ -94,20 +113,20 @@ void bin_insert(BinTree *src, int k)
 
 static void insert(BinNode **src, int k)
 {
-	BinNode **new = src;
-	BinNode *parent = NULL;
+	BinNode **node = src;
+	BinNode *tmp = NULL;
 
-	while (*new)
+	while (*node)
 	{
-		parent = *new;
+		tmp = *node;
 
-		if (parent->key > k)
+		if (tmp->key > k)
 		{
-			new = &parent->left;
+			node = &tmp->left;
 		}
-		else if (parent->key < k)
+		else if (tmp->key < k)
 		{
-			new = &parent->right;
+			node = &tmp->right;
 		}
 		else
 		{
@@ -115,8 +134,8 @@ static void insert(BinNode **src, int k)
 		}
 	}
 
-	*new = create(k);
-	set_parent(*new, parent);
+	*node = create(k);
+	set_parent(tmp, *node);
 }
 
 void bin_delete(BinTree *src, int k)
@@ -126,55 +145,55 @@ void bin_delete(BinTree *src, int k)
 
 static void delete(BinNode **src, int k)
 {
-	BinNode **del = src;
-	BinNode *parent = NULL;
+	BinNode **node = src;
+	BinNode *tmp = NULL;
 
-	while (*del)
+	while (*node)
 	{
-		parent = *del;
+		tmp = *node;
 
-		if (parent->key > k)
+		if (tmp->key > k)
 		{
-			del = &parent->left;
+			node = &tmp->left;
 		}
-		else if (parent->key < k)
+		else if (tmp->key < k)
 		{
-			del = &parent->right;
+			node = &tmp->right;
 		}
 		else
 		{
 			/* full node */
-			if (parent->left && parent->right)
+			if (tmp->left && tmp->right)
 			{
-				BinNode *next = bin_next(parent);
-				swap(&next->key, &parent->key);
+				BinNode *next = bin_next(tmp);
+				BinNode *next_parent = bin_parent(next);
 
-				/* The next node is its just right child. */
-				if (parent->right == next)
+				swap(&next->key, &tmp->key);
+
+				/* next->right can be NULL. */
+				change_child(next, next->right, next_parent, src);
+				if (next->right)
 				{
-					parent->right = next->right;
-				}
-				else
-				{
-					BinNode *next_parent = bin_parent(next);
-					next_parent->left = next->right;
+					set_parent(next_parent, next->right);
 				}
 
 				free(next);
 			}
-			/* only left, only right or none */
-			else
+			else /* only left, only right or none */
 			{
-				BinNode *next = parent->left ? parent->left : parent->right;
-				/* if not none */
+				BinNode *next = tmp->left ? tmp->left : tmp->right;
+				BinNode *gparent = bin_parent(tmp);
+
+				/* next can be NULL. */
+				change_child(tmp, next, gparent, src);
 				if (next)
 				{
-					next->parent = parent->parent;
+					set_parent(gparent, next);
 				}
-				*del = next;
-				free(parent);
+
+				free(tmp);
 			}
-			break;
+			return;
 		}
 	}
 }
@@ -182,23 +201,23 @@ static void delete(BinNode **src, int k)
 void bin_destroy(BinTree *src)
 {
 	BinNode **node = &src->root;
-	BinNode *parent = NULL;
+	BinNode *tmp = NULL;
 
 	while (*node)
 	{
-		parent = *node;
+		tmp = *node;
 
-		if (parent->left)
+		if (tmp->left)
 		{
-			node = &parent->left;
+			node = &tmp->left;
 		}
-		else if (parent->right)
+		else if (tmp->right)
 		{
-			node = &parent->right;
+			node = &tmp->right;
 		}
 		else
 		{
-			parent = parent->parent;
+			tmp = tmp->parent;
 			free(*node);
 			*node = NULL;
 		}
@@ -207,26 +226,26 @@ void bin_destroy(BinTree *src)
 
 static BinNode *bin_next(BinNode *src)
 {
-	BinNode *next = src->right;
+	BinNode *tmp = src->right;
 
-	while (next->left)
+	while (tmp->left)
 	{
-		next = next->left;
+		tmp = tmp->left;
 	}
 
-	return next;
+	return tmp;
 }
 
 static BinNode *bin_prev(BinNode *src)
 {
-	BinNode *prev = src;
+	BinNode *tmp = src;
 
-	while (prev->right)
+	while (tmp->right)
 	{
-		prev = prev->right;
+		tmp = tmp->right;
 	}
 
-	return prev;
+	return tmp;
 }
 
 /*
