@@ -63,13 +63,34 @@ static inline int avl_bf(AvlNode *src)
 
 static inline void set_parent(AvlNode *parent, AvlNode *child)
 {
-	child->parent = (unsigned long)parent;
+	if (child)
+	{
+		child->parent = (unsigned long)parent;
+	}
 }
 
+/* set balance factor of @src to @bf */
 static inline void set_bf(AvlNode *src, int bf)
 {
 	src->parent &= ~3;
 	src->parent |= bf;
+}
+
+/* set proper balance factor of @src */
+static inline void fix_bf(AvlNode *src)
+{
+	if (src->left && src->right == NULL)
+	{
+		set_bf(src, LEFT_HEAVY);
+	}
+	else if (src->left == NULL && src->right)
+	{
+		set_bf(src, RIGHT_HEAVY);
+	}
+	else
+	{
+		set_bf(src, BALANCE);
+	}
 }
 
 static inline void change_child(AvlNode *old, AvlNode *new, AvlNode *parent, AvlNode **root)
@@ -84,10 +105,14 @@ static inline void change_child(AvlNode *old, AvlNode *new, AvlNode *parent, Avl
 		{
 			parent->right = new;
 		}
+
+		set_parent(parent, new);
 	}
 	else
 	{
 		*root = new;
+
+		set_parent(NULL, new);
 	}
 }
 
@@ -122,16 +147,12 @@ static void insert(AvlNode **root, int k);
 static void insert_bf(AvlNode *src, AvlNode **root);
 
 static void delete(AvlNode **root, int k);
-static void delete_bf(AvlNode *src, AvlNode **root);
+static void delete_bf(AvlNode *src, bool is_left, AvlNode **root);
 
-static void rotate_left(AvlNode *src, AvlNode **root);
-static void rotate_right(AvlNode *src, AvlNode **root);
-
-/* working */
-static void ll_rotate(AvlNode *src, AvlNode **root);
-static void lr_rotate(AvlNode *src, AvlNode **root);
-static void rr_rotate(AvlNode *src, AvlNode **root);
-static void rl_rotate(AvlNode *src, AvlNode **root);
+static AvlNode *ll_rotate(AvlNode *src, AvlNode **root);
+static AvlNode *lr_rotate(AvlNode *src, AvlNode **root);
+static AvlNode *rr_rotate(AvlNode *src, AvlNode **root);
+static AvlNode *rl_rotate(AvlNode *src, AvlNode **root);
 
 static void put_node(AvlNode *data, int c);
 static void put_space(PrintList *src);
@@ -197,24 +218,24 @@ static void insert_bf(AvlNode *src, AvlNode **root)
 		return;
 	}
 
-	AvlNode *node = src;
+	AvlNode *parent = src;
 
-	if (node->left && node->right)
+	if (parent->left && parent->right)
 	{
-		set_bf(node, BALANCE);
+		set_bf(parent, BALANCE);
 	}
-	else if (node->left)
+	else if (parent->left)
 	{
-		set_bf(node, LEFT_HEAVY);
+		set_bf(parent, LEFT_HEAVY);
 	}
 	else
 	{
-		set_bf(node, RIGHT_HEAVY);
+		set_bf(parent, RIGHT_HEAVY);
 	}
 
 	while (true)
 	{
-		AvlNode *gparent = avl_parent(node);
+		AvlNode *gparent = avl_parent(parent);
 
 		if (gparent == NULL)
 		{
@@ -222,7 +243,7 @@ static void insert_bf(AvlNode *src, AvlNode **root)
 		}
 
 		int bf = avl_bf(gparent);
-		bool left_child = gparent->left == node;
+		bool is_left = gparent->left == parent;
 
 		/*
 		 * 6 cases:
@@ -235,7 +256,7 @@ static void insert_bf(AvlNode *src, AvlNode **root)
 		 */
 		if (bf == BALANCE)
 		{
-			if (left_child)
+			if (is_left)
 			{
 				set_bf(gparent, LEFT_HEAVY);
 			}
@@ -246,38 +267,17 @@ static void insert_bf(AvlNode *src, AvlNode **root)
 		}
 		else if (bf == LEFT_HEAVY)
 		{
-			if (left_child)
+			if (is_left)
 			{
-				int parent_bf = avl_bf(node);
+				int parent_bf = avl_bf(parent);
+
 				if (parent_bf == LEFT_HEAVY)
 				{
-					ll_rotate(gparent, root);
-
-					/* 'y' node */
-					set_bf(gparent, BALANCE);
-					/* 'x' node */
-					set_bf(gparent->right, BALANCE);
+					gparent = ll_rotate(gparent, root);
 				}
 				else
 				{
-					lr_rotate(gparent, root);
-
-					/* 'z' node */
-					set_bf(gparent, BALANCE);
-
-					/* If 'x' node is full */
-					if (gparent->right->left)
-					{
-						/* 'x' node */
-						set_bf(gparent->right, BALANCE);
-						/* 'y' node */
-						set_bf(gparent->left, LEFT_HEAVY);
-					}
-					else /* 'y' node must be full */
-					{
-						set_bf(gparent->right, RIGHT_HEAVY);
-						set_bf(gparent->left, BALANCE);
-					}
+					gparent = lr_rotate(gparent, root);
 				}
 			}
 			else /* right_child */
@@ -288,48 +288,27 @@ static void insert_bf(AvlNode *src, AvlNode **root)
 		}
 		else /* bf == RIGHT_HEAVY */
 		{
-			if (left_child)
+			if (is_left)
 			{
 				set_bf(gparent, BALANCE);
 			}
 			else /* right_child */
 			{
-				int parent_bf = avl_bf(node);
+				int parent_bf = avl_bf(parent);
+
 				if (parent_bf == RIGHT_HEAVY)
 				{
-					rr_rotate(gparent, root);
-
-					/* 'y' node */
-					set_bf(gparent, BALANCE);
-					/* 'x' node */
-					set_bf(gparent->left, BALANCE);
+					gparent = rr_rotate(gparent, root);
 				}
 				else
 				{
-					rl_rotate(gparent, root);
-
-					/* 'z' node */
-					set_bf(gparent, BALANCE);
-
-					/* If 'x' node is full */
-					if (gparent->left->right)
-					{
-						/* 'x' node */
-						set_bf(gparent->left, BALANCE);
-						/* 'y' node */
-						set_bf(gparent->right, RIGHT_HEAVY);
-					}
-					else /* 'y' must be full */
-					{
-						set_bf(gparent->left, LEFT_HEAVY);
-						set_bf(gparent->right, BALANCE);
-					}
+					gparent = rl_rotate(gparent, root);
 				}
 			}
 			return;
 		}
 
-		node = avl_parent(node);
+		parent = avl_parent(parent);
 	}
 }
 
@@ -342,6 +321,7 @@ static void delete(AvlNode **root, int k)
 {
 	AvlNode **node = root;
 	AvlNode *tmp = NULL;
+	bool is_left = true;
 
 	while (*node)
 	{
@@ -363,13 +343,14 @@ static void delete(AvlNode **root, int k)
 				AvlNode *next = avl_next(tmp);
 				AvlNode *next_parent = avl_parent(next);
 
+				if (next_parent->right == next)
+				{
+					is_left = false;
+				}
+
 				swap(&next->key, &tmp->key);
 
 				change_child(next, next->right, next_parent, root);
-				if (next->right)
-				{
-					set_parent(next_parent, next->right);
-				}
 
 				free(next);
 
@@ -380,11 +361,12 @@ static void delete(AvlNode **root, int k)
 				AvlNode *next = tmp->left ? tmp->left : tmp->right;
 				AvlNode *gparent = avl_parent(tmp);
 
-				change_child(tmp, next, gparent, root);
-				if (next)
+				if (tmp->right)
 				{
-					set_parent(gparent, next);
+					is_left = false;
 				}
+
+				change_child(tmp, next, gparent, root);
 
 				free(tmp);
 
@@ -394,7 +376,7 @@ static void delete(AvlNode **root, int k)
 		}
 	}
 
-	// delete_bf(tmp, root);
+	delete_bf(tmp, is_left, root);
 }
 
 /*
@@ -432,31 +414,70 @@ static void delete(AvlNode **root, int k)
  * which can be either 0 or +1,
  * if LR-first, that of y needs to be examined.
  */
-static void delete_bf(AvlNode *src, AvlNode **root)
+static void delete_bf(AvlNode *src, bool is_left, AvlNode **root)
 {
 	if (src == NULL)
 	{
 		return;
 	}
 
-	AvlNode *node = src;
+	AvlNode *parent = src;
+	AvlNode *child = is_left ? parent->left : parent->right;
 
-	if (node->left == NULL && node->right == NULL)
+	if (parent->left)
 	{
-		set_bf(node, BALANCE);
+		set_bf(parent, LEFT_HEAVY);
+
+		if (parent->left->left)
+		{
+			parent = ll_rotate(parent, root);
+
+			/* If it could also lr_rotate */
+			if (parent->right->left)
+			{
+				set_bf(parent->right, LEFT_HEAVY);
+			}
+
+			return;
+		}
+
+		if (parent->left->right)
+		{
+			parent = lr_rotate(parent, root);
+			return;
+		}
 	}
-	else if (node->left)
+	else if (parent->right)
 	{
-		set_bf(node, LEFT_HEAVY);
+		set_bf(parent, RIGHT_HEAVY);
+
+		if (parent->right->right)
+		{
+			parent = rr_rotate(parent, root);
+
+			/* If it could also rl_rotate */
+			if (parent->left->right)
+			{
+				set_bf(parent->left, RIGHT_HEAVY);
+			}
+
+			return;
+		}
+
+		if (parent->right->left)
+		{
+			parent = rl_rotate(parent, root);
+			return;
+		}
 	}
 	else
 	{
-		set_bf(node, RIGHT_HEAVY);
+		set_bf(parent, BALANCE);
 	}
 
 	while (true)
 	{
-		AvlNode *gparent = avl_parent(node);
+		AvlNode *gparent = avl_parent(parent);
 
 		if (gparent == NULL)
 		{
@@ -464,11 +485,65 @@ static void delete_bf(AvlNode *src, AvlNode **root)
 		}
 
 		int bf = avl_bf(gparent);
-		bool left_child = gparent->left == node;
+		bool is_left = gparent->left == parent;
 
-		if (bf == BALANCE)
+		if (bf == LEFT_HEAVY)
 		{
-			if (left_child)
+			if (is_left)
+			{
+				set_bf(gparent, BALANCE);
+			}
+			else
+			{
+				if (parent->left)
+				{
+					gparent = ll_rotate(gparent, root);
+
+					if (gparent->right->left)
+					{
+						set_bf(gparent->right, LEFT_HEAVY);
+					}
+
+					return;
+				}
+
+				if (parent->right)
+				{
+					gparent = lr_rotate(gparent, root);
+					return;
+				}
+			}
+		}
+		else if (bf == RIGHT_HEAVY)
+		{
+			if (is_left)
+			{
+				if (parent->right)
+				{
+					gparent = rr_rotate(gparent, root);
+
+					if (gparent->left->right)
+					{
+						set_bf(gparent->left, RIGHT_HEAVY);
+					}
+					
+					return;
+				}
+
+				if (parent->left)
+				{
+					gparent = rl_rotate(gparent, root);
+					return;
+				}
+			}
+			else
+			{
+				set_bf(gparent, BALANCE);
+			}
+		}
+		else /* bf == BALANCE */
+		{
+			if (is_left)
 			{
 				set_bf(gparent, RIGHT_HEAVY);
 			}
@@ -476,248 +551,47 @@ static void delete_bf(AvlNode *src, AvlNode **root)
 			{
 				set_bf(gparent, LEFT_HEAVY);
 			}
+
 			return;
 		}
-		else if (bf == LEFT_HEAVY)
-		{
-			/*
-			 * Note that in the insertion process,
-			 * the node is balanced because it is "full",
-			 * while it is because it is a "leaf".
-			 * Thus, a certain node up to the root might be unbalanced.
-			 */
-			if (left_child)
-			{
-				set_bf(gparent, BALANCE);
-			}
-			else
-			{
-				int parent_bf = avl_bf(node);
-				if (parent_bf == LEFT_HEAVY)
-				{
-					ll_rotate(gparent, root);
-
-					set_bf(gparent->right, BALANCE);
-				}
-				else if (parent_bf == BALANCE)
-				{
-					set_bf(gparent->right, LEFT_HEAVY);
-				}
-				else
-				{
-					lr_rotate(gparent, root);
-
-					set_bf(gparent->right, LEFT_HEAVY);
-				}
-
-				set_bf(gparent->left, BALANCE);
-				set_bf(gparent, BALANCE);
-
-				return;
-			}
-		}
-		else /* bf == RIGHT_HEAVY */
-		{
-			if (left_child)
-			{
-				rotate_right(gparent, root);
-
-				return;
-			}
-			else
-			{
-				set_bf(gparent, BALANCE);
-			}
-		}
 	}
 }
-
-static void rotate_left(AvlNode *src, AvlNode **root)
-{
-	int bf = avl_bf(src);
-
-	/* LL rotate */
-	if (bf == LEFT_HEAVY)
-	{
-		AvlNode *x = src;
-		AvlNode *y = x->left;
-		AvlNode *t = y->right;
-		AvlNode *parent = avl_parent(src);
-
-		x->left = t;
-		if (t)
-		{
-			set_parent(x, t);
-		}
-
-		y->right = x;
-		set_parent(y, x);
-
-		set_bf(x, BALANCE);
-		set_bf(y, BALANCE);
-
-		set_parent(parent, y);
-		if (parent == NULL)
-		{
-			*root = y;
-		}
-		else if (parent->left == src)
-		{
-			parent->left = y;
-		}
-		else
-		{
-			parent->right = y;
-		}
-	}
-	else /* LR rotate */
-	{
-		AvlNode *x = src;
-		AvlNode *y = x->left;
-		AvlNode *z = y->right;
-		AvlNode *t1 = z->left;
-		AvlNode *t2 = z->right;
-		AvlNode *parent = avl_parent(src);
-
-		x->left = t2;
-		z->right = x;
-		set_parent(z, x);
-
-		y->right = t1;
-		z->left = y;
-		set_parent(z, y);
-
-		if (t1)
-		{
-			set_parent(y, t1);
-			set_bf(x, RIGHT_HEAVY);
-			set_bf(y, BALANCE);
-		}
-		else
-		{
-			set_parent(x, t2);
-			set_bf(x, BALANCE);
-			set_bf(y, LEFT_HEAVY);
-		}
-
-		set_bf(z, BALANCE);
-		set_parent(parent, z);
-		if (parent == NULL)
-		{
-			*root = z;
-		}
-		else if (parent->left == src)
-		{
-			parent->left = z;
-		}
-		else
-		{
-			parent->right = z;
-		}
-	}
-}
-
-static void rotate_right(AvlNode *src, AvlNode **root)
-{
-	int bf = avl_bf(src);
-
-	/* RR rotate */
-	if (bf == RIGHT_HEAVY)
-	{
-		AvlNode *x = src;
-		AvlNode *y = x->right;
-		AvlNode *t = y->left;
-		AvlNode *parent = avl_parent(src);
-
-		x->right = t;
-		if (t)
-		{
-			set_parent(x, t);
-		}
-
-		y->left = x;
-		set_parent(y, x);
-
-		set_bf(x, BALANCE);
-		set_bf(y, BALANCE);
-
-		set_parent(parent, y);
-		if (parent == NULL)
-		{
-			*root = y;
-		}
-		else if (parent->left == src)
-		{
-			parent->left = y;
-		}
-		else
-		{
-			parent->right = y;
-		}
-	}
-	else /* RL rotate */
-	{
-		AvlNode *x = src;
-		AvlNode *y = x->right;
-		AvlNode *z = y->left;
-		AvlNode *t1 = z->left;
-		AvlNode *t2 = z->right;
-		AvlNode *parent = avl_parent(src);
-
-		x->right = t1;
-		z->left = x;
-		set_parent(z, x);
-
-		y->left = t2;
-		z->right = y;
-		set_parent(z, y);
-
-		if (t1)
-		{
-			set_parent(x, t1);
-			set_bf(x, BALANCE);
-			set_bf(y, RIGHT_HEAVY);
-		}
-		else
-		{
-			set_parent(y, t2);
-			set_bf(x, LEFT_HEAVY);
-			set_bf(y, BALANCE);
-		}
-
-		set_bf(z, BALANCE);
-		set_parent(parent, z);
-		if (parent == NULL)
-		{
-			*root = z;
-		}
-		else if (parent->left == src)
-		{
-			parent->left = z;
-		}
-		else
-		{
-			parent->right = z;
-		}
-	}
-}
-
 /*
- * LL rotation:
- *	x.bf = 0
- *	y.bf = 0
- *       x            y
- *      / \         /   \
- *     y   4       z     x
- *    / \    ==>  / \   / \
- *   z   3       1   2 3   4
- *  / \
- * 1   2
- * There is only one new node, either 1 or 2.
- * Following nodes have changed
- * their parents: x, y and 3.
+ * LL rotation(insertion):
+ * case 1:
+ *       x          y
+ *      / \        / \
+ *     y   3      z   x
+ *    / \    =>  /   / \
+ *   z   2      1   2   3
+ *  /
+ * 1
+ *
+ * case 2:
+ *     x         y
+ *    / \      /   \
+ *   y   3    z     x
+ *  / \    =>  \   / \
+ * z   2        1 2   3
+ *  \
+ *   1
+ *
+ * LL rotation(deletion):
+ * case 1:
+ *     x         y
+ *    / \       / \
+ *   y  (2)    z   x
+ *  /       =>
+ * z
+ *
+ * case 2:
+ *     x         y
+ *    / \       / \
+ *   y  (2)    z   x
+ *  / \     =>    /
+ * z   1         1
  */
-static void ll_rotate(AvlNode *src, AvlNode **root)
+static AvlNode *ll_rotate(AvlNode *src, AvlNode **root)
 {
 	AvlNode *x = src;
 	AvlNode *y = x->left;
@@ -725,38 +599,55 @@ static void ll_rotate(AvlNode *src, AvlNode **root)
 	AvlNode *parent = avl_parent(x);
 
 	x->left = t;
-	if (t)
-	{
-		set_parent(x, t);
-	}
+	set_parent(x, t);
 
 	y->right = x;
 	set_parent(y, x);
 
 	change_child(x, y, parent, root);
-	set_parent(parent, y);
 
 	set_bf(x, BALANCE);
 	set_bf(y, BALANCE);
+
+	return y;
 }
 
 /*
- * LR rotation:
- *	x.bf = (new == 2) ? -1 : 0
- *	y.bf = (new == 2) ? 0 : 1
- *	z.bf = 0
- *      x             z
- *     / \          /   \
- *    y   4        y     x
- *   / \     ==>  / \   / \
- *  1   z        1   2 3   4
- *     / \
- *    2   3
- * There is only one new node, either 2 or 3.
- * Following nodes have changed
- * their parents: x, y, z and 2 or 3.
+ * LR rotation(insertion):
+ * case 1:
+ *     x          z
+ *    / \        / \
+ *   y   3      y   x
+ *  / \    =>  / \   \
+ * 1   z      1   2   3
+ *    /
+ *  (2)
+ *
+ * case 2:
+ *     x          z
+ *    / \        / \
+ *   y   3      y   x
+ *  / \    =>  /   / \
+ * 1   z      1   2   3
+ *      \
+ *      (2)
+ *
+ * LR rotation(deletion):
+ * case 1:
+ *   x         z
+ *  / \       / \
+ * y  (3)    y   x
+ *  \     =>
+ *   z
+ *
+ * case 2:
+ *     x           z
+ *    / \         / \
+ *   y  (3)      y   x
+ *  / \     =>  /
+ * 1   z       1
  */
-static void lr_rotate(AvlNode *src, AvlNode **root)
+static AvlNode *lr_rotate(AvlNode *src, AvlNode **root)
 {
 	AvlNode *x = src;
 	AvlNode *y = x->left;
@@ -766,48 +657,59 @@ static void lr_rotate(AvlNode *src, AvlNode **root)
 	AvlNode *parent = avl_parent(x);
 
 	x->left = t2;
+	set_parent(x, t2);
 	z->right = x;
 	set_parent(z, x);
 
 	y->right = t1;
+	set_parent(y, t1);
 	z->left = y;
 	set_parent(z, y);
 
-	if (t1)
-	{
-		set_parent(y, t1);
-		set_bf(x, RIGHT_HEAVY);
-		set_bf(y, BALANCE);
-	}
-	else
-	{
-		set_parent(x, t2);
-		set_bf(x, BALANCE);
-		set_bf(y, LEFT_HEAVY);
-	}
-
 	change_child(x, z, parent, root);
-	set_parent(parent, z);
 
+	set_bf(y, BALANCE);
 	set_bf(z, BALANCE);
+
+	return z;
 }
 
 /*
- * RR rotation:
- *	x.bf = 0
- *	y.bf = 0
- *   x                 y
- *  / \              /   \
- * 1   y            x     z
- *    / \    ==>   / \   / \
- *   2   z        1   2 3   4
- *      / \
- *     3   4
- * There is only one new node, either 3 or 4.
- * Following nodes have changed
- * their parents: x, y and 2.
+ * RR rotation(insertion):
+ * case 1:
+ *   x              y
+ *  / \            / \
+ * 1   y          x   z
+ *    / \    =>  / \   \
+ *   2   z      1   2   3
+ *        \
+ *         3
+ *
+ * case 2:
+ *   x             y
+ *  / \          /   \
+ * 1   y        x     z
+ *    / \  =>  / \   /
+ *   2   z    1   2 3
+ *      /
+ *     3
+ *
+ * RR rotation(deletion):
+ * case 1:
+ *    x          y
+ *   / \        / \
+ * (1)  y      x   z
+ *       \  =>
+ *        z
+ *
+ * case 2:
+ *    x          y
+ *   / \        / \
+ * (1)  y      x   z
+ *     / \  =>  \
+ *    2   z      2
  */
-static void rr_rotate(AvlNode *src, AvlNode **root)
+static AvlNode *rr_rotate(AvlNode *src, AvlNode **root)
 {
 	AvlNode *x = src;
 	AvlNode *y = x->right;
@@ -815,37 +717,55 @@ static void rr_rotate(AvlNode *src, AvlNode **root)
 	AvlNode *parent = avl_parent(x);
 
 	x->right = t;
-	if (t)
-	{
-		set_parent(x, t);
-	}
+	set_parent(x, t);
 
 	y->left = x;
 	set_parent(y, x);
 
 	change_child(x, y, parent, root);
-	set_parent(parent, y);
 
 	set_bf(x, BALANCE);
 	set_bf(y, BALANCE);
+
+	return y;
 }
 
-/* RL rotation:
- *	x.bf = (new == 2) ? 0 : -1
- *	y.bf = (new == 2) ? 1 : 0
- *	z.bf = 0
- *   x                 z
- *  / \              /   \
- * 1   y            x     y
- *    / \    ==>   / \   / \
- *   z   4        1   2 3   4
- *  / \
- * 2   3
- * There is only one new node, either 2 or 3.
- * Following nodes have changed
- * their parents: x, y, z and 2 or 3.
+/*
+ * RL rotation(insertion):
+ * case 1:
+ *   x            z
+ *  / \          / \
+ * 1   y        x   y
+ *    / \  =>  / \   \
+ *   z   3    1   2   3
+ *  /
+ * 2
+ *
+ * case 2:
+ *   x            z
+ *  / \          / \
+ * 1   y        x   y
+ *    / \  =>  /   / \
+ *   z   3    1   2   3
+ *    \
+ *     2
+ *
+ * RL rotation(deletion):
+ * case 1:
+ *    x          z
+ *   / \        / \
+ * (1)  y      x   y
+ *     / \  =>      \
+ *    z   3          3
+ *
+ * case 2:
+ *    x        z
+ *   / \      / \
+ * (1)  y    x   y
+ *     /  =>
+ *    z
  */
-static void rl_rotate(AvlNode *src, AvlNode **root)
+static AvlNode *rl_rotate(AvlNode *src, AvlNode **root)
 {
 	AvlNode *x = src;
 	AvlNode *y = x->right;
@@ -855,28 +775,21 @@ static void rl_rotate(AvlNode *src, AvlNode **root)
 	AvlNode *parent = avl_parent(x);
 
 	x->right = t1;
+	set_parent(x, t1);
 	z->left = x;
 	set_parent(z, x);
 
 	y->left = t2;
+	set_parent(y, t2);
 	z->right = y;
 	set_parent(z, y);
 
-	if (t1)
-	{
-		set_parent(x, t1);
-		set_bf(x, BALANCE);
-		set_bf(y, RIGHT_HEAVY);
-	}
-	else
-	{
-		set_parent(y, t2);
-		set_bf(x, LEFT_HEAVY);
-		set_bf(y, BALANCE);
-	}
-
 	change_child(x, z, parent, root);
-	set_parent(parent, z);
+
+	set_bf(y, BALANCE);
+	set_bf(z, BALANCE);
+
+	return z;
 }
 
 void avl_destroy(AvlTree *src)
@@ -960,7 +873,7 @@ static void put_node(AvlNode *data, int c)
 	wchar_t *s = output;
 	wchar_t *e = output + OUTPUT_LENGTH-2;
 
-	swprintf(output, OUTPUT_LENGTH-1, L"%-*d", OUTPUT_LENGTH-1, key);
+	swprintf(output, OUTPUT_LENGTH-1, L"%-*d(%d)", OUTPUT_LENGTH-1, key);
 
 	while (s < e)
 	{
