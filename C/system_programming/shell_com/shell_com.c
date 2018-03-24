@@ -99,7 +99,7 @@ static String *char_to_string(const char *src)
 		p++;
 	}
 
-	return nchar_to_string(src, p-s+1);
+	return nchar_to_string(src, p-s);
 }
 
 static String *nchar_to_string(const char *src, size_t len)
@@ -150,7 +150,7 @@ static String *strip_string(String *src)
 		}
 	}
 
-	return nchar_to_string(sot, eot-sot);
+	return nchar_to_string(sot, eot-sot+1);
 }
 
 /*
