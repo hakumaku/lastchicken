@@ -81,6 +81,7 @@ void shell_command(const char *command_line)
 
 	free(raw_cmd_line);
 	free(cmd_line);
+	free(cmds);
 }
 
 /*
