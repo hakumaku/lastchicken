@@ -3,8 +3,8 @@
 #define MAZE_MAT_H
 #include <stdio.h>
 #include <stdlib.h>
-#include "my_string.h"
-#include "my_list.h"
+#include "util/my_string.h"
+#include "util/my_list.h"
 
 #define DEAD_END	0	
 #define FOUND_EXIT	2

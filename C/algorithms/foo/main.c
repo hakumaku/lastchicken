@@ -1,4 +1,5 @@
 #include "ids/ids.h"
+// #include "gbs/gbs.h"
 
 int main(int argc, const char *argv[])
 {
@@ -41,6 +42,10 @@ int main(int argc, const char *argv[])
 	}
 
 	List *paths = iterative_deepening(foo);
+	/*
+	List *paths = greedy_bestfirst_search(foo);
+	*/
+
 	if (paths)
 	{
 		Node *temp = paths->head;

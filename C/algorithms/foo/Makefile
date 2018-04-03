@@ -1,18 +1,18 @@
 CC = gcc
-CFLAGS = -std=c99 -g -Wall -Wextra -Wno-unused-function -I.
+CFLAGS = -std=c99 -g -Wall -Wextra -Wno-unused-function -I. -I./util
 
-PROG = ids
-OBJ = maze_mat.o my_string.o priority_queue.o my_list.o main.o ids.o
+PROG = ids gbs
+OBJ = maze_mat.o my_string.o priority_queue.o my_list.o main.o
 
 all: $(PROG)
 
-priority_queue.o: priority_queue.c priority_queue.h
+priority_queue.o: util/priority_queue.c util/priority_queue.h
 	$(CC) $(CFLAGS) -c $^
 
-my_string.o: my_string.c my_string.h
+my_string.o: util/my_string.c util/my_string.h
 	$(CC) $(CFLAGS) -c $^
 
-my_list.o: my_list.c my_list.h
+my_list.o: util/my_list.c util/my_list.h
 	$(CC) $(CFLAGS) -c $^
 
 maze_mat.o: maze_mat.c maze_mat.h
@@ -24,16 +24,27 @@ main.o: main.c
 ids.o: ids/ids.c ids/ids.h
 	$(CC) $(CFLAGS) -c $^
 
-ids: $(OBJ)
+ids: $(OBJ) ids.o
+	$(CC) $(CFLAGS) -o $@.exe $^
+
+gbs.o: gbs/gbs.c gbs/gbs.h
+	$(CC) $(CFLAGS) -c $^
+
+gbs: $(OBJ) gbs.o
 	$(CC) $(CFLAGS) -o $@.exe $^
 
 clean:
 	rm -rf *.h.gch $(OBJ)
 	rm -rf ids/*.h.gch
+	rm -rf gbs/*.h.gch
+	rm -rf util/*.h.gch
 	rm -rf *.exe
 
-run:
-	./$(PROG).exe "texts/test(windows).txt"
+run_ids:
+	./ids.exe "texts/test(windows).txt"
+
+run_gbs:
+	./gbs.exe "texts/test(windows).txt"
 
 valgrind:
 	valgrind --leak-check=yes ./$(PROG).exe

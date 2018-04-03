@@ -184,7 +184,6 @@ void write_shortest_path(MazeMat *maze, List *path)
 
 	size_t row = maze->rows;
 	size_t col = maze->cols;
-	size_t len = row * col;
 
 	Point *data = deep_copy_points(maze);
 	replace_points(data, col, path);
@@ -270,6 +269,11 @@ void free_shortest_path(List *path)
 	{
 		List *p = pop(path);
 
+		/* Expects the first node to be of PathInfo. */
+		PathInfo *t = pop(p);
+		free(t);
+
+		/* Free the rest of it. */
 		while (p->count)
 		{
 			pop(p);

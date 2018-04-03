@@ -8,8 +8,6 @@
  * the solution.
  */
 #include "ids.h"
-#include "maze_mat.h"
-#include "my_list.h"
 
 static List *depth_first_search(MazeMat *maze, size_t depth);
 
@@ -102,7 +100,7 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 		else
 		{
 			Point *branching = dequeue(branch);
-			
+
 			/* No exit in maze. */
 			if (branching == NULL)
 			{

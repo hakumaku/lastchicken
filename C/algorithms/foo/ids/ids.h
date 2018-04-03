@@ -6,7 +6,7 @@
 #include "maze_mat.h"
 #include "my_list.h"
 
-List * iterative_deepening(MazeMat *maze);
+List *iterative_deepening(MazeMat *maze);
 
 #endif
 
