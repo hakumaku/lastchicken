@@ -48,6 +48,7 @@ struct point_data
 	MazeKind kind;
 	MazePrev from;
 	/* Maze with multiple exits. */
+	size_t distance;
 	bool eval;
 };
 
@@ -58,6 +59,7 @@ struct path_info
 };
 
 MazeMat *init_maze(const char *text_file);
+void clearup_maze(MazeMat *src);
 void free_maze(MazeMat *src);
 void free_shortest_path(List *path);
 
@@ -69,6 +71,7 @@ Point *locate_starting(MazeMat *src);
 Point *locate_ending(MazeMat *src);
 Point *look_around(MazeMat *src, Point *p);
 Point *get_previous_point(MazeMat *maze, Point *p);
+size_t manhattan_distance(Point *s, Point *d);
 
 PathInfo *create_info(size_t length, size_t movement);
 

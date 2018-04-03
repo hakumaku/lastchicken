@@ -1,14 +1,21 @@
 /*
- * Greedy best-first search
- * Unlike iterative deepening search,
- * it chooses one 'greedily' each time it meets a branching point.
+ * A* Search(A star search)
+ *
+ * One of informed search algorithms that it solves
+ * problems by searching among all possible paths to the solution for
+ * the one that incurs the smallest cost.
+ * f(n) = g(n) + h(n) where n is the last node on the path,
+ * g(n) is the cost of the path from the start node to n,
+ * and h(n) is a heuristic that estimates the cost of the cheapest
+ * path from n to the goal.
+ * Note that when g(n) = 0, it is Greedy best-first search, and
+ * when h(n) = 0, dijkstra.
  */
-#include "gbs.h"
+#include "ass.h"
 
-static size_t manhattan_distance(Point *s, Point *d);
 static List *search(MazeMat *maze, Point *end);
 
-List *greedy_bestfirst_search(MazeMat *maze)
+List *astar_search(MazeMat *maze)
 {
 	List *solution = init_list();
 	Point *end = locate_ending(maze);
@@ -22,6 +29,7 @@ List *greedy_bestfirst_search(MazeMat *maze)
 			push(solution, path);
 		}
 
+		clearup_maze(maze);
 		end = locate_ending(maze);
 	}
 
@@ -55,9 +63,15 @@ static List *search(MazeMat *maze, Point *end)
 		{
 			while (true)
 			{
-				/* "Greedily" push. */
+				/*
+				 * Addition to greedy choice,
+				 * take distance from starting point
+				 * into priority.
+				 */
+				size_t distance = point->distance + 1;
+				p->distance = distance;
 				size_t priority = manhattan_distance(p, end);
-				prior_push(branch, p, priority);
+				prior_push(branch, p, priority + distance);
 
 				p = look_around(maze, point);
 
@@ -67,7 +81,6 @@ static List *search(MazeMat *maze, Point *end)
 				}
 			}
 
-			/* "Greedily" choose. */
 			p = prior_pop(branch);
 
 			push(path, p);
@@ -138,19 +151,5 @@ static List *search(MazeMat *maze, Point *end)
 	}
 
 	return path;
-}
-
-static size_t manhattan_distance(Point *s, Point *d)
-{
-	size_t x1 = s->x;
-	size_t x2 = d->x;
-
-	size_t y1 = s->y;
-	size_t y2 = d->y;
-
-	size_t d1 = x1 > x2 ? x1 - x2 : x2 - x1;
-	size_t d2 = y1 > y2 ? y1 - y2 : y2 - y1;
-
-	return d1 + d2;
 }
 

@@ -14,12 +14,11 @@ static size_t count_lines(FILE *fp);
 /********************************************/
 
 /* Functions related to Point. */
-static Point *create_point(size_t i, size_t j, MazeKind kind, MazePrev prev);
 static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, MazeKind point);
 static Point *locate_multiple_point(MazeMat *src, MazeKind point);
-
 static Point *deep_copy_points(MazeMat *src);
 static void replace_points(Point *data, size_t stride, List *path);
+size_t manhattan_distance(Point *s, Point *d);
 
 static MazeMat *create_mat(size_t m, size_t n)
 {
@@ -39,6 +38,19 @@ static MazeMat *create_mat(size_t m, size_t n)
 	}
 
 	return mat;
+}
+
+/* It clears 'distance' of all points */
+void clearup_maze(MazeMat *src)
+{
+	Point *data = src->data;
+	Point *end = data + src->cols * src->rows;
+
+	while (data < end)
+	{
+		data->distance = 0;
+		data++;
+	}
 }
 
 void free_maze(MazeMat *src)
@@ -118,9 +130,13 @@ MazeMat *init_maze(const char *text_file)
 		{
 			if (IS_DIGIT(*text))
 			{
-				data->kind = TO_DIGIT(*text);
+				/* Initialize a point. */
 				data->x = x;
 				data->y = y;
+				data->kind = TO_DIGIT(*text);
+				data->from = NONE;
+				data->eval = false;
+				data->distance = 0;
 
 				y++;
 				x += (y == col);
@@ -218,51 +234,6 @@ void write_shortest_path(MazeMat *maze, List *path)
 	fclose(fp);
 }
 
-static Point *deep_copy_points(MazeMat *src)
-{
-	if (src == NULL || src->data == NULL)
-	{
-		return NULL;
-	}
-
-	size_t len = src->rows * src->cols;
-	Point *data = (Point *)calloc(len, sizeof(Point));
-	Point *pd = data;
-	Point *ps = src->data;
-
-	for (size_t i = 0; i < len; i++)
-	{
-		*pd = *ps;
-		pd++;
-		ps++;
-	}
-
-	return data;
-}
-
-/*
- * Replace ROAD with SHORTEST_PATH.
- * Note that the first node of 'path'
- * is information of that.
- */
-static void replace_points(Point *data, size_t stride, List *path)
-{
-	if (data == NULL || path == NULL || path->count < 2)
-	{
-		return;
-	}
-
-	Node *node = path->head->next->next;
-	Node *tail = path->tail;
-
-	while (node != tail)
-	{
-		Point *p = node->data;
-		data[p->x * stride + p->y].kind = SHORTEST_PATH;
-		node = node->next;
-	}
-}
-
 void free_shortest_path(List *path)
 {
 	while (path->count)
@@ -338,15 +309,18 @@ static size_t count_lines(FILE *fp)
 /********************
  * Points functions *
  ********************/
-static Point *create_point(size_t i, size_t j, MazeKind kind, MazePrev prev)
+size_t manhattan_distance(Point *s, Point *d)
 {
-	Point *point = (Point *)calloc(1, sizeof(Point));
-	point->x = i;
-	point->y = j;
-	point->kind = kind;
-	point->from = prev;
+	size_t x1 = s->x;
+	size_t x2 = d->x;
 
-	return point;
+	size_t y1 = s->y;
+	size_t y2 = d->y;
+
+	size_t d1 = x1 > x2 ? x1 - x2 : x2 - x1;
+	size_t d2 = y1 > y2 ? y1 - y2 : y2 - y1;
+
+	return d1 + d2;
 }
 
 /* Wrapper of finding out STARTING_POINT */
@@ -505,6 +479,51 @@ Point *look_around(MazeMat *src, Point *p)
 		direction = NULL;
 
 		return NULL;
+	}
+}
+
+static Point *deep_copy_points(MazeMat *src)
+{
+	if (src == NULL || src->data == NULL)
+	{
+		return NULL;
+	}
+
+	size_t len = src->rows * src->cols;
+	Point *data = (Point *)calloc(len, sizeof(Point));
+	Point *pd = data;
+	Point *ps = src->data;
+
+	for (size_t i = 0; i < len; i++)
+	{
+		*pd = *ps;
+		pd++;
+		ps++;
+	}
+
+	return data;
+}
+
+/*
+ * Replace ROAD with SHORTEST_PATH.
+ * Note that the first node of 'path'
+ * is information of that.
+ */
+static void replace_points(Point *data, size_t stride, List *path)
+{
+	if (data == NULL || path == NULL || path->count < 2)
+	{
+		return;
+	}
+
+	Node *node = path->head->next->next;
+	Node *tail = path->tail;
+
+	while (node != tail)
+	{
+		Point *p = node->data;
+		data[p->x * stride + p->y].kind = SHORTEST_PATH;
+		node = node->next;
 	}
 }
 

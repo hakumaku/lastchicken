@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -std=c99 -g -Wall -Wextra -Wno-unused-function -I. -I./util
 
-PROG = ids gbs
+PROG = ids gbs ass
 OBJ = maze_mat.o my_string.o priority_queue.o my_list.o main.o
 
 all: $(PROG)
@@ -33,19 +33,35 @@ gbs.o: gbs/gbs.c gbs/gbs.h
 gbs: $(OBJ) gbs.o
 	$(CC) $(CFLAGS) -o $@.exe $^
 
+ass.o: ass/ass.c ass/ass.h
+	$(CC) $(CFLAGS) -c $^
+
+ass: $(OBJ) ass.o
+	$(CC) $(CFLAGS) -o $@.exe $^
+
 clean:
-	rm -rf *.h.gch $(OBJ)
+	rm -rf *.h.gch $(OBJ) ids.o gbs.o ass.o
 	rm -rf ids/*.h.gch
 	rm -rf gbs/*.h.gch
+	rm -rf ass/*.h.gch
 	rm -rf util/*.h.gch
 	rm -rf *.exe
 
 run_ids:
 	./ids.exe "texts/test(windows).txt"
 
+valgrind_ids:
+	valgrind --leak-check=yes ./ids.exe
+
 run_gbs:
 	./gbs.exe "texts/test(windows).txt"
 
-valgrind:
-	valgrind --leak-check=yes ./$(PROG).exe
+valgrind_gbs:
+	valgrind --leak-check=yes ./gbs.exe
+
+run_ass:
+	./ass.exe "texts/test(windows).txt"
+
+valgrind_ass:
+	valgrind --leak-check=yes ./ass.exe
 
