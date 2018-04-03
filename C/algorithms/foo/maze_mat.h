@@ -11,6 +11,7 @@
 
 typedef struct maze_mat MazeMat;
 typedef struct point_data Point;
+typedef struct path_info PathInfo;
 typedef enum maze_kind MazeKind;
 typedef enum maze_prev MazePrev;
 
@@ -50,16 +51,26 @@ struct point_data
 	bool eval;
 };
 
+struct path_info
+{
+	size_t length;
+	size_t movement;
+};
+
 MazeMat *init_maze(const char *text_file);
 void free_maze(MazeMat *src);
+void free_shortest_path(List *path);
+
 void print_maze(MazeMat *src);
+void print_shortest_path(List *paths);
+void write_shortest_path(MazeMat *maze, List *path);
 
 Point *locate_starting(MazeMat *src);
 Point *locate_ending(MazeMat *src);
 Point *look_around(MazeMat *src, Point *p);
 Point *get_previous_point(MazeMat *maze, Point *p);
-void print_shortest_path(List *paths);
-/* Writing */
+
+PathInfo *create_info(size_t length, size_t movement);
 
 #endif
 

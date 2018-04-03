@@ -29,7 +29,8 @@ ids: $(OBJ)
 
 clean:
 	rm -rf *.h.gch $(OBJ)
-	rm -rf *.out
+	rm -rf ids/*.h.gch
+	rm -rf *.exe
 
 run:
 	./$(PROG).exe "texts/test(windows).txt"

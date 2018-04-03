@@ -38,6 +38,7 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 	/* Queue */
 	List *branch = init_list();
 	bool found = false;
+	size_t movement = 0;
 
 	/*
 	 * Put the current node into 'path', and
@@ -67,7 +68,6 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 		/* Found an exit. */
 		if (point->kind == ENDING_POINT && point->eval == false)
 		{
-			push(path, point);
 			point->eval = true;
 			found = true;
 			break;
@@ -80,6 +80,7 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 		if (p)
 		{
 			push(path, p);
+			movement++;
 
 			/*
 			 * If it has more than one,
@@ -124,10 +125,12 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 					{
 						/* Throw it away. */
 						pop(path);
+						movement++;
 					}
 				}
 
 				push(path, branching);
+				movement++;
 			}
 		}
 	}
@@ -150,6 +153,12 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 		free(path);
 
 		path = NULL;
+	}
+	else
+	{
+		/* Starting point and exiting point does not count. */
+		PathInfo *info = create_info(path->count-2, movement);
+		push(path, info);
 	}
 
 	return path;

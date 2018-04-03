@@ -3,6 +3,7 @@
 
 #define IS_DIGIT(c)		(c > 47 && c < 58)
 #define TO_DIGIT(c)		(c - '0')
+#define TO_CHAR(d)		(d + '0')
 
 /* Most of MazeMat functions are declared public. */
 static MazeMat *create_mat(size_t m, size_t n);
@@ -16,6 +17,9 @@ static size_t count_lines(FILE *fp);
 static Point *create_point(size_t i, size_t j, MazeKind kind, MazePrev prev);
 static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, MazeKind point);
 static Point *locate_multiple_point(MazeMat *src, MazeKind point);
+
+static Point *deep_copy_points(MazeMat *src);
+static void replace_points(Point *data, size_t stride, List *path);
 
 static MazeMat *create_mat(size_t m, size_t n)
 {
@@ -57,7 +61,7 @@ void print_maze(MazeMat *src)
 	{
 		for (size_t j = 0; j < n; j++)
 		{
-			printf("%d ", data->kind);
+			printf("%d(%ld,%ld) ", data->kind, data->x, data->y);
 			data++;
 		}
 		putchar('\n');
@@ -92,6 +96,8 @@ MazeMat *init_maze(const char *text_file)
 
 	MazeMat *mat = create_mat(row, col);
 	Point *data = mat->data;
+	size_t x = 0;
+	size_t y = 0;
 
 	/* Frees the first line of text file. */
 	free(line);
@@ -113,6 +119,13 @@ MazeMat *init_maze(const char *text_file)
 			if (IS_DIGIT(*text))
 			{
 				data->kind = TO_DIGIT(*text);
+				data->x = x;
+				data->y = y;
+
+				y++;
+				x += (y == col);
+				y = (y == col) ? 0 : y;
+
 				data++;
 			}
 			text++;
@@ -126,33 +139,145 @@ MazeMat *init_maze(const char *text_file)
 	return mat;
 }
 
-void print_shortest_path(List *paths)
+/* A signle path must be cast. */
+void print_shortest_path(List *path)
 {
-	if (paths == NULL || paths->count == 0)
+	if (path == NULL || path->count == 0)
 	{
 		return;
 	}
 
-	while (true)
+	PathInfo *info = path->head->data;
+	printf("Length: %ld\n", info->length);
+	printf("Time: %ld\n", info->movement);
+
+	Node *node = path->tail;
+	Point *p = NULL;
+	/* Exclude the first node. */
+	size_t len = path->count - 2;
+
+	for (size_t i = 0; i < len; i++)
 	{
-		List *path = pop(paths);
+		p = node->data;
+		printf("(%ld, %ld) -> ", p->x, p->y);
 
-		if (path == NULL)
-		{
-			break;
-		}
-
-		Point *node = NULL;
-
-		while (path->count > 1)
-		{
-			node = dequeue(path);
-			printf("(%ld, %ld) -> ", node->x, node->y);
-		}
-
-		node = dequeue(path);
-		printf("(%ld, %ld)\n", node->x, node->y);
+		node = node->prev;
 	}
+	p = node->data;
+	printf("(%ld, %ld)\n", p->x, p->y);
+}
+
+/* A signle path must be cast. */
+void write_shortest_path(MazeMat *maze, List *path)
+{
+	if (maze == NULL || path == NULL || path->head == NULL)
+	{
+		return;
+	}
+
+	FILE *fp = fopen("output.txt", "w");
+	if (fp == NULL)
+	{
+		fprintf(stderr, "Creating output.txt has failed.\n");
+		return;
+	}
+
+	size_t row = maze->rows;
+	size_t col = maze->cols;
+	size_t len = row * col;
+
+	Point *data = deep_copy_points(maze);
+	replace_points(data, col, path);
+
+	/* buffer size == 2n */
+	char *buf = (char *)calloc((col << 1), sizeof(char));
+	Point *dp = data;
+
+	for (size_t i = 0; i < row; i++)
+	{
+		char *bp = buf;
+
+		for (size_t j = 0; j < col; j++)
+		{
+			*bp = TO_CHAR(dp->kind);
+			bp++;
+			*bp = ' ';
+			bp++;
+			dp++;
+		}
+		*(bp-1) = '\0';
+
+		fprintf(fp, "%s\n", buf);
+	}
+
+	PathInfo *info = path->head->data;
+	fprintf(fp, "Length: %ld\n", info->length);
+	fprintf(fp, "Time: %ld\n", info->movement);
+
+	free(buf);
+	free(data);
+	fclose(fp);
+}
+
+static Point *deep_copy_points(MazeMat *src)
+{
+	if (src == NULL || src->data == NULL)
+	{
+		return NULL;
+	}
+
+	size_t len = src->rows * src->cols;
+	Point *data = (Point *)calloc(len, sizeof(Point));
+	Point *pd = data;
+	Point *ps = src->data;
+
+	for (size_t i = 0; i < len; i++)
+	{
+		*pd = *ps;
+		pd++;
+		ps++;
+	}
+
+	return data;
+}
+
+/*
+ * Replace ROAD with SHORTEST_PATH.
+ * Note that the first node of 'path'
+ * is information of that.
+ */
+static void replace_points(Point *data, size_t stride, List *path)
+{
+	if (data == NULL || path == NULL || path->count < 2)
+	{
+		return;
+	}
+
+	Node *node = path->head->next->next;
+	Node *tail = path->tail;
+
+	while (node != tail)
+	{
+		Point *p = node->data;
+		data[p->x * stride + p->y].kind = SHORTEST_PATH;
+		node = node->next;
+	}
+}
+
+void free_shortest_path(List *path)
+{
+	while (path->count)
+	{
+		List *p = pop(path);
+
+		while (p->count)
+		{
+			pop(p);
+		}
+		free(p);
+	}
+
+	free(path);
 }
 
 /*
@@ -232,11 +357,13 @@ Point *locate_ending(MazeMat *src)
 	return locate_multiple_point(src, ENDING_POINT);
 }
 
+/* Locate a point of given kind from (i, j). */
 static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, MazeKind kind)
 {
 	size_t n = src->cols;
 	size_t i = from_j == n ? from_i + 1 : from_i;
 	size_t j = from_j == n ? 0 : from_j;
+
 	Point *data = src->data + i * n + j;
 	Point *end = data + src->rows * n;
 
@@ -248,10 +375,6 @@ static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, Ma
 		}
 
 		data++;
-		j++;
-
-		i += (j == n);
-		j = (j == n) ? 0 : j;
 	}
 
 	if (data == end)
@@ -260,34 +383,19 @@ static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, Ma
 		return NULL;
 	}
 
-	return create_point(i, j, kind, NONE);
+	return data;
 }
 
 static Point *locate_multiple_point(MazeMat *src, MazeKind kind)
 {
 	static List *points = NULL;
-	static bool init = false;
 
-	if (init)
+	if (points == NULL)
 	{
-		Point *s = dequeue(points);
-
-		if (s == NULL)
-		{
-			init = false;
-			free(points);
-		}
-
-		return s;
-	}
-	else
-	{
-		init = true;
-
-		points = init_list();
-
 		size_t i = 0;
 		size_t j = 0;
+
+		points = init_list();
 
 		while (true)
 		{
@@ -303,8 +411,18 @@ static Point *locate_multiple_point(MazeMat *src, MazeKind kind)
 
 			enqueue(points, p);
 		}
+	}
 
+	if (points->count)
+	{
 		return dequeue(points);
+	}
+	else
+	{
+		free(points);
+		points = NULL;
+
+		return NULL;
 	}
 }
 
@@ -395,7 +513,7 @@ Point *get_previous_point(MazeMat *maze, Point *p)
 
 	MazePrev from = p->from;
 	Point *prev = NULL;
-	size_t stride = maze->rows;
+	size_t stride = maze->cols;
 
 	if (from == UP)
 	{
@@ -415,5 +533,14 @@ Point *get_previous_point(MazeMat *maze, Point *p)
 	}
 
 	return prev;
+}
+
+PathInfo *create_info(size_t length, size_t movement)
+{
+	PathInfo *info = (PathInfo *)calloc(1, sizeof(PathInfo));
+	info->length = length;
+	info->movement = movement;
+
+	return info;
 }
 
