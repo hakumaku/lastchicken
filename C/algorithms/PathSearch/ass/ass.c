@@ -13,16 +13,17 @@
  */
 #include "ass.h"
 
-static List *search(MazeMat *maze, Point *end);
+static List *search(MazeMat *maze, Point *start, Point *end);
 
 List *astar_search(MazeMat *maze)
 {
 	List *solution = init_list();
+	Point *start = locate_starting(maze);
 	Point *end = locate_ending(maze);
 
 	while (end)
 	{
-		List *path = search(maze, end);
+		List *path = search(maze, start, end);
 
 		if (path)
 		{
@@ -36,27 +37,15 @@ List *astar_search(MazeMat *maze)
 	return solution;
 }
 
-static List *search(MazeMat *maze, Point *end)
+static List *search(MazeMat *maze, Point *start, Point *end)
 {
-	List *path = init_list();
+	List *path = NULL;
 	PriorList *branch = init_prior_list();
-	bool found = false;
 	size_t movement = 0;
+	Point *point = start;
 
-	Point *point = locate_starting(maze);
-	push(path, point);
-
-	while (true)
+	while (point != end)
 	{
-		point = path->head->data;
-
-		if (point == end)
-		{
-			point->eval = true;
-			found = true;
-			break;
-		}
-
 		Point *p = look_around(maze, point);
 
 		if (p)
@@ -81,9 +70,8 @@ static List *search(MazeMat *maze, Point *end)
 				}
 			}
 
-			p = prior_pop(branch);
-
-			push(path, p);
+			point = prior_pop(branch);
+			point->eval = true;
 			movement++;
 
 			continue;
@@ -99,26 +87,8 @@ static List *search(MazeMat *maze, Point *end)
 			}
 			else
 			{
-				Point *threshold = get_previous_point(maze, branching);
-
-				/* Pop enough nodes. */
-				while (true)
-				{
-					Point *back = path->head->data;
-
-					if (back == threshold)
-					{
-						break;
-					}
-					else
-					{
-						/* Throw it away. */
-						pop(path);
-						movement++;
-					}
-				}
-
-				push(path, branching);
+				point = branching;
+				point->eval = true;
 				movement++;
 			}
 		}
@@ -132,19 +102,10 @@ static List *search(MazeMat *maze, Point *end)
 	free(branch);
 
 	/* Returns NULL when it didn't find one. */
-	if (found == false)
+	if (point == end)
 	{
-		while (path->head)
-		{
-			pop(path);
-		}
+		path = construct_path(maze, end);
 
-		free(path);
-
-		path = NULL;
-	}
-	else
-	{
 		/* Starting point and exiting point does not count. */
 		PathInfo *info = create_info(path->count-2, movement);
 		push(path, info);

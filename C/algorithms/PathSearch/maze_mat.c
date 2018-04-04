@@ -18,7 +18,6 @@ static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, Ma
 static Point *locate_multiple_point(MazeMat *src, MazeKind point);
 static Point *deep_copy_points(MazeMat *src);
 static void replace_points(Point *data, size_t stride, List *path);
-size_t manhattan_distance(Point *s, Point *d);
 
 static MazeMat *create_mat(size_t m, size_t n)
 {
@@ -48,6 +47,7 @@ void clearup_maze(MazeMat *src)
 
 	while (data < end)
 	{
+		data->eval = false;
 		data->distance = 0;
 		data++;
 	}
@@ -134,8 +134,8 @@ MazeMat *init_maze(const char *text_file)
 				data->x = x;
 				data->y = y;
 				data->kind = TO_DIGIT(*text);
-				data->from = NONE;
 				data->eval = false;
+				data->from = NONE;
 				data->distance = 0;
 
 				y++;
@@ -153,6 +153,21 @@ MazeMat *init_maze(const char *text_file)
 	fclose(fp);
 
 	return mat;
+}
+
+List *construct_path(MazeMat *maze, Point *end)
+{
+	List *path = init_list();
+	Point *cur = end;
+
+	while (cur->kind != STARTING_POINT)
+	{
+		push(path, cur);
+		cur = get_previous_point(maze, cur);
+	}
+	push(path, cur);
+
+	return path;
 }
 
 /* A signle path must be cast. */

@@ -1,5 +1,5 @@
-// #include "ids/ids.h"
-// #include "gbs/gbs.h"
+#include "ids/ids.h"
+#include "gbs/gbs.h"
 #include "ass/ass.h"
 
 int main(int argc, const char *argv[])

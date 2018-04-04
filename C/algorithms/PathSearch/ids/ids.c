@@ -9,33 +9,40 @@
  */
 #include "ids.h"
 
-static List *depth_first_search(MazeMat *maze, size_t depth);
+static List *depth_first_search(MazeMat *maze, size_t depth, Point *start, Point *end);
 
 List *iterative_deepening(MazeMat *maze)
 {
 	size_t fixed_depth = maze->rows * maze->cols;
 	List *solution = init_list();
+	Point *start = locate_starting(maze);
+	Point *end = locate_ending(maze);
 
-	for (size_t i = 1; i < fixed_depth; i++)
+	while (end)
 	{
-		List *path = depth_first_search(maze, i);
-
-		if (path)
+		for (size_t i = 1; i < fixed_depth; i++)
 		{
-			push(solution, path);
+			List *path = depth_first_search(maze, i, start, end);
+
+			if (path)
+			{
+				push(solution, path);
+				break;
+			}
+
+			clearup_maze(maze);
 		}
+
+		end = locate_ending(maze);
 	}
 
 	return solution;
 }
 
-static List *depth_first_search(MazeMat *maze, size_t depth)
+static List *depth_first_search(MazeMat *maze, size_t depth, Point *start, Point *end)
 {
-	/* Stack */
-	List *path = init_list();
-	/* Queue */
+	List *path = NULL;
 	List *branch = init_list();
-	bool found = false;
 	size_t movement = 0;
 
 	/*
@@ -55,19 +62,13 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 	 *	Else:
 	 *		No exit exists.
 	 */
-	Point *point = locate_starting(maze);
-	push(path, point);
+	Point *point = start;
 
 	for (size_t i = 0; i < depth; i++)
 	{
-		/* Current point. */
-		point = path->head->data;
-
 		/* Found an exit. */
-		if (point->kind == ENDING_POINT && point->eval == false)
+		if (point == end)
 		{
-			point->eval = true;
-			found = true;
 			break;
 		}
 
@@ -77,7 +78,8 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 		/* Push next point. */
 		if (p)
 		{
-			push(path, p);
+			point = p;
+			point->eval = true;
 			movement++;
 
 			/*
@@ -104,30 +106,12 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 			/* No exit in maze. */
 			if (branching == NULL)
 			{
-				/* Error handling */
+				break;
 			}
 			else
 			{
-				Point *threshold = get_previous_point(maze, branching);
-
-				/* Pop enough nodes. */
-				while (true)
-				{
-					Point *back = path->head->data;
-
-					if (back == threshold)
-					{
-						break;
-					}
-					else
-					{
-						/* Throw it away. */
-						pop(path);
-						movement++;
-					}
-				}
-
-				push(path, branching);
+				point = branching;
+				point->eval = true;
 				movement++;
 			}
 		}
@@ -141,19 +125,10 @@ static List *depth_first_search(MazeMat *maze, size_t depth)
 	free(branch);
 
 	/* Returns NULL when it didn't find one. */
-	if (found == false)
+	if (point == end)
 	{
-		while (path->head)
-		{
-			pop(path);
-		}
+		path = construct_path(maze, end);
 
-		free(path);
-
-		path = NULL;
-	}
-	else
-	{
 		/* Starting point and exiting point does not count. */
 		PathInfo *info = create_info(path->count-2, movement);
 		push(path, info);

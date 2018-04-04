@@ -6,9 +6,6 @@
 #include "util/my_string.h"
 #include "util/my_list.h"
 
-#define DEAD_END	0	
-#define FOUND_EXIT	2
-
 typedef struct maze_mat MazeMat;
 typedef struct point_data Point;
 typedef struct path_info PathInfo;
@@ -47,7 +44,7 @@ struct point_data
 	size_t y;
 	MazeKind kind;
 	MazePrev from;
-	/* Maze with multiple exits. */
+	/* A* search */
 	size_t distance;
 	bool eval;
 };
@@ -59,6 +56,7 @@ struct path_info
 };
 
 MazeMat *init_maze(const char *text_file);
+List *construct_path(MazeMat *maze, Point *end);
 void clearup_maze(MazeMat *src);
 void free_maze(MazeMat *src);
 void free_shortest_path(List *path);
