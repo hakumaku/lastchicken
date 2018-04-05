@@ -42,9 +42,9 @@ int main(int argc, const char *argv[])
 		printf("e: (%ld, %ld)\n", e->x, e->y);
 	}
 
-	// List *paths = iterative_deepening(foo);
+	List *paths = iterative_deepening(foo);
 	// List *paths = greedy_bestfirst_search(foo);
-	List *paths = astar_search(foo);
+	// List *paths = astar_search(foo);
 
 
 	if (paths)

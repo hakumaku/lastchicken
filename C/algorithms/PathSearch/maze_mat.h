@@ -70,6 +70,7 @@ Point *locate_ending(MazeMat *src);
 Point *look_around(MazeMat *src, Point *p);
 Point *get_previous_point(MazeMat *maze, Point *p);
 size_t manhattan_distance(Point *s, Point *d);
+size_t nearest_manhattan_distance(Point *s, List *ends);
 
 PathInfo *create_info(size_t length, size_t movement);
 

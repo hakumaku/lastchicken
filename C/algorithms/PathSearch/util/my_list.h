@@ -22,6 +22,7 @@ struct linked_node
 };
 
 List *init_list(void);
+void free_list(List *src);
 void enqueue(List *src, void *data);
 void *dequeue(List *src);
 void push(List *src, void *data);

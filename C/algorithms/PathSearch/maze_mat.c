@@ -338,6 +338,22 @@ size_t manhattan_distance(Point *s, Point *d)
 	return d1 + d2;
 }
 
+size_t nearest_manhattan_distance(Point *s, List *ends)
+{
+	Node *node = ends->head;
+	size_t min = (size_t)-1;
+
+	while (node)
+	{
+		size_t d = manhattan_distance(s, node->data);
+		min = min > d ? d : min;
+
+		node = node->next;
+	}
+	
+	return min;
+}
+
 /* Wrapper of finding out STARTING_POINT */
 Point *locate_starting(MazeMat *src)
 {

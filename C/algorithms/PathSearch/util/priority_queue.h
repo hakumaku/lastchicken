@@ -23,6 +23,7 @@ struct prior_list_node
 };
 
 PriorList *init_prior_list(void);
+void free_prior_list(PriorList *src);
 void prior_push(PriorList *src, void *data, size_t priority);
 void *prior_pop(PriorList *src);
 

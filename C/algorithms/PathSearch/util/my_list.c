@@ -20,6 +20,23 @@ List *init_list(void)
 	return list;
 }
 
+void free_list(List *src)
+{
+	if (src)
+	{
+		Node *node = src->head;
+
+		while (node)
+		{
+			Node *del = node;
+			node = node->next;
+			free(del);
+		}
+
+		free(src);
+	}
+}
+
 void enqueue(List *src, void *data)
 {
 	if (src == NULL)

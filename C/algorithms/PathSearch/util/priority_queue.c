@@ -12,6 +12,23 @@ PriorList *init_prior_list(void)
 	return list;
 }
 
+void free_prior_list(PriorList *src)
+{
+	if (src)
+	{
+		PriorListNode *node = src->head;
+
+		while (node)
+		{
+			PriorListNode *del = node;
+			node = node->next;
+			free(del);
+		}
+
+		free(src);
+	}
+}
+
 static PriorListNode *create(PriorListNode *next, void *data, size_t priority)
 {
 	PriorListNode *node = (PriorListNode *)calloc(1, sizeof(PriorListNode));

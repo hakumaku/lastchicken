@@ -8,6 +8,7 @@
 #include "priority_queue.h"
 
 List *greedy_bestfirst_search(MazeMat *maze);
+List *greedy_bestfirst_nearest_search(MazeMat *maze);
 
 #endif
 
