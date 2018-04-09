@@ -150,7 +150,6 @@ static List *search(MazeMat *maze, size_t depth, Point *start, Point *end)
 		}
 	}
 
-	/* Deallocate the rest. */
 	free_list(branch);
 
 	/* Returns NULL when it didn't find one. */

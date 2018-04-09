@@ -33,6 +33,11 @@ static MazeMat *create_mat(size_t m, size_t n)
 		{
 			data->x = i;
 			data->y = j;
+			data->distance = 0;
+			data->eval = false;
+			data->from = NONE;
+			data->kind = 0;
+			data++;
 		}
 	}
 
@@ -108,8 +113,6 @@ MazeMat *init_maze(const char *text_file)
 
 	MazeMat *mat = create_mat(row, col);
 	Point *data = mat->data;
-	size_t x = 0;
-	size_t y = 0;
 
 	/* Frees the first line of text file. */
 	free(line);
@@ -131,17 +134,7 @@ MazeMat *init_maze(const char *text_file)
 			if (IS_DIGIT(*text))
 			{
 				/* Initialize a point. */
-				data->x = x;
-				data->y = y;
 				data->kind = TO_DIGIT(*text);
-				data->eval = false;
-				data->from = NONE;
-				data->distance = 0;
-
-				y++;
-				x += (y == col);
-				y = (y == col) ? 0 : y;
-
 				data++;
 			}
 			text++;
@@ -241,8 +234,9 @@ void write_shortest_path(MazeMat *maze, List *path)
 	}
 
 	PathInfo *info = path->head->data;
-	fprintf(fp, "Length: %ld\n", info->length);
-	fprintf(fp, "Time: %ld\n", info->movement);
+	fprintf(fp, "---");
+	fprintf(fp, "length: %ld\n", info->length);
+	fprintf(fp, "time: %ld\n", info->movement);
 
 	free(buf);
 	free(data);
@@ -251,9 +245,34 @@ void write_shortest_path(MazeMat *maze, List *path)
 
 void free_shortest_path(List *path)
 {
+	if (path == NULL)
+	{
+		return;
+	}
+
+	/* Expects the first node to be of PathInfo. */
+	PathInfo *t = pop(path);
+	free(t);
+
+	/* Free the rest of it. */
 	while (path->count)
 	{
-		List *p = pop(path);
+		pop(path);
+	}
+
+	free(path);
+}
+
+void free_shortest_paths(List *paths)
+{
+	if (paths == NULL)
+	{
+		return;
+	}
+
+	while (paths->count)
+	{
+		List *p = pop(paths);
 
 		/* Expects the first node to be of PathInfo. */
 		PathInfo *t = pop(p);
@@ -267,7 +286,7 @@ void free_shortest_path(List *path)
 		free(p);
 	}
 
-	free(path);
+	free(paths);
 }
 
 /*
@@ -350,7 +369,7 @@ size_t nearest_manhattan_distance(Point *s, List *ends)
 
 		node = node->next;
 	}
-	
+
 	return min;
 }
 
@@ -374,7 +393,7 @@ static Point *locate_single_point(MazeMat *src, size_t from_i, size_t from_j, Ma
 	size_t j = from_j == n ? 0 : from_j;
 
 	Point *data = src->data + i * n + j;
-	Point *end = data + src->rows * n;
+	Point *end = src->data + src->rows * n;
 
 	while (data < end)
 	{

@@ -50,7 +50,7 @@ String *read_ltos(FILE *fp)
 		return NULL;
 	}
 
-	char *buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+	char *buf = (char *)calloc(BUFFER_SIZE, sizeof(char));
 	char *bp = buf;
 	unsigned buf_size = BUFFER_SIZE;
 	/* Need to store the initial position of fp. */

@@ -60,6 +60,7 @@ List *construct_path(MazeMat *maze, Point *end);
 void clearup_maze(MazeMat *src);
 void free_maze(MazeMat *src);
 void free_shortest_path(List *path);
+void free_shortest_paths(List *paths);
 
 void print_maze(MazeMat *src);
 void print_shortest_path(List *paths);

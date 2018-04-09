@@ -127,7 +127,6 @@ static List *search(MazeMat *maze, Point *start, Point *end)
 		}
 	}
 
-	/* Deallocate the rest. */
 	free_prior_list(branch);
 
 	/* Returns NULL when it didn't find one. */
@@ -150,7 +149,7 @@ static List *nearest_search(MazeMat *maze, Point *start, List *ends)
 	size_t movement = 0;
 	Point *point = start;
 
-	while (point->kind == ENDING_POINT)
+	while (point->kind != ENDING_POINT)
 	{
 		Point *p = look_around(maze, point);
 

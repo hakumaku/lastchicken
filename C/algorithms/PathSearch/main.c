@@ -4,14 +4,14 @@
 
 int main(int argc, const char *argv[])
 {
-	const char *test_txt = "texts/test(windows).txt";
-	/*
-	if (argc != 2)
+	// const char *test_txt = "texts/test(windows).txt";
+	const char *test_txt = argv[1];
+
+	if (argc != 2 || test_txt == NULL)
 	{
 		fprintf(stderr, "Command line argument missing.\n");
 		exit(1);
 	}
-	*/
 
 	printf("Reading file(%s)...\n", test_txt);
 	MazeMat *foo = init_maze(test_txt);
@@ -42,27 +42,21 @@ int main(int argc, const char *argv[])
 		printf("e: (%ld, %ld)\n", e->x, e->y);
 	}
 
-	List *paths = iterative_deepening(foo);
-	// List *paths = greedy_bestfirst_search(foo);
-	// List *paths = astar_search(foo);
+	// List *path = nearest_iterative_deepening(foo);
+	// List *path = greedy_bestfirst_nearest_search(foo);
+	List *path = astar_nearest_search(foo);
 
-
-	if (paths)
+	if (path)
 	{
-		Node *temp = paths->head;
-		for (size_t i = 0; i < paths->count; i++)
-		{
-			print_shortest_path(temp->data);
-			write_shortest_path(foo, temp->data);
-			temp = temp->next;
-		}
+		print_shortest_path(path);
+		write_shortest_path(foo, path);
 	}
 	else
 	{
 		fprintf(stderr, "There is no exit in the maze.\n");
 	}
 
-	free_shortest_path(paths);
+	free_shortest_path(path);
 	free_maze(foo);
 
 	return 0;
