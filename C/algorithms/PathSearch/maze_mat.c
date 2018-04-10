@@ -234,9 +234,7 @@ void write_shortest_path(MazeMat *maze, List *path)
 	}
 
 	PathInfo *info = path->head->data;
-	fprintf(fp, "---");
-	fprintf(fp, "length: %ld\n", info->length);
-	fprintf(fp, "time: %ld\n", info->movement);
+	fprintf(fp, "---\nlength: %ld\ntiem: %ld\n", info->length, info->movement);
 
 	free(buf);
 	free(data);
@@ -470,27 +468,15 @@ Point *look_around(MazeMat *src, Point *p)
 
 		direction = init_list();
 
-		/* Up */
-		if (i != 0 && from != UP)
+		/* Left */
+		if (j != 0 && from != LEFT)
 		{
-			Point *up = p - src->cols;
+			Point *left = p - 1;
 
-			if (up->eval == false && up->kind != WALL)
+			if (left->eval == false && left->kind != WALL)
 			{
-				up->from = DOWN;
-				enqueue(direction, up);
-			}
-		}
-
-		/* Right */
-		if (j != src->cols-1 && from != RIGHT)
-		{
-			Point *right = p + 1;
-
-			if (right->eval == false && right->kind != WALL)
-			{
-				right->from = LEFT;
-				enqueue(direction, right);
+				left->from = RIGHT;
+				enqueue(direction, left);
 			}
 		}
 
@@ -506,15 +492,27 @@ Point *look_around(MazeMat *src, Point *p)
 			}
 		}
 
-		/* Left */
-		if (j != 0 && from != LEFT)
+		/* Right */
+		if (j != src->cols-1 && from != RIGHT)
 		{
-			Point *left = p - 1;
+			Point *right = p + 1;
 
-			if (left->eval == false && left->kind != WALL)
+			if (right->eval == false && right->kind != WALL)
 			{
-				left->from = RIGHT;
-				enqueue(direction, left);
+				right->from = LEFT;
+				enqueue(direction, right);
+			}
+		}
+
+		/* Up */
+		if (i != 0 && from != UP)
+		{
+			Point *up = p - src->cols;
+
+			if (up->eval == false && up->kind != WALL)
+			{
+				up->from = DOWN;
+				enqueue(direction, up);
 			}
 		}
 	}

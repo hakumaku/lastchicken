@@ -42,9 +42,9 @@ int main(int argc, const char *argv[])
 		printf("e: (%ld, %ld)\n", e->x, e->y);
 	}
 
-	// List *path = nearest_iterative_deepening(foo);
+	List *path = nearest_iterative_deepening(foo);
 	// List *path = greedy_bestfirst_nearest_search(foo);
-	List *path = astar_nearest_search(foo);
+	// List *path = astar_nearest_search(foo);
 
 	if (path)
 	{

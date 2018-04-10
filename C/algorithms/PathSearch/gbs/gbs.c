@@ -141,6 +141,8 @@ static List *nearest_search(MazeMat *maze, Point *start, List *ends)
 
 		if (p)
 		{
+			size_t distance = point->distance + 1;
+
 			while (true)
 			{
 				/*
@@ -148,7 +150,6 @@ static List *nearest_search(MazeMat *maze, Point *start, List *ends)
 				 * take distance from starting point
 				 * into priority.
 				 */
-				size_t distance = point->distance + 1;
 				p->distance = distance;
 				size_t priority = nearest_manhattan_distance(p, ends);
 				prior_push(branch, p, priority + distance);
@@ -180,8 +181,8 @@ static List *nearest_search(MazeMat *maze, Point *start, List *ends)
 			{
 				point = branching;
 				point->eval = true;
-				movement++;
 			}
+				movement++;
 		}
 	}
 
