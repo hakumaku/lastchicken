@@ -13,7 +13,7 @@ package_list=(
 	"ctags"
 	"gdebi"
 	"valgrind"
-	"blueman"
+	# "blueman"
 	"tmux"
 	"autogen"
 	"automake"
@@ -63,9 +63,7 @@ fi
 "
 
 tmux_setting="# tmux
-if command -v tmux>/dev/null; then
-	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-fi
+[ -z "$TMUX" ] && command -v tmux >/dev/null && TERM=xterm-256color exec tmux
 "
 
 bash_line=(
@@ -146,12 +144,14 @@ cd fonts && ./install.sh && cd .. && rm -rf fonts
 
 # gnome-tweak-tool settings
 echo "gnome-tweak-tool settings"
-profile_id="$(dconf list /org/gnome/terminal/legacy/profiles:/)"
+profile_id="$(gsettings get org.gnome.Terminal.ProfilesList default)"
+profile_id="${profile_id:1:-1}"
 echo $profile_id
 dconf write /org/gnome/terminal/legacy/default-show-menubar 'false'
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id use-system-font 'false'
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id font 'Source Code Pro for Powerline Semi-Bold 12'
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id scrollbar-policy 'never'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile_id/ use-system-font 'false'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile_id/ use-theme-colors 'false'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile_id/ font 'Source Code Pro for Powerline Semi-Bold 12'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile_id/ scrollbar-policy 'never'
 
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 gsettings set org.gnome.desktop.background show-desktop-icons 'false'

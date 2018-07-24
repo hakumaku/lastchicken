@@ -13,8 +13,8 @@
 			}
 		},
 		"shell": {
-			"colorscheme": "default_leftonly",
-			"theme": "default",
+			"colorscheme": "default",
+			"theme": "default_leftonly",
 			"local_themes": {
 				"continuation": "continuation",
 				"select": "select"
