@@ -289,10 +289,10 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " =====================
 " {{{
 " set background=dark
-" colorscheme solarized8
-" colorscheme solarized8_low
-" colorscheme solarized8_high
-" colorscheme solarized8_flat
+" silent! colorscheme solarized8
+" silent! colorscheme solarized8_low
+" silent! colorscheme solarized8_high
+" silent! colorscheme solarized8_flat
 " }}}
 " =====================
 
@@ -303,7 +303,7 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " =====================
 " {{{
 set background=dark
-colorscheme gruvbox
+silent! colorscheme gruvbox
 let g:gruvbox_invert_indent_guides=1
 let g:gruvbox_contrast='hard'
 " }}}
@@ -315,7 +315,7 @@ let g:gruvbox_contrast='hard'
 " https://github.com/crusoexia/vim-monokai
 " =====================
 " {{{
-" colorscheme monokai
+" silent! colorscheme monokai
 " }}}
 " =====================
 
@@ -329,7 +329,7 @@ let g:gruvbox_contrast='hard'
 " Range:   233 (darkest) ~ 239 (lightest)
 " Default: 237
 " let g:seoul256_background = 233
-" colorscheme seoul256
+" silent! colorscheme seoul256
 " }}}
 " =====================
 
