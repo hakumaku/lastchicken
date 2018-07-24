@@ -6,8 +6,8 @@ pip_list=(
 )
 
 powerline_setting="# powerline-status
-if [ -d "$HOME/.local/bin" ]; then
-	PATH="$HOME/.local/bin:$PATH"
+if [ -d "\$HOME/.local/bin" ]; then
+	PATH="\$HOME/.local/bin:\$PATH"
 fi
 export POWERLINE_COMMAND=powerline
 if [ -f ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh ]; then
