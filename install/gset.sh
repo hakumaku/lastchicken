@@ -67,6 +67,10 @@ gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 gsettings set org.gnome.desktop.interface clock-show-date 'true'
 gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
 
+gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
+gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
+
 #####################
 # Keyboard settings #
 #####################
