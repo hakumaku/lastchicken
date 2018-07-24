@@ -52,12 +52,19 @@ pip_list=(
 )
 
 powerline_setting="# powerline-status
+if [ -d "$HOME/.local/bin" ]; then
+	PATH="$HOME/.local/bin:$PATH"
+fi
+export POWERLINE_COMMAND=powerline
 if [ -f ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh ]; then
 	source ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh
 fi
 "
+
 tmux_setting="# tmux
-[[ $TERM != "screen" ]] && exec tmux
+if command -v tmux>/dev/null; then
+	[[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
+fi
 "
 
 bash_line=(
@@ -76,12 +83,13 @@ for ppa in "${ppa_list[@]}"; do
 	echo $ppa
 	sudo add-apt-repository -n -y ${BASH_REMATCH[1]}
 done
+sudo apt update -qq
 
 echo "The following packages will be installed:"
 for package in ${package_list[*]}; do
 	printf "\t%s\n" $package
 done
-sudo apt install -qq ${apt_packages[*]}
+sudo apt install -qq -y ${package_list[*]}
 
 echo "The following packages will be downloaded, then installed:"
 for site in ${site_list[*]}; do
@@ -121,7 +129,7 @@ cp tmux.conf ~/.tmux.conf
 
 echo "Downloading python packages"
 for package in ${pip_list[*]}; do
-	pip install --user -q $package
+	pip3 install --user -q $package
 done
 
 # powerline-status configure.json
@@ -136,6 +144,13 @@ cd fonts && ./install.sh && cd .. && rm -rf fonts
 
 # gnome-tweak-tool settings
 echo "gnome-tweak-tool settings"
+profile_id="$(dconf list /org/gnome/terminal/legacy/profiles:/)"
+echo $profile_id
+dconf write /org/gnome/terminal/legacy/default-show-menubar 'false'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id use-system-font 'false'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id font 'Source Code Pro for Powerline Semi-Bold 12'
+gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/$profile_id scrollbar-policy 'never'
+
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 gsettings set org.gnome.desktop.background show-desktop-icons 'false'
 gsettings set org.gnome.desktop.interface icon-theme 'Suru'
@@ -146,6 +161,8 @@ gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 gsettings set org.gnome.desktop.interface clock-show-date 'true'
 gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
 
+gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
+
 echo "Copying totem.thumbnailer to /usr/share/thumbnailers"
 sudo cp totem.thumbnailer /usr/share/thumbnailers
 
@@ -154,15 +171,17 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo "Copying vimrc to $HOME"
 sudo cp vimrc ~/.vimrc
 vim +PluginInstall +qall
+echo "Installing YouCompleteMe(Vim plugin)"
+python3 ~/.vim/bundle/YouCompleteMe/install.py --all
 
 echo "Installing Java"
-sudo apt install -qq oracle-java10-installer
-sudo apt install -qq oracle-java10-set-default
+sudo apt install -qq -y oracle-java10-installer
+sudo apt install -qq -y oracle-java10-set-default
 # umake android
 
 echo "Installing Node.js"
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt install -qq nodejs
+sudo apt install -qq -y nodejs
 
 echo "Installing graphics driver."
 echo "Reboot is required after installation."
