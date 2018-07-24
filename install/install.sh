@@ -17,6 +17,7 @@ package_list=(
 	"tmux"
 	"autogen"
 	"automake"
+	"cmake"
 	"snap"
 	"fcitx-hangul"
 	"chrome-gnome-shell"
@@ -136,7 +137,7 @@ done
 # powerline-status configure.json
 powerline_config_dir="$HOME/.config/powerline"
 echo "Copying configure.json to $powerline_config_dir"
-mkdir $powerline_config_dir && cp configure.json $powerline_config_dir
+mkdir $powerline_config_dir && cp config.json $powerline_config_dir
 
 # powerline-font (https://github.com/powerline/fonts)
 echo "Downloading powerline-font"
