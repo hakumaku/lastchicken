@@ -90,6 +90,7 @@ for package in ${package_list[*]}; do
 	printf "\t%s\n" $package
 done
 sudo apt install -qq -y ${package_list[*]}
+sudo apt upgrade -qq -y
 
 echo "The following packages will be downloaded, then installed:"
 for site in ${site_list[*]}; do
