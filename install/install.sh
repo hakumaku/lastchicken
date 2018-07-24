@@ -187,8 +187,8 @@ echo "Installing graphics driver."
 echo "Reboot is required after installation."
 sudo ubuntu-drivers autoinstall
 # sudo apt install nvidia-cuda-toolkit gcc-6
-sudo apt autoremove
-sudo apt autoclean
+sudo apt autoremove -y
+sudo apt autoclean -y
 
 echo "Configure manually gufw and fcitx-hangul"
 echo "Everything is finished!"
