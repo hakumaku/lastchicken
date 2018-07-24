@@ -4,7 +4,6 @@
 *.h.gch
 *.o
 *.s
-*.json
 test*.c
 *.txt
 
