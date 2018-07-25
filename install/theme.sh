@@ -62,5 +62,5 @@ cd fonts && ./install.sh && cd .. && rm -rf fonts
 echo "Downloading tmux-themepack"
 git clone https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
 echo "Copying tmux.conf to $HOME"
-cp config_file/tmux.conf ~/.tmux.conf
+cp config_file/.tmux.conf ~/.tmux.conf
 
