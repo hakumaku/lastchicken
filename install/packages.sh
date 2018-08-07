@@ -5,6 +5,8 @@ ppa_list=(
 	"Java (ppa:linuxuprising/java)"
 	"NVIDIA graphics (ppa:graphics-drivers/ppa)"
 	"Stacer (ppa:oguzhaninan/stacer)"
+	"OBS studio (ppa:obsproject/obs-studio)"
+	"SMPlayer (ppa:rvm/smplayer)"
 )
 
 package_list=(
@@ -31,6 +33,10 @@ package_list=(
 	"python-apt"	# Steam requires
 	"ffmpeg"
 	"ffmpegthumbnailer"
+	"obs-studio"
+	"smplayer"			# SMPlayer
+	"smtube"			# SMPlayer
+	"smplayer-themes"	# SMPlayer	
 )
 
 pattern="(ppa:[\/a-zA-Z-]+)"
