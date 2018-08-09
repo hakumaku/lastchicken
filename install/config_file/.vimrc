@@ -36,6 +36,7 @@ call vundle#begin()
 	Plugin 'mattn/emmet-vim'
 
 	Plugin 'Valloric/YouCompleteMe'
+	Plugin 'pangloss/vim-javascript'
 	Plugin 'artur-shaik/vim-javacomplete2'
 
 	" arm syntax highlighting
