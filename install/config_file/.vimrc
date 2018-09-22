@@ -27,6 +27,7 @@ call vundle#begin()
 	Plugin 'tpope/vim-surround'
 	Plugin 'raimondi/delimitmate'
 	Plugin 'scrooloose/nerdtree'
+	Plugin 'terryma/vim-multiple-cursors'
 
 	Plugin 'tpope/vim-fugitive'
 
