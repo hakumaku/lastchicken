@@ -148,6 +148,30 @@ func! Iab (ab, full)
 		\a:ab."', '".escape(a:full.'<C-R>=EatWhitespace()<CR>', '<>"').
 		\"')<CR>"
 endfunc
+
+func! CompileRun()
+	let l:src = expand("%:t:r")
+	
+	if findfile("Makefile", ".") == "Makefile"
+		exe "!echo Compiling ".l:src.".c file. && make && make run"
+	else
+		exe "!echo Compiling ".l:src.".c file. &&
+			\gcc ".l:src.".c -Wall -Wextra -Wshadow -O2 -std=c99 -o ".l:src.".out && chmod +x ".l:src.".out && ./".l:src.".out"
+	endif
+endfunc
+
+func! CompileDebug()
+	let l:src = expand("%:t:r")
+	exe "!echo Compiling ".l:src.".c file. &&
+		\gcc ".l:src.".c -g3 -Wall -Wextra -Wshadow -std=c99 -o ".l:src.".out && gdb ./".l:src.".out"
+endfunc
+
+func! CompileAssem()
+	let l:src = expand("%:t:r")
+	silent exe "!echo Generating ".l:src.".s file. &&
+		\gcc ".l:src.".c -fverbose-asm -S -std=c99 -o ".l:src.".s"
+	exe "edit ".l:src.".s"
+endfunc
 " }}}
 " =====================
 
@@ -181,6 +205,11 @@ nnoremap <delete> :bd<CR>
 
 " Execute python file
 au FileType python noremap <buffer> <F9> :exec '!python3' shellescape(@%, 1)<CR>
+
+" Compile and Run C file
+au FileType c noremap <F9> :call CompileRun()<CR>
+au FileType c noremap <F10> :call CompileDebug()<CR>
+au FileType c noremap <F8> :call CompileAssem()<CR>
 
 " Execute bash file
 au FileType sh noremap <buffer> <F9> :exec '!bash' shellescape(@%, 1)<CR>
