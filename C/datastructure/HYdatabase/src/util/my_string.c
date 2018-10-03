@@ -1,15 +1,18 @@
 #include "my_string.h"
 
-inline static struct string *str_alloc(size_t size)
+/*********************
+ * Private functions *
+ *********************/
+static inline struct string *str_alloc(size_t size)
 {
-	struct string *new = (struct string *)malloc(
-			sizeof(struct string) + (size+1)*sizeof(char));
+	struct string *new = (struct string *)malloc(sizeof(struct string)
+			+ size + 1);
 
 	new->length = size;
 	return new;
 }
 
-inline static size_t char_len(const char *src)
+static inline size_t char_len(const char *src)
 {
 	char *t = (char *)src;
 	while (*t != '\0')
@@ -20,7 +23,7 @@ inline static size_t char_len(const char *src)
 	return (size_t)(t - src);
 }
 
-inline static void char_copy(const char *dest, const char *src)
+static inline void char_copy(const char *dest, const char *src)
 {
 	char *t1 = (char *)dest;
 	char *t2 = (char *)src;
@@ -33,7 +36,7 @@ inline static void char_copy(const char *dest, const char *src)
 	*t1 = '\0';
 }
 
-inline static void char_2copy(const char *dest, const char *s1, const char *s2)
+static inline void char_2copy(const char *dest, const char *s1, const char *s2)
 {
 	char *t1 = (char *)dest;
 	char *t2 = (char *)s1;
@@ -53,6 +56,9 @@ inline static void char_2copy(const char *dest, const char *s1, const char *s2)
 	*t1 = '\0';
 }
 
+/********************
+ * Public functions *
+ ********************/
 struct string *char2str(const char *text)
 {
 	size_t length = char_len(text);

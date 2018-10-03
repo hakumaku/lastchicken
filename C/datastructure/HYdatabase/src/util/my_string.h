@@ -6,7 +6,7 @@
 struct string
 {
 	size_t length;
-	char text[0];
+	char text[];
 };
 
 /*
@@ -24,5 +24,5 @@ struct string *concate_char(struct string *src, const char *text);
  */
 struct string *concate_str(struct string *src, struct string *dest);
 
-#endif
+#endif /* __MY_STRING_H__ */
 

@@ -1,5 +1,5 @@
-#ifndef __DISK_MANAGER_H__
-#define __DISK_MANAGER_H__
+#ifndef __DISKMGR_H__
+#define __DISKMGR_H__
 
 #include <stdio.h>
 #include <stdint.h>
@@ -39,5 +39,5 @@ char *find(int64_t key);
  */
 int delete(int64_t key);
 
-#endif
+#endif /* __DISKMGR_H__ */
 

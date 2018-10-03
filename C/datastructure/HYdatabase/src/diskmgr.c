@@ -1,5 +1,6 @@
 #include "btr.h"
 #include "util/my_string.h"
+#include "diskmgr.h"
 
 /* Database file descriptor. */
 static int database = 0;
@@ -9,7 +10,7 @@ static int database = 0;
  */
 int open_db(const char *pathname)
 {
-	string_t *path = char2str(pathname);
+	struct string *path = char2str(pathname);
 	const char *name = NULL;
 
 	/* Does it contain '/' at the end? */
@@ -22,7 +23,7 @@ int open_db(const char *pathname)
 		name = SLASH_DATABASE_NAME;
 	}
 
-	string_t *db = concate_char(path, name);
+	struct string *db = concate_char(path, name);
 
 	/* Database already exists. */
 	if (access(db->text, F_OK) == 0)
