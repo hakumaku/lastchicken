@@ -23,6 +23,7 @@ bash_settings="# bash settings
 set -o vi
 export EDITOR=/usr/bin/vim
 bind -m vi-insert \"\C-l\":clear-screen
+alias=ls='ls --color -h --group-directories-first'
 screenfetch
 "
 
