@@ -143,10 +143,16 @@ func! MapNoContext(key, seq)
 	endif
 endfunc
 
-func! Iab (ab, full)
+func! Iab(ab, full)
 	exe "iab <silent> <buffer> ".a:ab." <C-R>=MapNoContext('".
 		\a:ab."', '".escape(a:full.'<C-R>=EatWhitespace()<CR>', '<>"').
 		\"')<CR>"
+endfunc
+
+func! SetCLA()
+	call inputsave()
+	let b:argv = input('Command line arguments: ')
+	call inputrestore()
 endfunc
 
 func! CompileRun()
@@ -169,7 +175,7 @@ endfunc
 func! CompileAssem()
 	let l:src = expand("%:t:r")
 	silent exe "!echo Generating ".l:src.".s file. &&
-		\gcc ".l:src.".c -fverbose-asm -S -std=c99 -o ".l:src.".s"
+		\gcc ".l:src.".c -fverbose-asm -S -O2 -std=c99 -o ".l:src.".s"
 	exe "edit ".l:src.".s"
 endfunc
 " }}}
@@ -417,7 +423,7 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1	" Show buffer number
 " YouCompleteMe
 " =====================
 " {{{
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 " Disable scratch window.
 set completeopt-=preview
 let g:ycm_autoclose_preview_window_after_completion = 1

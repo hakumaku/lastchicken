@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-sudo bash packages.sh
-sudo bash external_packages.sh
+source ./package/packages.sh
+source ./packag/external_packages.sh
 
-sudo bash vim_plugins.sh
-
-bash theme.sh
-bash gset.sh
-bash favorites.sh
+source ./misc/vim_plugins.sh
+source ./misc/theme.sh
+source ./misc/gset.sh
+source ./misc/favorites.sh
 

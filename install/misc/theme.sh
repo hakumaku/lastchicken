@@ -19,6 +19,13 @@ tmux_setting="# tmux
 [ -z "$TMUX" ] && command -v tmux >/dev/null && TERM=xterm-256color exec tmux
 "
 
+bash_settings="# bash settings
+set -o vi
+export EDITOR=/usr/bin/vim
+bind -m vi-insert \"\C-l\":clear-screen
+screenfetch
+"
+
 bash_line=(
 	"$powerline_setting"
 	# "$tmux_setting"

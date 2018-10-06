@@ -34,6 +34,7 @@ package_list=(
 	"ffmpeg"
 	"ffmpegthumbnailer"
 	"obs-studio"
+	"screenfetch"
 	"smplayer"			# SMPlayer
 	"smtube"			# SMPlayer
 	"smplayer-themes"	# SMPlayer	
