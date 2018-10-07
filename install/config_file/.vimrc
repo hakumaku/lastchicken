@@ -149,37 +149,44 @@ func! Iab(ab, full)
 		\"')<CR>"
 endfunc
 
-let b:argv = ''
+let g:argv = ''
 func! SetCLA()
 	call inputsave()
 	let l:new_args = input("Command line arguments(type \'clear\' to reset): ")
 	call inputrestore()
 	redraw
 	if l:new_args == "clear"
-		let b:argv = ''
+		let g:argv = ''
 		echo 'Cleared command line arguments.'
 	else
-		let b:argv = b:argv.' '.l:new_args
-		echo 'Current argv: ['.b:argv.' ]'
+		let g:argv = g:argv.' '.l:new_args
+		echo 'Current argv: ['.g:argv.' ]'
 	endif
 endfunc
 
 func! CompileRun()
-	let l:flags = " -Wall -Wextra -Wshadow -O2 -std=c99"
-	silent exe "!gcc "."%".l:flags
-	exe "!./a.out ".b:argv
+	let l:cwd = getcwd()
+	let l:flags = "-Wall -Wextra -Wshadow -O2 -std=c99"
+	silent exe 'cd' fnameescape(expand("%:h"))
+	silent exe '!gcc' shellescape(expand("%")) l:flags
+	exe '!./a.out'
+	silent exe 'cd' fnameescape(l:cwd)
 endfunc
 
 func! CompileDebug()
-	let l:flags = " -Wall -Wextra -Wshadow -g2 -std=c99"
-	silent exe "!gcc "."%".l:flags
-	exe "!gdb "."a.out"
+	let l:cwd = getcwd()
+	let l:flags = "-Wall -Wextra -Wshadow -g2 -std=c99"
+	silent exe 'cd' fnameescape(expand("%:h"))
+	silent exe "!gcc" "%" l:flags
+	exe "!gdb a.out"
+	silent exe 'cd' fnameescape(l:cwd)
 endfunc
 
 func! CompileAssem()
-	let l:flags = " -fverbose-asm -S -O2 -std=c99"
-	silent exe "!gcc "."%".l:flags
-	exe "edit " expand("%:t:r").".s"
+	let l:flags = "-fverbose-asm -S -O2 -std=c99"
+	let l:output = expand("%:r").".s"
+	silent exe "!gcc" "%" l:flags "-o ".l:output
+	exe "edit" l:output
 endfunc
 " }}}
 " =====================
