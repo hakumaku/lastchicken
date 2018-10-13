@@ -38,6 +38,7 @@ package_list=(
 	"smplayer"			# SMPlayer
 	"smtube"			# SMPlayer
 	"smplayer-themes"	# SMPlayer	
+	"tlp"			# for power saving.
 )
 
 pattern="(ppa:[\/a-zA-Z-]+)"

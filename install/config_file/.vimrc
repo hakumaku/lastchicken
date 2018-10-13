@@ -70,7 +70,7 @@ filetype plugin indent on    " required
 syntax on
 set t_Co=256			" True colors
 if (has("termguicolors"))
-	 set termguicolors
+	set termguicolors
 endif
 
 set hidden				" Hide buffers when abandoned
