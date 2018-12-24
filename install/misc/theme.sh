@@ -24,7 +24,9 @@ set -o vi
 export EDITOR=/usr/bin/vim
 bind -m vi-insert \"\C-l\":clear-screen
 alias=ls='ls --color -h --group-directories-first'
-screenfetch
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+	exec tmux
+fi
 "
 
 bash_line=(

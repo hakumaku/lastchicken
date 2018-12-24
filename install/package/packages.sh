@@ -30,7 +30,7 @@ package_list=(
 	"gnome-tweak-tool"
 	"python3-dev"
 	"python3-pip"
-	"python-apt"	# Steam requires
+	"python-apt"		# Steam requires
 	"ffmpeg"
 	"ffmpegthumbnailer"
 	"obs-studio"
@@ -40,6 +40,7 @@ package_list=(
 	"smplayer-themes"	# SMPlayer
 	"tlp"				# for power saving.
 	"libncursesw5-dev"	# NNN (https://github.com/jarun/nnn)
+	"moreutils"			# For NNN (vidir)
 )
 
 pattern="(ppa:[\/a-zA-Z-]+)"
