@@ -37,8 +37,9 @@ package_list=(
 	"screenfetch"
 	"smplayer"			# SMPlayer
 	"smtube"			# SMPlayer
-	"smplayer-themes"	# SMPlayer	
-	"tlp"			# for power saving.
+	"smplayer-themes"	# SMPlayer
+	"tlp"				# for power saving.
+	"libncursesw5-dev"	# NNN (https://github.com/jarun/nnn)
 )
 
 pattern="(ppa:[\/a-zA-Z-]+)"

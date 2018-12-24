@@ -27,7 +27,7 @@ call vundle#begin()
 	Plugin 'tpope/vim-surround'
 	Plugin 'raimondi/delimitmate'
 	Plugin 'scrooloose/nerdtree'
-	Plugin 'terryma/vim-multiple-cursors'
+	" Plugin 'terryma/vim-multiple-cursors'
 
 	Plugin 'tpope/vim-fugitive'
 
@@ -197,7 +197,9 @@ endfunc
 " =====================
 " {{{
 " Insert a newline in normal mode.
-nnoremap <C-L> o<Esc>
+nnoremap <C-l> o<ESC>k
+" Removes any search highlighting.
+nnoremap <C-n> :nohl<CR>
 " Move the current line one down.
 nnoremap <C-j> :m+1<CR>:echo 'Move line down'<CR>
 " Move the current line one up.
@@ -223,7 +225,7 @@ nnoremap <delete> :bd<CR>
 nnoremap <F12> :call SetCLA()<CR>
 
 " Execute python file
-au FileType python noremap <buffer> <F9> :exec '!python3' shellescape(@%, 1) b:argv<CR>
+au FileType python noremap <buffer> <F9> :exec '!python3' shellescape(@%, 1) g:argv<CR>
 
 " Compile and Run C file
 au FileType c noremap <F9> :call CompileRun()<CR>
@@ -352,10 +354,10 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " https://github.com/morhetz/gruvbox
 " =====================
 " {{{
-set background=dark
-silent! colorscheme gruvbox
-let g:gruvbox_invert_indent_guides=1
-let g:gruvbox_contrast='hard'
+" set background=dark
+" silent! colorscheme gruvbox
+" let g:gruvbox_invert_indent_guides=1
+" let g:gruvbox_contrast='hard'
 " }}}
 " =====================
 
@@ -365,7 +367,7 @@ let g:gruvbox_contrast='hard'
 " https://github.com/crusoexia/vim-monokai
 " =====================
 " {{{
-" silent! colorscheme monokai
+silent! colorscheme monokai
 " }}}
 " =====================
 
