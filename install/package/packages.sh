@@ -5,7 +5,7 @@ ppa_list=(
 	"Java (ppa:linuxuprising/java)"
 	"NVIDIA graphics (ppa:graphics-drivers/ppa)"
 	"Stacer (ppa:oguzhaninan/stacer)"
-	"OBS studio (ppa:obsproject/obs-studio)"
+	# "OBS studio (ppa:obsproject/obs-studio)"
 	"SMPlayer (ppa:rvm/smplayer)"
 )
 
@@ -64,8 +64,8 @@ sudo apt install -qq -y ${package_list[*]}
 sudo apt upgrade -qq -y
 
 echo "Installing Java"
-sudo apt install -qq -y oracle-java10-installer
-sudo apt install -qq -y oracle-java10-set-default
+sudo apt install -qq -y oracle-java11-installer
+sudo apt install -qq -y oracle-java11-set-default
 # umake android
 
 echo "Installing Node.js"

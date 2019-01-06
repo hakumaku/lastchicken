@@ -28,7 +28,7 @@ dconf write "${dconfdir}/default" "'${new_id}'"
 ##########################
 # Some terminal settings #
 ##########################
-dconf write /org/gnome/terminal/legacy/default-show-menubar 'false'
+gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ use-system-font 'false'
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ use-theme-colors 'false'
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ font 'Source Code Pro for Powerline Semi-Bold 12'
@@ -61,7 +61,7 @@ done
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 gsettings set org.gnome.desktop.background show-desktop-icons 'false'
 gsettings set org.gnome.desktop.interface icon-theme 'Suru'
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'communitheme'
 gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
 gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 gsettings set org.gnome.desktop.interface clock-show-date 'true'
