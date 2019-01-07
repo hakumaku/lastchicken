@@ -2,6 +2,7 @@
 
 # Source file directory.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SRC="${BASH_SOURCE[0]}"
 VIMRC="$DIR/.vimrc"
 TMUX_CONFIG_PATH="$DIR/.tmux.conf"
 POWERLINE_CONFIG="$DIR/config.json"
@@ -12,11 +13,12 @@ BASHRC_CONFIG="$DIR/bashrc.dat"
 # If it is invoked by ~/.bashrc
 # Put commands to run on bash here.
 if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
-	# bash settings
+	# Bash settings
 	set -o vi
 	export EDITOR=/usr/bin/vim
 	bind -m vi-insert "\C-l":clear-screen
 	alias ls='ls --color -h --group-directories-first'
+	alias bashrc="vim +16 $SRC -c 'normal zt'"
 
 	# Tmux
 	if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -31,6 +33,7 @@ if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
 	if [ -f ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh ]; then
 		source ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh
 	fi
+
 	return
 fi
 

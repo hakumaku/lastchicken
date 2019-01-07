@@ -1,2 +1,4 @@
-free -m | awk 'NR==2{ printf("%4.1f /%4.1f GB", $3/1024, $2/1024) }'
+#!/usr/bin/env bash
+
+xrandr --output eDP-1-1 --off
 
