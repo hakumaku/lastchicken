@@ -216,6 +216,14 @@ nnoremap <expr> <Home> bufname('%') == $MYVIMRC ? ':bd<CR>' : ':e $MYVIMRC<CR>'
 vnoremap <C-h> y:call Replace()<CR>
 " Exact replace
 vnoremap <C-g> y:call ExactReplace()<CR>
+" Copy & Paste
+" If it does not work, please check if vim is compiled with clipboard
+" features: vim --version | grep 'clipboard'.
+" ( '+' means it supports, '-' not.)
+" If you are using ubuntu or gnome environment,
+" run 'sudo apt install vim-gnome'
+vnoremap <C-c> "+y
+inoremap <C-v> <ESC>"+p
 
 " Cycle through buffers
 nnoremap <tab> :bn<CR>

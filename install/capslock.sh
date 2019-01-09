@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-xmodmap -e "clear lock" #disable caps lock switch
-xmodmap -e "keysym Caps_Lock = Escape" #set caps_lock as escape
+# Disable caps_lock switch
+xmodmap -e "clear lock"
+# Set caps_lock as escape
+xmodmap -e "keysym Caps_Lock = Escape"
 
