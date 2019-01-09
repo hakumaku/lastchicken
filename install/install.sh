@@ -107,28 +107,15 @@ while getopts 's' opt; do
 done
 
 PACKAGE=(
-	"git"
-	"vim"
-	"vim-gnome"
-	"g++"
-	"curl"
-	"ctags"
-	"gdebi"
-	"valgrind"
+	"git" "vim" "vim-gnome"
+	"g++" "curl" "ctags"
+	"gdebi" "valgrind"
 	# blueman
-	"tmux"
-	"screenfetch"
-	"autogen"
-	"automake"
-	"cmake"
-	"snap"
-	"fcitx-hangul"
-	"chrome-gnome-shell"
-	"gufw"
+	"tmux" "screenfetch" "autogen"
+	"automake" "cmake" "snap"
+	"fcitx-hangul" "chrome-gnome-shell" "gufw"
 	"gnome-tweak-tool"
-	"python3-dev"
-	"python3-pip"
-	"python-apt"
+	"python3-dev" "python3-pip" "python-apt" 
 
 	# Powerline-status fonts
 	"fonts-powerline"
@@ -137,8 +124,7 @@ PACKAGE=(
 	"oracle-java11-installer"
 
 	# For thumbnails
-	"ffmpeg"
-	"ffmpegthumbnailer"
+	"ffmpeg" "ffmpegthumbnailer"
 
 	# OBS studio
 	"obs-studio"
@@ -147,17 +133,13 @@ PACKAGE=(
 	"stacer"
 
 	# SMPlayer
-	"smplayer"
-	"smtube"
-	"smplayer-themes"
+	"smplayer" "smtube" "smplayer-themes"
 
 	# Laptop power saving utility.
 	"tlp"
 
 	# The following two are associated with NNN. (https://github.com/jarun/nnn)
-	"libncursesw5-dev"
-	"moreutils"
-	"nnn"
+	# "libncursesw5-dev" "moreutils" "nnn"
 
 	# Image viewer on terminal
 	"sxiv"
@@ -190,17 +172,6 @@ FAVORITE=(
 	"steam.desktop"
 	"rhythmbox.desktop"
 	"stacer.desktop"
-)
-
-TERMINAL_THEME=(
-	"https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/gruvbox-dark.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/molokai.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/monokai-dark.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/one-dark.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/solarized-dark-higher-contrast.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/solarized-dark.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/solarized-light.sh"
-	# "https://raw.githubusercontent.com/Mayccoll/Gogh/master/themes/wombat.sh"
 )
 
 REMOVED=()
@@ -321,33 +292,6 @@ echo -e -n "\tInstalling ${CYAN}YouCompleteMe${NC} "
 # python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
 echo -e "✔\n"
 
-# Installing themes
-# Need to write a dummy profile first.
-# dconfdir="/org/gnome/terminal/legacy/profiles:"
-# new_id="$(uuidgen)"
-# new_name="dummy"
-# profile_list="$(dconf read "${dconfdir}/list")"
-# profile_list="${profile_list:1:-1}"
-
-# for id in ${profile_list[*]}; do
-# 	new_list+=" ${id}"
-# done
-
-# new_list+=${new_list:+', '}
-# new_list+="'${new_id}'"
-
-# dconf write "${dconfdir}/list" "[${new_list}]"
-# dconf write "${dconfdir}/:${new_id}/visible-name" "'${new_name}'"
-# dconf write "${dconfdir}/default" "'${new_id}'"
-
-echo_title "Installing terminal theme"
-# Download themes from https://github.com/Mayccoll/Gogh
-print_list 1 $TERMINAL_THEME
-for theme in ${TERMINAL_THEME[*]}; do
-	name=${theme##*/}
-	echo "wget -nv ${theme} && bash ${name} && rm ${name}"
-done
-
 echo_title "Setting up theme"
 echo -e -n "\tDownloading ${CYAN}communitheme${NC} "
 echo -e "✔"
@@ -379,16 +323,6 @@ echo -e -n "\tCopying ${CYAN}.tmux.conf${NC} to ${LIGHT_BLUE}$HOME${NC} "
 echo "cp $TMUX_SOURCE $TMUX_DEST"
 echo -e "✔\n"
 
-echo_title "gsettings: Terminal"
-set -x
-# gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
-# gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ use-system-font 'false'
-# gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ use-theme-colors 'false'
-# gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ font 'Source Code Pro for Powerline Semi-Bold 12'
-# gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$new_id/ scrollbar-policy 'never'
-{ set +x; } 2>/dev/null
-echo ""
-
 echo_title "gsettings: Desktop"
 set -x
 # gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
@@ -409,6 +343,10 @@ echo_title "gsettings: Keyboard shortcuts"
 set -x
 # gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
 # gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
+# gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
+# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
+# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Return"
 { set +x; } 2>/dev/null
 echo ""
 
