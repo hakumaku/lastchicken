@@ -33,18 +33,26 @@ TOTEM_SOURCE="$CONFIG_DIR/totem.thumbnailer"
 TOTEM_DEST="/usr/share/thumbnailers"
 SXIV_SOURCE="$CONFIG_DIR/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
+RANGER_SOURCE="$CONFIG_DIR/rc.conf"
+RANGER_DEST="$HOME/.config/ranger/rc.conf"
+ST_SOURCE="$CONFIG_DIR/config.h"
+ST_DEST="$HOME/workspace/st/st*/config.h"
 
 SOURCE_FILES=(
 	$VIMRC_SOURCE
 	$TMUX_SOURCE
 	$POWERLINE_SOURCE
 	$SXIV_SOURCE
+	$RANGER_SOURCE
+	$ST_SOURCE
 )
 DEST_FILES=(
 	$VIMRC_DEST
 	$TMUX_DEST
 	$POWERLINE_DEST
 	$SXIV_DEST
+	$RANGER_DEST
+	$ST_DEST
 )
 
 # If it is invoked by ~/.bashrc
@@ -54,9 +62,12 @@ if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
 	set -o vi
 	export EDITOR=/usr/bin/vim
 	bind -m vi-insert "\C-l":clear-screen
+	bind -x '"\C-o": "ranger"'
+	bind -x '"\e[15~": "exec bash"'
 	alias ls='ls --color -h --group-directories-first'
 	alias bashrc="vim +52 $SRC -c 'normal zt'"
 	alias vimrc="vim $HOME/.vimrc"
+	alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
 
 	# Tmux
 	if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -119,6 +130,9 @@ PACKAGE=(
 	"python3-pip"
 	"python-apt"
 
+	# Powerline-status fonts
+	"fonts-powerline"
+
 	# Java
 	"oracle-java11-installer"
 
@@ -143,6 +157,7 @@ PACKAGE=(
 	# The following two are associated with NNN. (https://github.com/jarun/nnn)
 	"libncursesw5-dev"
 	"moreutils"
+	"nnn"
 
 	# Image viewer on terminal
 	"sxiv"
@@ -159,6 +174,7 @@ PPA=(
 	"Stacer (ppa:oguzhaninan/stacer)"
 	"OBS studio (ppa:obsproject/obs-studio)"
 	"SMPlayer (ppa:rvm/smplayer)"
+	"NNN (ppa:twodopeshaggy/jarun)"
 )
 graphics="$( lspci -nn | grep 'NVIDIA' )"
 NVIDIA_PPA="NVIDIA graphics (ppa:graphics-drivers/ppa)"
@@ -351,11 +367,6 @@ echo -e -n "\tCopying ${CYAN}configure.json${NC} to ${LIGHT_BLUE}$POWERLINE_CONF
 echo "mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST"
 echo -e "✔"
 
-echo -e -n "\tCloning into ${CYAN}powerline-font${NC} "
-# git clone -q https://github.com/powerline/fonts.git --depth=1
-# cd fonts && ./install.sh && cd .. && rm -rf fonts
-echo -e "✔"
-
 echo -e -n "\tCloning into ${CYAN}tmux-themepack${NC} "
 # git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
 echo -e "✔"
@@ -427,7 +438,6 @@ if [[ "$graphics" ]]; then
 	echo -e "Press ${PURPLE}Super+A${NC}, search ${CYAN}Software & Updates${NC}, and click ${LIGHT_BLUE}Additional Drivers${NC} tab."
 	echo -e "Choose NVIDIA driver and reboot.${NC}"
 fi
-echo -e "\nVisit https://github.com/jarun/nnn to install ${CYAN}NNN${NC}."
 printf "%0.s*" {1..50}
 echo ""
 

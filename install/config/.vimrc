@@ -223,7 +223,7 @@ vnoremap <C-g> y:call ExactReplace()<CR>
 " If you are using ubuntu or gnome environment,
 " run 'sudo apt install vim-gnome'
 vnoremap <C-c> "+y
-inoremap <C-v> <ESC>"+p
+inoremap <C-v> <ESC>"+pa
 
 " Cycle through buffers
 nnoremap <tab> :bn<CR>
