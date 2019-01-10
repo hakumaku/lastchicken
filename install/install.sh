@@ -68,6 +68,7 @@ if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
 	alias bashrc="vim +52 $SRC -c 'normal zt'"
 	alias vimrc="vim $HOME/.vimrc"
 	alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
+	alias sxiv='sxiv -a'
 
 	# Tmux
 	if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -115,7 +116,7 @@ PACKAGE=(
 	"automake" "cmake" "snap"
 	"fcitx-hangul" "chrome-gnome-shell" "gufw"
 	"gnome-tweak-tool"
-	"python3-dev" "python3-pip" "python-apt" 
+	"python3-dev" "python3-pip" "python-apt"
 
 	# Powerline-status fonts
 	"fonts-powerline"
