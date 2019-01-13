@@ -68,6 +68,7 @@ if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
 	alias bashrc="vim +52 $SRC -c 'normal zt'"
 	alias vimrc="vim $HOME/.vimrc"
 	alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
+	alias gif='mpv --loop=8'
 	alias sxiv='sxiv -a'
 
 	# Tmux
