@@ -252,7 +252,7 @@ for t in "${PPA[@]}"; do
 done
 
 # Installs packages.
-sudo apt install -qq -y ${PACKAGE[*]}
+sudo apt install -qq -y ${PACKAGE[@]}
 sudo apt update -qq -y
 sudo apt upgrade -qq -y
 
