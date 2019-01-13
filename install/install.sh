@@ -250,11 +250,9 @@ for t in "${PPA[@]}"; do
 	[[ $t =~ $PPA_PATTERN ]]
 	sudo add-apt-repository -n -y ${BASH_REMATCH}
 done
-echo -e -n "\nType ENTER to continue if it seems packages are completely installed."
-read input
 
 # Installs packages.
-sudo apt install -qq -y "${PACKAGE[*]}"
+sudo apt install -qq -y ${PACKAGE[*]}
 sudo apt update -qq -y
 sudo apt upgrade -qq -y
 
@@ -266,6 +264,8 @@ for site in ${EXTERNAL_PACKAGE[*]}; do
 	sudo dpkg -i $temp
 	rm $temp
 done
+echo -e -n "\nType ENTER to continue if it seems packages are completely installed."
+read input
 
 # Installing Vim plugins
 echo_title "Setting up Vim"
