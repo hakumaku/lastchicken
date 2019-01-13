@@ -211,13 +211,6 @@ read_file () {
 	done < "$stream"
 }
 
-# Assign values to a variable.
-# read_file package $PACKAGE_FILE
-# read_file ppa $PPA_FILE
-# read_file site $SITE_FILE
-# read_file pip $PIP_FILE
-# read_file favorite $FAVORITE_FILE
-
 clear
 if [[ "$graphics" ]]; then
 	echo -e "It has NVIDIA graphics card. Added NVIDIA PPA."
@@ -255,43 +248,42 @@ print_list 3 "${PACKAGE[@]}"
 # Adds PPA.
 for t in "${PPA[@]}"; do
 	[[ $t =~ $PPA_PATTERN ]]
-	# sudo add-apt-repository -n -y ${BASH_REMATCH}
+	sudo add-apt-repository -n -y ${BASH_REMATCH}
 done
 echo -e -n "\nType ENTER to continue if it seems packages are completely installed."
 read input
 
 # Installs packages.
-# sudo apt install -qq -y "${PACKAGE[*]}"
-# sudo apt update -qq -y
-# sudo apt upgrade -qq -y
+sudo apt install -qq -y "${PACKAGE[*]}"
+sudo apt update -qq -y
+sudo apt upgrade -qq -y
 
 echo_title "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
 print_list 1 "${EXTERNAL_PACKAGE[@]}"
 temp="downloaded.deb"
 for site in ${EXTERNAL_PACKAGE[*]}; do
-	echo -n ""
-	# wget -q -O $temp $site
-	# sudo dpkg -i $temp
-	# rm $temp
+	wget -q -O $temp $site
+	sudo dpkg -i $temp
+	rm $temp
 done
 
 # Installing Vim plugins
 echo_title "Setting up Vim"
 echo -e -n "\tCloning into ${CYAN}Vundle${NC} "
-# git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 echo -e "✔"
-# if [[ ! -f $VIMRC_SOURCE ]]; then
-# 	echo -e "\n${CYAN}.vimrc${NC} file does not exist in ${LIGHT_BLUE}$VIMRC_SOURCE${NC}"
-# 	exit 1
-# fi
+if [[ ! -f $VIMRC_SOURCE ]]; then
+	echo -e "\n${CYAN}.vimrc${NC} file does not exist in ${LIGHT_BLUE}$VIMRC_SOURCE${NC}"
+	exit 1
+fi
 echo -e -n "\tCopying ${CYAN}.vimrc${NC} file to ${LIGHT_BLUE}$HOME${NC} "
 echo "sudo cp $VIMRC_SOURCE $VIMRC_DEST"
 echo -e "✔"
 echo -e -n "\tVundle PluginInstall "
-# vim -E +PluginInstall +qall > /dev/null
+vim -E +PluginInstall +qall > /dev/null
 echo -e "✔"
 echo -e -n "\tInstalling ${CYAN}YouCompleteMe${NC} "
-# python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
+python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
 echo -e "✔\n"
 
 echo_title "Setting up theme"
@@ -300,64 +292,63 @@ echo -e "✔"
 
 echo -e -n "\tDownloading ${CYAN}powerline-status${NC} "
 for package in ${PIP[*]}; do
-	echo -n ""
-	# pip3 install --user -q $package
+	pip3 install --user -q $package
 done
 echo -e "✔"
 
 echo -e -n "\tCopying ${CYAN}configure.json${NC} to ${LIGHT_BLUE}$POWERLINE_CONFIG${NC} "
-# if [[ ! -f $POWERLINE_SOURCE ]]; then
-# 	echo -e "\n${CYAN}config.json${NC} file does not exist in ${LIGHT_BLUE}$POWERLINE_SOURCE${NC}"
-# 	exit 1
-# fi
+if [[ ! -f $POWERLINE_SOURCE ]]; then
+	echo -e "\n${CYAN}config.json${NC} file does not exist in ${LIGHT_BLUE}$POWERLINE_SOURCE${NC}"
+	exit 1
+fi
 echo "mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST"
 echo -e "✔"
 
 echo -e -n "\tCloning into ${CYAN}tmux-themepack${NC} "
-# git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
+git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
 echo -e "✔"
 
 echo -e -n "\tCopying ${CYAN}.tmux.conf${NC} to ${LIGHT_BLUE}$HOME${NC} "
-# if [[ ! -f $TMUX_SOURCE ]]; then
-# 	echo -e "\n${CYAN}.tmux.conf${NC} file does not exist at ${LIGHT_BLUE}$TMUX_SOURCE${NC}"
-# 	exit 1
-# fi
+if [[ ! -f $TMUX_SOURCE ]]; then
+	echo -e "\n${CYAN}.tmux.conf${NC} file does not exist at ${LIGHT_BLUE}$TMUX_SOURCE${NC}"
+	exit 1
+fi
 echo "cp $TMUX_SOURCE $TMUX_DEST"
 echo -e "✔\n"
 
 echo_title "gsettings: Desktop"
 set -x
-# gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-# gsettings set org.gnome.desktop.background show-desktop-icons 'false'
-# gsettings set org.gnome.desktop.interface icon-theme 'Suru'
-# gsettings set org.gnome.desktop.interface gtk-theme 'communitheme'
-# gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
-# gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
-# gsettings set org.gnome.desktop.interface clock-show-date 'true'
-# gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
-# gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
-# gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
-# gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+gsettings set org.gnome.desktop.background show-desktop-icons 'false'
+gsettings set org.gnome.desktop.interface icon-theme 'Suru'
+gsettings set org.gnome.desktop.interface gtk-theme 'communitheme'
+gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
+gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
+gsettings set org.gnome.desktop.interface clock-show-date 'true'
+gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
+gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
+gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
 { set +x; } 2>/dev/null
 echo ""
 
 echo_title "gsettings: Keyboard shortcuts"
 set -x
-# gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
-# gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
-# gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
-# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
-# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
-# gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Return"
+gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Return"
 { set +x; } 2>/dev/null
 echo ""
 
 echo_title "gsettings: favorites"
 for app in ${FAVORITE[*]}; do
 	echo -e "\t'${app}'"
-	# gset="${gset:+"${gset}, "}'${app}'"
+	gset="${gset:+"${gset}, "}'${app}'"
 done
-# gsettings set org.gnome.shell favorite-apps "[${gset[*]}]"
+gsettings set org.gnome.shell favorite-apps "[${gset[*]}]"
 echo ""
 
 echo_title "Etc"
