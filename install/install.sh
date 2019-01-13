@@ -160,8 +160,6 @@ PPA=(
 	"SMPlayer (ppa:rvm/smplayer)"
 	"NNN (ppa:twodopeshaggy/jarun)"
 )
-graphics="$( lspci -nn | grep 'NVIDIA' )"
-NVIDIA_PPA="NVIDIA graphics (ppa:graphics-drivers/ppa)"
 PPA_PATTERN="(ppa:[\/a-zA-Z-]+)"
 
 EXTERNAL_PACKAGE=(
@@ -212,12 +210,6 @@ read_file () {
 }
 
 clear
-if [[ "$graphics" ]]; then
-	echo -e "It has NVIDIA graphics card. Added NVIDIA PPA."
-	echo -e "$graphics\n"
-	PPA+=("$NVIDIA_PPA")
-fi
-
 while true; do
 	echo_title "The following ${#PPA[@]} PPA(s) wiil be installed:"
 	print_list 1 "${PPA[@]}"
@@ -242,6 +234,8 @@ while true; do
 	done
 	clear
 done
+echo_title "Installing graphics drivers"
+sudo ubuntu-drivers autoinstall
 
 echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
 print_list 3 "${PACKAGE[@]}"
@@ -252,6 +246,7 @@ for t in "${PPA[@]}"; do
 done
 
 # Installs packages.
+apt --fix-broken install
 sudo apt install -y ${PACKAGE[@]}
 sudo apt update -qq -y
 sudo apt upgrade -qq -y
@@ -277,7 +272,7 @@ if [[ ! -f $VIMRC_SOURCE ]]; then
 	exit 1
 fi
 echo -e -n "\tCopying ${CYAN}.vimrc${NC} file to ${LIGHT_BLUE}$HOME${NC} "
-echo "sudo cp $VIMRC_SOURCE $VIMRC_DEST"
+sudo cp $VIMRC_SOURCE $VIMRC_DEST
 echo -e "✔"
 echo -e -n "\tVundle PluginInstall "
 vim -E +PluginInstall +qall > /dev/null
@@ -288,6 +283,7 @@ echo -e "✔\n"
 
 echo_title "Setting up theme"
 echo -e -n "\tDownloading ${CYAN}communitheme${NC} "
+sudo snap install communitheme
 echo -e "✔"
 
 echo -e -n "\tDownloading ${CYAN}powerline-status${NC} "
@@ -301,7 +297,7 @@ if [[ ! -f $POWERLINE_SOURCE ]]; then
 	echo -e "\n${CYAN}config.json${NC} file does not exist in ${LIGHT_BLUE}$POWERLINE_SOURCE${NC}"
 	exit 1
 fi
-echo "mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST"
+mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST
 echo -e "✔"
 
 echo -e -n "\tCloning into ${CYAN}tmux-themepack${NC} "
@@ -365,10 +361,6 @@ echo_title "Everything is finished! Now you need to do..."
 printf "%0.s*" {1..50}
 echo -e "\nPress ${PURPLE}Super+A${NC}, search ${CYAN}language${NC}, and click to download language packs."
 echo -e "Reboot and configure ${LIGHT_BLUE}Global Config${NC} of ${CYAN}fcitx-hangul${NC}.\n"
-if [[ "$graphics" ]]; then
-	echo -e "Press ${PURPLE}Super+A${NC}, search ${CYAN}Software & Updates${NC}, and click ${LIGHT_BLUE}Additional Drivers${NC} tab."
-	echo -e "Choose NVIDIA driver and reboot.${NC}"
-fi
 printf "%0.s*" {1..50}
 echo ""
 
