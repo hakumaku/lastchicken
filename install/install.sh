@@ -123,7 +123,7 @@ PACKAGE=(
 	"fonts-powerline"
 
 	# Java
-	"oracle-java11-installer"
+	# "oracle-java11-installer"
 
 	# For thumbnails
 	"ffmpeg" "ffmpegthumbnailer"
@@ -252,7 +252,7 @@ for t in "${PPA[@]}"; do
 done
 
 # Installs packages.
-sudo apt install -qq -y ${PACKAGE[@]}
+sudo apt install -y ${PACKAGE[@]}
 sudo apt update -qq -y
 sudo apt upgrade -qq -y
 
