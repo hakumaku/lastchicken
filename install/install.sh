@@ -55,39 +55,6 @@ DEST_FILES=(
 	$ST_DEST
 )
 
-# If it is invoked by ~/.bashrc
-# Put commands to run on bash here.
-if [[ ${#BASH_SOURCE[@]} -eq 2 ]] && [[ ${BASH_SOURCE[1]} == $BASHRC ]]; then
-	# Bash settings
-	set -o vi
-	export EDITOR=/usr/bin/vim
-	bind -m vi-insert "\C-l":clear-screen
-	bind -x '"\C-o": "ranger"'
-	bind -x '"\e[15~": "exec bash"'
-	alias ls='ls --color -h --group-directories-first'
-	alias bashrc="vim +52 $SRC -c 'normal zt'"
-	alias vimrc="vim $HOME/.vimrc"
-	alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
-	alias gif='mpv --loop=8'
-	alias sxiv='sxiv -a'
-
-	# Tmux
-	if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-		exec tmux
-	fi
-
-	# Powerline-status
-	if [ -d "\$HOME/.local/bin" ]; then
-		PATH="\$HOME/.local/bin:\$PATH"
-	fi
-	export POWERLINE_COMMAND=powerline
-	if [ -f ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh ]; then
-		source ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh
-	fi
-
-	return
-fi
-
 while getopts 's' opt; do
 	case "$opt" in
 		s)
@@ -209,158 +176,199 @@ read_file () {
 	done < "$stream"
 }
 
-clear
-while true; do
+setup_repository () {
 	echo_title "The following ${#PPA[@]} PPA(s) wiil be installed:"
 	print_list 1 "${PPA[@]}"
-	if [[ ! -z $REMOVED ]]; then
-		echo_title "Removed:"
-		print_list 1 "${REMOVED[@]}"
+	for t in "${PPA[@]}"; do
+		[[ $t =~ $PPA_PATTERN ]]
+		sudo add-apt-repository -n -y ${BASH_REMATCH}
+	done
+}
+
+setup_graphics () {
+	echo_title "Installing graphics drivers"
+	sudo ubuntu-drivers autoinstall
+}
+
+setup_packages () {
+	echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
+	print_list 3 "${PACKAGE[@]}"
+	sudo apt install -qq -y ${PACKAGE[@]}
+	sudo apt update -qq -y
+	sudo apt upgrade -qq -y
+}
+
+setup_external_packages () {
+	echo_title "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
+	print_list 1 "${EXTERNAL_PACKAGE[@]}"
+	temp="downloaded.deb"
+	for site in ${EXTERNAL_PACKAGE[*]}; do
+		wget -q -O $temp $site
+		sudo dpkg -i $temp
+		rm $temp
+	done
+}
+
+setup_vim () {
+	if [[ ! -f $VIMRC_SOURCE ]]; then
+		echo -e "\n${CYAN}.vimrc${NC} file does not exist in ${LIGHT_BLUE}$VIMRC_SOURCE${NC}"
+		return 1
 	fi
-	echo -e -n "Type Enter to continue or number you do not want to install: "
+	echo_title "Setting up Vim"
+	echo -e "Cloning into ${CYAN}Vundle${NC} "
+	git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+	echo -e "Copying ${CYAN}.vimrc${NC} file to ${LIGHT_BLUE}$HOME${NC} "
+	sudo cp $VIMRC_SOURCE $VIMRC_DEST
+
+	echo -e "Vundle PluginInstall "
+	vim -E +PluginInstall +qall > /dev/null
+
+	echo -e "Installing ${CYAN}YouCompleteMe${NC} "
+	python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
+}
+
+setup_communitheme () {
+	echo_title "Setting up theme"
+	echo -e "Downloading ${CYAN}communitheme${NC} "
+	sudo snap install communitheme
+}
+
+setup_powerline () {
+	if [[ ! -f $POWERLINE_SOURCE ]]; then
+		echo -e "\n${CYAN}config.json${NC} file does not exist in ${LIGHT_BLUE}$POWERLINE_SOURCE${NC}"
+		return 1
+	fi
+
+	echo -e "Downloading ${CYAN}powerline-status${NC} "
+	for package in ${PIP[*]}; do
+		pip3 install --user -q $package
+	done
+
+	echo -e "Copying ${CYAN}configure.json${NC} to ${LIGHT_BLUE}$POWERLINE_CONFIG${NC} "
+	mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST
+}
+
+setup_tmux_theme () {
+	if [[ ! -f $TMUX_SOURCE ]]; then
+		echo -e "\n${CYAN}.tmux.conf${NC} file does not exist at ${LIGHT_BLUE}$TMUX_SOURCE${NC}"
+		exit 1
+	fi
+	echo -e "Cloning into ${CYAN}tmux-themepack${NC}"
+	git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
+
+	echo -e "Copying ${CYAN}.tmux.conf${NC} to ${LIGHT_BLUE}$HOME${NC}"
+	cp $TMUX_SOURCE $TMUX_DEST
+}
+
+setup_gsettings_desktop () {
+	echo_title "gsettings: Desktop"
+	set -x
+	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+	gsettings set org.gnome.desktop.background show-desktop-icons 'false'
+	gsettings set org.gnome.desktop.interface icon-theme 'Suru'
+	gsettings set org.gnome.desktop.interface gtk-theme 'Communitheme'
+	gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
+	gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
+	gsettings set org.gnome.desktop.interface clock-show-date 'true'
+	gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
+	gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+	gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
+	gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
+	{ set +x; } 2>/dev/null
+	echo ""
+}
+
+setup_gsettings_shortcut () {
+	echo_title "gsettings: Keyboard shortcuts"
+	set -x
+	gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
+	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Return"
+	{ set +x; } 2>/dev/null
+	echo ""
+}
+
+setup_gsettings_favorites () {
+	echo_title "gsettings: favorites"
+	for app in ${FAVORITE[*]}; do
+		echo -e "'${app}'"
+		gset="${gset:+"${gset}, "}'${app}'"
+	done
+	gsettings set org.gnome.shell favorite-apps "[${gset[*]}]"
+	echo ""
+}
+
+setup_thumbnailer () {
+	echo_title "Etc"
+	echo -e "Copying ${CYAN}totem.thumbnailer${NC} to ${LIGHT_BLUE}$TOTEM_DEST${NC}"
+	sudo cp $TOTEM_SOURCE $TOTEM_DEST
+}
+
+setup_bashrc () {
+	# Run this script on ".bashrc"
+	printf "\n# Customized script\n" >> $BASHRC
+	printf "source $CONFIG_DIR/bashrc\n\n" >> $BASHRC
+}
+
+setup_git () {
+	git config --global user.email "gentlebuuny@gmail.com"
+	git config --global user.name "hakumaku"
+}
+
+function_list=(
+	"add-repository"
+	"grapchis driver"
+	"packages"
+	"external_packages"
+	"vim"
+	"communitheme"
+	"powerline"
+	"tmux-theme"
+	"gsettings-desktop"
+	"gsettings-shortcut"
+	"gsettings-favorite"
+	"thumbnailer"
+	"bashrc"
+	"git config"
+)
+
+clear
+while true; do
+	echo_title "Run functions:"
+	print_list 1 "${function_list[@]}"
+	echo -e -n "Type number: "
 	read input
 	if [[ -z $input ]]; then
 		echo ""
 		break;
 	fi
 
-	for i in "${input[@]}"; do
-		i=$(( $i - 1 ))
-		if [[ $i -gt ${#PPA[@]} ]]  || [[ $i -lt 0 ]]; then
-			continue
-		fi
-		REMOVED+=("${PPA[$i]}")
-		PPA=( "${PPA[@]:0:$i}" "${PPA[@]:$((i + 1))}" )
-	done
-	clear
-done
-echo_title "Installing graphics drivers"
-sudo ubuntu-drivers autoinstall
-
-echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
-print_list 3 "${PACKAGE[@]}"
-# Adds PPA.
-for t in "${PPA[@]}"; do
-	[[ $t =~ $PPA_PATTERN ]]
-	sudo add-apt-repository -n -y ${BASH_REMATCH}
+	case $input in
+		1) setup_repository;;
+		2) setup_graphics;;
+		3) setup_packages;;
+		4) setup_external_packages;;
+		5) setup_vim;;
+		6) setup_communitheme;;
+		7) setup_powerline;;
+		8) setup_tmux_theme;;
+		9) setup_gsettings_desktop;;
+		10) setup_gsettings_shortcut;;
+		11) setup_gsettings_favorites;;
+		12) setup_thumbnailer;;
+		13) setup_bashrc;;
+		14) setup_git;;
+		*);;
+	esac
 done
 
-# Installs packages.
-apt --fix-broken install
-sudo apt install -y ${PACKAGE[@]}
-sudo apt update -qq -y
-sudo apt upgrade -qq -y
-
-echo_title "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
-print_list 1 "${EXTERNAL_PACKAGE[@]}"
-temp="downloaded.deb"
-for site in ${EXTERNAL_PACKAGE[*]}; do
-	wget -q -O $temp $site
-	sudo dpkg -i $temp
-	rm $temp
-done
-echo -e -n "\nType ENTER to continue if it seems packages are completely installed."
-read input
-
-# Installing Vim plugins
-echo_title "Setting up Vim"
-echo -e -n "\tCloning into ${CYAN}Vundle${NC} "
-git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-echo -e "✔"
-if [[ ! -f $VIMRC_SOURCE ]]; then
-	echo -e "\n${CYAN}.vimrc${NC} file does not exist in ${LIGHT_BLUE}$VIMRC_SOURCE${NC}"
-	exit 1
-fi
-echo -e -n "\tCopying ${CYAN}.vimrc${NC} file to ${LIGHT_BLUE}$HOME${NC} "
-sudo cp $VIMRC_SOURCE $VIMRC_DEST
-echo -e "✔"
-echo -e -n "\tVundle PluginInstall "
-vim -E +PluginInstall +qall > /dev/null
-echo -e "✔"
-echo -e -n "\tInstalling ${CYAN}YouCompleteMe${NC} "
-python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
-echo -e "✔\n"
-
-echo_title "Setting up theme"
-echo -e -n "\tDownloading ${CYAN}communitheme${NC} "
-sudo snap install communitheme
-echo -e "✔"
-
-echo -e -n "\tDownloading ${CYAN}powerline-status${NC} "
-for package in ${PIP[*]}; do
-	pip3 install --user -q $package
-done
-echo -e "✔"
-
-echo -e -n "\tCopying ${CYAN}configure.json${NC} to ${LIGHT_BLUE}$POWERLINE_CONFIG${NC} "
-if [[ ! -f $POWERLINE_SOURCE ]]; then
-	echo -e "\n${CYAN}config.json${NC} file does not exist in ${LIGHT_BLUE}$POWERLINE_SOURCE${NC}"
-	exit 1
-fi
-mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST
-echo -e "✔"
-
-echo -e -n "\tCloning into ${CYAN}tmux-themepack${NC} "
-git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
-echo -e "✔"
-
-echo -e -n "\tCopying ${CYAN}.tmux.conf${NC} to ${LIGHT_BLUE}$HOME${NC} "
-if [[ ! -f $TMUX_SOURCE ]]; then
-	echo -e "\n${CYAN}.tmux.conf${NC} file does not exist at ${LIGHT_BLUE}$TMUX_SOURCE${NC}"
-	exit 1
-fi
-echo "cp $TMUX_SOURCE $TMUX_DEST"
-echo -e "✔\n"
-
-echo_title "gsettings: Desktop"
-set -x
-gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-gsettings set org.gnome.desktop.background show-desktop-icons 'false'
-gsettings set org.gnome.desktop.interface icon-theme 'Suru'
-gsettings set org.gnome.desktop.interface gtk-theme 'communitheme'
-gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
-gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
-gsettings set org.gnome.desktop.interface clock-show-date 'true'
-gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
-gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
-gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
-gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
-{ set +x; } 2>/dev/null
-echo ""
-
-echo_title "gsettings: Keyboard shortcuts"
-set -x
-gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
-gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
-gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Return"
-{ set +x; } 2>/dev/null
-echo ""
-
-echo_title "gsettings: favorites"
-for app in ${FAVORITE[*]}; do
-	echo -e "\t'${app}'"
-	gset="${gset:+"${gset}, "}'${app}'"
-done
-gsettings set org.gnome.shell favorite-apps "[${gset[*]}]"
-echo ""
-
-echo_title "Etc"
-echo -e -n "\tCopying ${CYAN}totem.thumbnailer${NC} to ${LIGHT_BLUE}/usr/share/thumbnailers${NC} "
-echo "sudo cp $TOTEM_SOURCE $TOTEM_DEST"
-echo -e "✔"
-echo ""
-
-# Run this script on ".bashrc"
-printf "\n# Customized script\n" >> $BASHRC
-printf "source $DIR/${BASH_SOURCE[0]}\n\n" >> $BASHRC
-
-echo_title "Everything is finished! Now you need to do..."
 printf "%0.s*" {1..50}
 echo -e "\nPress ${PURPLE}Super+A${NC}, search ${CYAN}language${NC}, and click to download language packs."
-echo -e "Reboot and configure ${LIGHT_BLUE}Global Config${NC} of ${CYAN}fcitx-hangul${NC}.\n"
+echo -e "Reboot and configure ${LIGHT_BLUE}Global Config${NC} of ${CYAN}fcitx-hangul${NC}."
 printf "%0.s*" {1..50}
-echo ""
+echo "\n"
 
