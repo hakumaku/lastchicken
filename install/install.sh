@@ -86,6 +86,12 @@ PACKAGE=(
 	"gnome-tweak-tool"
 	"python3-dev" "python3-pip" "python-apt"
 
+	# Suckless Terminal
+	"libfontconfig1-dev"
+	"libxft-dev"
+	"libx11-dev"
+	"libxext-dev"
+
 	# Powerline-status fonts
 	"fonts-powerline"
 
