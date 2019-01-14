@@ -192,6 +192,7 @@ setup_repository () {
 		[[ $t =~ $PPA_PATTERN ]]
 		sudo add-apt-repository -n -y ${BASH_REMATCH}
 	done
+	sudo apt update -qq -y
 }
 
 setup_graphics () {
@@ -202,9 +203,7 @@ setup_graphics () {
 setup_packages () {
 	echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
 	print_list 3 "${PACKAGE[@]}"
-	sudo apt update -qq -y
 	sudo apt install -qq -y ${PACKAGE[@]}
-	sudo apt upgrade -qq -y
 }
 
 setup_external_packages () {
