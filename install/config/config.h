@@ -5,12 +5,12 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-// static char *font = "Souce Code Pro for Powerline:style=semibold:pixelsize=16:antialias=true:autohint=true";
+// static char *font = "SouceCodePro-Semibold:pixelsize=16:antialias=true:autohint=true";
 // static char *font = "Monospace:style=semibold:pixelsize=16:antialias=true:autohint=true";
-// static char *font = "Inconsolata:style=bold:pixelsize=20:antialias=true:autohint=true";
-// static char *font = "Ubuntu Mono:style=semibold:pixelsize=20:antialias=true:autohint=true";
-static char *font = "DejaVu Sans Mono:style=semibold:pixelsize=20:antialias=true:autohint=true";
-static int borderpx = 2;
+// static char *font = "Inconsolata:style=semibold:pixelsize=20:antialias=true:autohint=true";
+static char *font = "Ubuntu Mono:style=bold:pixelsize=20:antialias=true:autohint=true";
+// static char *font = "DejaVu Sans Mono:style=semibold:pixelsize=17:antialias=true:autohint=true";
+static int borderpx = 0;
 
 /*
  * What program is execed by st depends of these precedence rules:
