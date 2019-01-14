@@ -312,7 +312,10 @@ setup_gsettings_favorites () {
 }
 
 setup_thumbnailer () {
-	echo_title "Etc"
+	if [[ ! -f $TOTEM_SOURCE ]]; then
+		echo -e "\n${CYAN}.totem.thumbnailer${NC} file does not exist at ${LIGHT_BLUE}$TOTEM_SOURCE${NC}"
+		exit 1
+	fi
 	echo -e "Copying ${CYAN}totem.thumbnailer${NC} to ${LIGHT_BLUE}$TOTEM_DEST${NC}"
 	sudo cp $TOTEM_SOURCE $TOTEM_DEST
 }
@@ -326,6 +329,31 @@ setup_bashrc () {
 setup_git () {
 	git config --global user.email "gentlebuuny@gmail.com"
 	git config --global user.name "hakumaku"
+}
+
+setup_ranger () {
+	if [[ ! -f $RANGER_SOURCE ]]; then
+		echo -e "\n${CYAN}rc.conf${NC} file does not exist at ${LIGHT_BLUE}$RANGER_SOURCE${NC}"
+		exit 1
+	fi
+	echo -e "Copying ${CYAN}rc.conf${NC} to ${LIGHT_BLUE}$RANGER_DEST${NC}"
+	ranger --copy-config=all
+	cp $RANGER_SOURCE $RANGER_DEST
+}
+
+setup_sxiv () {
+	if [[ ! -f $SXIV_SOURCE ]]; then
+		echo -e "\n${CYAN}image-info${NC} file does not exist at ${LIGHT_BLUE}$SXIV_SOURCE${NC}"
+		exit 1
+	fi
+	echo -e "Copying ${CYAN}image-info${NC} to ${LIGHT_BLUE}$SXIV_DEST${NC}"
+	if [[ ! -d $HOME/.config/sxiv ]]; then
+		mkdir "$HOME/.config/sxiv"
+	fi
+	if [[ ! -d $HOME/.config/sxiv/exec ]]; then
+		mkdir "$HOME/.config/sxiv/exec"
+	fi
+	cp $SXIV_SOURCE $SXIV_DEST
 }
 
 function_list=(
@@ -342,6 +370,8 @@ function_list=(
 	"gsettings-favorite"
 	"thumbnailer"
 	"bashrc"
+	"ranger"
+	"sxiv"
 	"git config"
 )
 
@@ -370,7 +400,9 @@ while true; do
 		11) setup_gsettings_favorites;;
 		12) setup_thumbnailer;;
 		13) setup_bashrc;;
-		14) setup_git;;
+		14) setup_ranger;;
+		15) setup_sxiv;;
+		16) setup_git;;
 		*);;
 	esac
 done
