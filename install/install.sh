@@ -92,6 +92,9 @@ PACKAGE=(
 	"libx11-dev"
 	"libxext-dev"
 
+	# Ranger
+	"ranger"
+
 	# Powerline-status fonts
 	"fonts-powerline"
 
