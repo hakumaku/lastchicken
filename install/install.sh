@@ -121,6 +121,9 @@ PACKAGE=(
 
 	# Image viewer on terminal
 	"sxiv"
+
+	# Youtube downloader
+	"youtube-dl"
 )
 
 PIP=(
