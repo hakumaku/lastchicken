@@ -3,10 +3,10 @@ set -o vi
 export EDITOR=/usr/bin/vim
 bind -m vi-insert "\C-l":clear-screen
 bind -x '"\C-o": "ranger"'
-bind -x '"\e[15~": "exec bash"'
 alias ls='ls --color -h --group-directories-first'
 alias bashrc="vim ${BASH_SOURCE[0]} -c 'normal zt'"
 alias vimrc="vim $HOME/.vimrc"
+# nvidia-settings -a [gpu:0]/GpuPowerMizerMode=1
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
 alias gif='mpv --loop=8'
 alias sxiv='sxiv -a -f'

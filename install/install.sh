@@ -19,23 +19,23 @@ NC="\033[0;39m"
 
 # Source file directory.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-CONFIG_DIR="$DIR/config"
+DOTFILES="$DIR/dotfiles"
 SRC="${BASH_SOURCE[0]}"
 
-VIMRC_SOURCE="$CONFIG_DIR/.vimrc"
+VIMRC_SOURCE="$DOTFILES/.vimrc"
 VIMRC_DEST="$HOME/.vimrc"
-TMUX_SOURCE="$CONFIG_DIR/.tmux.conf"
+TMUX_SOURCE="$DOTFILES/.tmux.conf"
 TMUX_DEST="$HOME/.tmux.conf"
-POWERLINE_SOURCE="$CONFIG_DIR/config.json"
+POWERLINE_SOURCE="$DOTFILES/config.json"
 POWERLINE_DEST="$HOME/.config/powerline/config.json"
 BASHRC="$HOME/.bashrc"
-TOTEM_SOURCE="$CONFIG_DIR/totem.thumbnailer"
+TOTEM_SOURCE="$DOTFILES/totem.thumbnailer"
 TOTEM_DEST="/usr/share/thumbnailers"
-SXIV_SOURCE="$CONFIG_DIR/image-info"
+SXIV_SOURCE="$DOTFILES/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
-RANGER_SOURCE="$CONFIG_DIR/rc.conf"
+RANGER_SOURCE="$DOTFILES/rc.conf"
 RANGER_DEST="$HOME/.config/ranger/rc.conf"
-ST_SOURCE="$CONFIG_DIR/config.h"
+ST_SOURCE="$DOTFILES/config.h"
 ST_DEST="$HOME/workspace/st/st*/config.h"
 
 SOURCE_FILES=(
@@ -325,7 +325,7 @@ setup_thumbnailer () {
 setup_bashrc () {
 	# Run this script on ".bashrc"
 	printf "\n# Customized script\n" >> $BASHRC
-	printf "source $CONFIG_DIR/bashrc\n\n" >> $BASHRC
+	printf "source $DOTFILES/bashrc\n\n" >> $BASHRC
 }
 
 setup_git () {
@@ -356,6 +356,10 @@ setup_sxiv () {
 		mkdir "$HOME/.config/sxiv/exec"
 	fi
 	cp $SXIV_SOURCE $SXIV_DEST
+}
+
+place_st_icon () {
+	sudo cp "$DOTFILES/st.png" "/usr/share/icons/hicolor/256x256/apps/"
 }
 
 function_list=(
@@ -405,6 +409,7 @@ while true; do
 		14) setup_ranger;;
 		15) setup_sxiv;;
 		16) setup_git;;
+		17) place_st_icon;;
 		*);;
 	esac
 done
