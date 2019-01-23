@@ -91,6 +91,7 @@ PACKAGE=(
 	"libxft-dev"
 	"libx11-dev"
 	"libxext-dev"
+	"libxinerama-dev"
 
 	# Ranger
 	"ranger"
@@ -295,6 +296,14 @@ setup_gsettings_shortcut () {
 	set -x
 	gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
+
+	# Window tiling keybindings
+	gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Super>h']"
+	gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Super>l']"
+	gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>k']"
+	gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>j']"
+
+	# Run Simple Terminal
 	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Simple Terminal"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "st"
