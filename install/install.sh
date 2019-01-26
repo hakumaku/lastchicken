@@ -297,40 +297,90 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
 
+	# Disable predefined shortcuts.
+	# <Super>Q: dash-to-dock
+	gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+	# <Super>N: focus-active-notification
+	gsettings set org.gnome.shell.keybindings focus-active-notification "[]"
+
 	# Window tiling keybindings
-	gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Super>h']"
-	gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Super>l']"
-	gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>k']"
-	gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>j']"
+	gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Super>H']"
+	gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Super>L']"
+	gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>K']"
+	gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>J']"
+
+	# Switching workspaces
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>N']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "['<Super>P']"
+	# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "['<Super>Left']"
+	# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "['<Super>Right']"
+
+	# Move window to another workspace
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-down "['<Super><Ctrl>N']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-up "['<Super><Ctrl>P']"
+	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Super><Alt>Right']"
+	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Super><Alt>Left']"
+
+	# Switching to specific workspace
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>7']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 "['<Super>8']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 "['<Super>9']"
+
+	# Move window to specific workspace
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><Ctrl>1']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><Ctrl>2']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><Ctrl>3']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><Ctrl>4']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><Ctrl>5']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 "['<Super><Ctrl>6']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><Ctrl>7']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 "['<Super><Ctrl>8']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><Ctrl>9']"
 
 	# Customized shortcuts
 	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[\
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', \
-		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/' ]"
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', \
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', \
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/' ]"
 
-	# Disable dash-to-dock shortcut(<Super>Q) first.
-	gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 	# custom0: Shutdown
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Shutdown"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "gnome-session-quit --power-off"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Q"
 
-	# custom1: Simple Terminal
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name "Simple Terminal"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command "st"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding "<Super>Return"
+	# custom1: Calculator
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ name "Calculator"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ command "gnome-calculator"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/ binding "<Super>C"
 
-	# custom2: Web browser
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name "Web browser"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command "google-chrome"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding "<Super>W"
+	# custom2: Simple Terminal
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ name "Simple Terminal"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ command "st"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/ binding "<Super>Return"
 
-	# custom3: Twitch TV
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ name "Twitch"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ command "google-chrome --app=https://twitch.tv"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ binding "<Super>T"
+	# custom3: Web browser
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ name "Web browser"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ command "google-chrome"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ binding "<Super>W"
+
+	# custom4: Twitch TV
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ name "Twitch"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ command "google-chrome --app=https://twitch.tv"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ binding "<Super>T"
+
+	# custom5: Steam
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>G"
 
 	{ set +x; } 2>/dev/null
 	echo ""
