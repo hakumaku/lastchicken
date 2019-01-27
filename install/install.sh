@@ -298,16 +298,31 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
 
 	# Disable default bindings.
+	# <Super>: overlay key
+	gsettings set org.gnome.mutter overlay-key ""
 	# <Super>Q: dash-to-dock
 	gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+	gsettings set org.gnome.shell.extensions.dash-to-dock shortcut-text ""
+	gsettings set org.gnome.shell.extensions.dash-to-dock shortcut "[]"
 	# <Super>N: focus-active-notification
 	gsettings set org.gnome.shell.keybindings focus-active-notification "[]"
+	# <Super>H: Hide window
+	gsettings set org.gnome.shell.keybindings toggle-message-tray "[]"
+	# <Super>L: Screensaver
+	gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "[]"
+	# <Super>P: switch-monitor
+	gsettings set org.gnome.mutter.keybindings switch-monitor "['XF86Display']"
+	# <Super>P: video out
+	gsettings set org.gnome.settings-daemon.plugins.media-keys video-out "[]"
+	# <Super>Above_Tab: switch-group
+	gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Alt>Above_Tab']"
 
 	# Window tiling keybindings
 	gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Super>H']"
 	gsettings set org.gnome.mutter.keybindings toggle-tiled-right "['<Super>L']"
 	gsettings set org.gnome.desktop.wm.keybindings maximize "['<Super>K']"
 	gsettings set org.gnome.desktop.wm.keybindings unmaximize "['<Super>J']"
+	gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>M']"
 
 	# Switching workspaces
 	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['<Super>N']"
@@ -320,6 +335,11 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-up "['<Super><Ctrl>P']"
 	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Super><Alt>Right']"
 	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Super><Alt>Left']"
+
+	# Minimize window
+	gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>M']"
+	# Close window
+	gsettings set org.gnome.desktop.wm.keybindings close "['<Super>Q', '<Alt>F4']"
 
 	# Switching to specific workspace
 	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
@@ -343,6 +363,11 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 "['<Super><Ctrl>8']"
 	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><Ctrl>9']"
 
+	# Sound control
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "'<Super>equal'"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "'<Super>minus'"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-mute "'<Super>0'"
+
 	# Customized shortcuts
 	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[\
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', \
@@ -356,7 +381,7 @@ setup_gsettings_shortcut () {
 	# custom0: Shutdown
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Shutdown"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "gnome-session-quit --power-off"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Q"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "<Super>Above_Tab"
 
 	# custom1: gnome-tweaks
 	# ubuntu 18.04 has bug that it cannot bind "<Super>O".
