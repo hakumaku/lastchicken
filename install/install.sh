@@ -342,6 +342,9 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.desktop.wm.keybindings close "['<Super>Q', '<Alt>F4']"
 	# Disable animation
 	gsettings set org.gnome.desktop.interface enable-animations false
+	# Text ellipsis limit
+	gsettings set org.gnome.nautilus.desktop text-ellipsis-limit 1
+	gsettings set org.gnome.nautilus.icon-view text-ellipsis-limit "['1']"
 
 	# Hide ubuntu dash-to-dock
 	gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
