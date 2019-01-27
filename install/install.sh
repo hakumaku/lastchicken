@@ -374,9 +374,20 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><Ctrl>9']"
 
 	# Sound control
-	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "'<Super>equal'"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "'<Super>minus'"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-mute "'<Super>0'"
+	# Unlike 'wm', media-keys does not support
+	# list of multiple keys, but string only.
+	# Thus, the audio keys, such as 'XF86AudioRaiseVolume',
+	# which some keyboards have will be disabled.
+	# I have tried to bind these keys to custom-keybindings to run 'amixer',
+	# but it did not go well. The commands were:
+	# 'amixer set Master 3%+'
+	# 'amixer -q sset Master 3%+'
+	# 'amixer -q -D pulse sset Master 10%+'
+	# 'amixer -M get Master'
+	# 'pactl set-sink-volume 0 +15%'
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-up "<Super>equal"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-down "<Super>minus"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys volume-mute "<Super>0"
 
 	# Customized shortcuts
 	gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[\
