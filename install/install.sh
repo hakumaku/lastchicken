@@ -341,6 +341,11 @@ setup_gsettings_shortcut () {
 	# Close window
 	gsettings set org.gnome.desktop.wm.keybindings close "['<Super>Q', '<Alt>F4']"
 
+	# Hide ubuntu dash-to-dock
+	gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
+	gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+	gsettings set org.gnome.shell.extensions.dash-to-dock intellihide false
+
 	# Switching to specific workspace
 	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
 	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
