@@ -336,6 +336,10 @@ setup_gsettings_shortcut () {
 	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right "['<Super><Alt>Right']"
 	# gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left "['<Super><Alt>Left']"
 
+	# Move window to another monitor
+	gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-left "['<Super><Ctrl>H']"
+	gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-right "['<Super><Ctrl>L']"
+
 	# Minimize window
 	gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super>M']"
 	# Close window
