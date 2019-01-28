@@ -207,7 +207,7 @@ nnoremap <C-k> :m-2<CR>:echo 'Move line up'<CR>
 " Open.
 nnoremap <C-o> :NERDTreeToggle<CR>:echo @%<CR>
 " Toggle displaying whitespaces.
-nnoremap <F3> :set nolist!<CR>
+nnoremap <C-_> :set nolist!<CR>
 " Insert space in normal mode
 nnoremap <space> i<space><esc>
 " Toggle .vimrc file.
@@ -230,18 +230,18 @@ nnoremap <tab> :bn<CR>
 nnoremap <delete> :bd<CR>
 
 " Set command line arguments
-nnoremap <F12> :call SetCLA()<CR>
+nnoremap <F4> :call SetCLA()<CR>
 
 " Execute python file
-au FileType python noremap <buffer> <F9> :exec '!python3' shellescape(@%, 1) g:argv<CR>
+au FileType python noremap <buffer> <C-e> :exec '!python3' shellescape(@%, 1) g:argv<CR>
 
 " Compile and Run C file
-au FileType c noremap <F9> :call CompileRun()<CR>
-au FileType c noremap <F10> :call CompileDebug()<CR>
-au FileType c noremap <F8> :call CompileAssem()<CR>
+au FileType c noremap <F2> :call CompileAssem()<CR>
+au FileType c noremap <C-e> :call CompileRun()<CR>
+au FileType c noremap <F3> :call CompileDebug()<CR>
 
 " Execute bash file
-au FileType sh noremap <buffer> <F9> :exec '!bash' shellescape(@%, 1)<CR>
+au FileType sh noremap <buffer> <C-e> :exec '!bash' shellescape(@%, 1)<CR>
 " }}}
 " =====================
 
