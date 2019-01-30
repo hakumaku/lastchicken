@@ -95,10 +95,14 @@ PACKAGE=(
 	# FREETYPEINC = ${X11INC}/freetype2
 	"libx11-dev"
 	"libxext-dev"
+	"libxft2"
 	"libxft-dev"
 	"libxinerama-dev"
 	"libfreetype6-dev"
 	"libfontconfig1-dev"
+	"libpam0g-dev"
+	"libxrandr2"
+	"libxss1"
 
 	# Ranger
 	"ranger"
