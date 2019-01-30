@@ -39,6 +39,10 @@ ST_SOURCE="$DOTFILES/st/config.h"
 ST_DEST="$HOME/workspace/st/st*/config.h"
 DMENU_SOURCE="$DOTFILES/dmenu/config.h"
 DMENU_DEST="$HOME/workspace/dmenu/dmenu*/config.h"
+DWM_SOURCE="$DOTFILES/dwm/config.h"
+DWM_DEST="$HOME/workspace/dwm/dwm*/config.h"
+DWM_XSESS_SOURCE="$DOTFILES/dwm/.xsessionrc"
+DWM_XSESS_DEST="$HOME/.xsessionrc"
 
 SOURCE_FILES=(
 	$VIMRC_SOURCE
@@ -48,6 +52,8 @@ SOURCE_FILES=(
 	$RANGER_SOURCE
 	$ST_SOURCE
 	$DMENU_SOURCE
+	$DWM_SOURCE
+	$DWM_XSESS_SOURCE
 )
 DEST_FILES=(
 	$VIMRC_DEST
@@ -57,6 +63,8 @@ DEST_FILES=(
 	$RANGER_DEST
 	$ST_DEST
 	$DMENU_DEST
+	$DWM_DEST
+	$DWM_XSESS_DEST
 )
 
 while getopts 's' opt; do
@@ -518,7 +526,11 @@ setup_sxiv () {
 }
 
 place_st_icon () {
-	sudo cp "$DOTFILES/st.png" "/usr/share/icons/hicolor/256x256/apps/"
+	sudo cp "$DOTFILES/st/st.png" "/usr/share/icons/hicolor/256x256/apps/"
+}
+
+place_dwm_icon () {
+	sudo cp "$DOTFILES/dwm/dwm.desktop" "/usr/share/xsessions/"
 }
 
 function_list=(
@@ -538,6 +550,8 @@ function_list=(
 	"ranger"
 	"sxiv"
 	"git config"
+	"place st icon"
+	"place dwm icon"
 )
 
 clear
@@ -569,6 +583,7 @@ while true; do
 		15) setup_sxiv;;
 		16) setup_git;;
 		17) place_st_icon;;
+		18) place_dwm_icon;;
 		*);;
 	esac
 done

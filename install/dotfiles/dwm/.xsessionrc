@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+feh --bg-fill $HOME/Pictures/wallpaper/nature.jpg
+# Disable caps_lock switch
+setxkbmap -option caps:escape
+
+exec dwm
+
