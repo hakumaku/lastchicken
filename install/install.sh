@@ -35,8 +35,10 @@ SXIV_SOURCE="$DOTFILES/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
 RANGER_SOURCE="$DOTFILES/rc.conf"
 RANGER_DEST="$HOME/.config/ranger/rc.conf"
-ST_SOURCE="$DOTFILES/config.h"
+ST_SOURCE="$DOTFILES/st/config.h"
 ST_DEST="$HOME/workspace/st/st*/config.h"
+DMENU_SOURCE="$DOTFILES/dmenu/config.h"
+DMENU_DEST="$HOME/workspace/dmenu/dmenu*/config.h"
 
 SOURCE_FILES=(
 	$VIMRC_SOURCE
@@ -45,6 +47,7 @@ SOURCE_FILES=(
 	$SXIV_SOURCE
 	$RANGER_SOURCE
 	$ST_SOURCE
+	$DMENU_SOURCE
 )
 DEST_FILES=(
 	$VIMRC_DEST
@@ -53,6 +56,7 @@ DEST_FILES=(
 	$SXIV_DEST
 	$RANGER_DEST
 	$ST_DEST
+	$DMENU_DEST
 )
 
 while getopts 's' opt; do
@@ -86,12 +90,15 @@ PACKAGE=(
 	"gnome-tweak-tool"
 	"python3-dev" "python3-pip" "python-apt"
 
-	# Suckless Terminal
-	"libfontconfig1-dev"
-	"libxft-dev"
+	# Suckless Terminal & Dmenu & DWM
+	# Comment the line in "config.mk" when install Dwm:
+	# FREETYPEINC = ${X11INC}/freetype2
 	"libx11-dev"
 	"libxext-dev"
+	"libxft-dev"
 	"libxinerama-dev"
+	"libfreetype6-dev"
+	"libfontconfig1-dev"
 
 	# Ranger
 	"ranger"
@@ -316,6 +323,8 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.settings-daemon.plugins.media-keys video-out "[]"
 	# <Super>Above_Tab: switch-group
 	gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Alt>Above_Tab']"
+	# <Super>S: toggle-overview
+	gsettings set org.gnome.shell.keybindings toggle-overview "[]"
 
 	# Window tiling keybindings
 	gsettings set org.gnome.mutter.keybindings toggle-tiled-left "['<Super>H']"
@@ -401,7 +410,8 @@ setup_gsettings_shortcut () {
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', \
-		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/' ]"
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', \
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/' ]"
 
 	# custom0: Shutdown
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Shutdown"
@@ -424,20 +434,25 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ command "st"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ binding "<Super>Return"
 
-	# custom4: Web browser
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ name "Web browser"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ command "google-chrome"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ binding "<Super>W"
+	# custom4: Dmenu
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ name "Dmenu"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ command "dmenu_run"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ binding "<Super>S"
 
-	# custom5: Twitch TV
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Twitch"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "google-chrome --app=https://twitch.tv"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>T"
+	# custom5: Web browser
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Web browser"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "google-chrome"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>W"
 
-	# custom6: Steam
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ name "Steam"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ command "steam"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ binding "<Super>G"
+	# custom6: Twitch TV
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ name "Twitch"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ command "google-chrome --app=https://twitch.tv"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ binding "<Super>T"
+
+	# custom7: Steam
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ name "Steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ command "steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ binding "<Super>G"
 
 	{ set +x; } 2>/dev/null
 	echo ""
