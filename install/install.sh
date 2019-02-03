@@ -178,6 +178,7 @@ FAVORITE=(
 	"google-chrome.desktop"
 	"steam.desktop"
 	"com.vinszent.GnomeTwitch.desktop"
+	"rhythmbox.desktop"
 	"smplayer.desktop"
 	"shotwell.desktop"
 	"st.desktop"
