@@ -144,6 +144,13 @@ PACKAGE=(
 
 	# Youtube downloader
 	"youtube-dl"
+
+	# gnome-twitch
+	"gnome-twitch"
+	"gnome-twitch-player-backend-gstreamer-cairo"
+	"gnome-twitch-player-backend-gstreamer-clutter"
+	"gnome-twitch-player-backend-gstreamer-opengl"
+	"gnome-twitch-player-backend-mpv-opengl"
 )
 
 PIP=(
@@ -158,6 +165,7 @@ PPA=(
 	"OBS studio (ppa:obsproject/obs-studio)"
 	"SMPlayer (ppa:rvm/smplayer)"
 	"NNN (ppa:twodopeshaggy/jarun)"
+	"gnome-twitch (ppa:nilarimogard/webupd8)"
 )
 PPA_PATTERN="(ppa:[\/a-zA-Z-]+)"
 
@@ -423,7 +431,8 @@ setup_gsettings_shortcut () {
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', \
-		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/' ]"
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', \
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/' ]"
 
 	# custom0: Shutdown
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Shutdown"
@@ -465,6 +474,11 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ name "Steam"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ command "steam"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ binding "<Super>G"
+
+	# custom8: nvidia
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ name "Nvidia dmenu"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ command "$DIR/nvidia.sh"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ binding "<Super>semicolon"
 
 	{ set +x; } 2>/dev/null
 	echo ""
