@@ -91,12 +91,16 @@ PACKAGE=(
 	"git" "vim" "vim-gnome"
 	"g++" "curl" "ctags"
 	"gdebi" "valgrind"
-	# blueman
 	"tmux" "screenfetch" "autogen"
 	"automake" "cmake" "snap"
 	"fcitx-hangul" "chrome-gnome-shell" "gufw"
-	"gnome-tweak-tool"
+	"gnome-tweak-tool" "gnome-shell-extensions"
 	"python3-dev" "python3-pip" "python-apt"
+	# blueman
+	# SMPlayer
+	"smplayer" "smtube" "smplayer-themes"
+	# Music Player
+	"rhythmbox"
 
 	# Suckless Terminal & Dmenu & DWM
 	# Comment the line in "config.mk" when install Dwm:
@@ -114,43 +118,28 @@ PACKAGE=(
 
 	# Ranger
 	"ranger"
-
+	# Image viewer on terminal
+	"sxiv"
 	# Powerline-status fonts
 	"fonts-powerline"
 
-	# Java
-	# "oracle-java11-installer"
-
 	# For thumbnails
 	"ffmpeg" "ffmpegthumbnailer"
-
-	# OBS studio
-	"obs-studio"
-
-	# Stacer
-	"stacer"
-
-	# SMPlayer
-	"smplayer" "smtube" "smplayer-themes"
-
 	# Laptop power saving utility.
 	"tlp"
-
 	# The following two are associated with NNN. (https://github.com/jarun/nnn)
 	# "libncursesw5-dev" "moreutils" "nnn"
-
-	# Image viewer on terminal
-	"sxiv"
 
 	# Youtube downloader
 	"youtube-dl"
 
-	# gnome-twitch
+	# Twitch
 	"gnome-twitch"
 	"gnome-twitch-player-backend-gstreamer-cairo"
 	"gnome-twitch-player-backend-gstreamer-clutter"
 	"gnome-twitch-player-backend-gstreamer-opengl"
 	"gnome-twitch-player-backend-mpv-opengl"
+
 )
 
 PIP=(
@@ -160,11 +149,8 @@ PIP=(
 
 PPA=(
 	"ubuntu-make (ppa:ubuntu-desktop/ubuntu-make)"
-	"Java (ppa:linuxuprising/java)"
-	"Stacer (ppa:oguzhaninan/stacer)"
-	"OBS studio (ppa:obsproject/obs-studio)"
 	"SMPlayer (ppa:rvm/smplayer)"
-	"NNN (ppa:twodopeshaggy/jarun)"
+	# "NNN (ppa:twodopeshaggy/jarun)"
 	"gnome-twitch (ppa:nilarimogard/webupd8)"
 )
 PPA_PATTERN="(ppa:[\/a-zA-Z-]+)"

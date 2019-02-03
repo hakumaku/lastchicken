@@ -5,10 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-// static char *font = "SouceCodePro-Semibold:pixelsize=16:antialias=true:autohint=true";
-// static char *font = "Monospace:style=semibold:pixelsize=16:antialias=true:autohint=true";
-// static char *font = "Inconsolata:style=semibold:pixelsize=20:antialias=true:autohint=true";
-static char *font = "Ubuntu Mono:style=bold:pixelsize=20:antialias=true:autohint=true";
+// static char *font = "Inconsolata for Powerline:style=BoldForPowerline:pixelsize=22:antialias=true:autohint=true";
+static char *font = "Source Code Pro for Powerline:style=Bold:pixelsize=19:antialias=true:autohint=true";
 // static char *font = "DejaVu Sans Mono:style=semibold:pixelsize=17:antialias=true:autohint=true";
 static int borderpx = 0;
 
@@ -146,8 +144,9 @@ static unsigned int rows = 24;
 
 /*
  * Default colour and shape of the mouse cursor
+ * Default: XC_xterm
  */
-static unsigned int mouseshape = XC_xterm;
+static unsigned int mouseshape = XC_left_ptr;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;
 
