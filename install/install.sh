@@ -99,8 +99,7 @@ PACKAGE=(
 	# blueman
 	# SMPlayer
 	"smplayer" "smtube" "smplayer-themes"
-	# Music Player
-	"rhythmbox"
+	"rhythmbox" "shotwell"
 
 	# Suckless Terminal & Dmenu & DWM
 	# Comment the line in "config.mk" when install Dwm:
