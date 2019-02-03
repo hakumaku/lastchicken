@@ -177,8 +177,13 @@ EXTERNAL_PACKAGE=(
 FAVORITE=(
 	"google-chrome.desktop"
 	"steam.desktop"
-	"rhythmbox.desktop"
-	"stacer.desktop"
+	"com.vinszent.GnomeTwitch.desktop"
+	"smplayer.desktop"
+	"shotwell.desktop"
+	"st.desktop"
+	"org.gnome.Nautilus.desktop"
+	"org.gnome.tweaks.desktop"
+	"nvidia-settings.desktop"
 )
 
 REMOVED=()
