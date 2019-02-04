@@ -35,14 +35,11 @@ SXIV_SOURCE="$DOTFILES/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
 RANGER_SOURCE="$DOTFILES/rc.conf"
 RANGER_DEST="$HOME/.config/ranger/rc.conf"
+
 ST_SOURCE="$DOTFILES/st/config.h"
-ST_DEST="$HOME/workspace/st/st*/config.h"
+ST_DEST="$HOME/workspace/st/config.h"
 DMENU_SOURCE="$DOTFILES/dmenu/config.h"
-DMENU_DEST="$HOME/workspace/dmenu/dmenu*/config.h"
-DWM_SOURCE="$DOTFILES/dwm/config.h"
-DWM_DEST="$HOME/workspace/dwm/dwm*/config.h"
-DWM_XSESS_SOURCE="$DOTFILES/dwm/.xsessionrc"
-DWM_XSESS_DEST="$HOME/.xsessionrc"
+DMENU_DEST="$HOME/workspace/dmenu/config.h"
 
 SOURCE_FILES=(
 	$VIMRC_SOURCE
@@ -52,8 +49,6 @@ SOURCE_FILES=(
 	$RANGER_SOURCE
 	$ST_SOURCE
 	$DMENU_SOURCE
-	$DWM_SOURCE
-	$DWM_XSESS_SOURCE
 )
 DEST_FILES=(
 	$VIMRC_DEST
@@ -63,8 +58,6 @@ DEST_FILES=(
 	$RANGER_DEST
 	$ST_DEST
 	$DMENU_DEST
-	$DWM_DEST
-	$DWM_XSESS_DEST
 )
 
 while getopts 's' opt; do
@@ -101,7 +94,7 @@ PACKAGE=(
 	"smplayer" "smtube" "smplayer-themes"
 	"rhythmbox" "shotwell"
 
-	# Suckless Terminal & Dmenu & DWM
+	# Suckless Terminal & Dmenu
 	# Comment the line in "config.mk" when install Dwm:
 	# FREETYPEINC = ${X11INC}/freetype2
 	"libx11-dev"
@@ -219,6 +212,7 @@ setup_repository () {
 
 setup_graphics () {
 	echo_title "Installing graphics drivers"
+	sudo ubuntu-drivers devices
 	sudo ubuntu-drivers autoinstall
 }
 
@@ -239,6 +233,33 @@ setup_external_packages () {
 	done
 }
 
+download_suckless () {
+	cd $HOME/workspace
+	local st="https://dl.suckless.org/st/"
+	local st_dir="${ST_DEST/config.h/}"
+	local dmenu="https://dl.suckless.org/tools/"
+	local dmenu_dir="${DMENU_DEST/config.h/}"
+	local latest=""
+
+	latest=$( wget -q $st -O - | grep -o "st-\([0-9].\)*tar.gz" | tail -1)
+	echo "Downloading" "$latest"
+	wget -q "$st$latest"
+	mkdir "$st_dir" && tar xf "$latest" -C "$st_dir" --strip-components 1
+	echo "Installing $latest"
+	cp $ST_SOURCE $ST_DEST
+	cd "$st_dir" && make && sudo make install && make clean && cd ..
+
+	latest=$( wget -q $dmenu -O - | grep -o "dmenu-\([0-9].\)*tar.gz" | tail -1)
+	echo "Downloading" "$latest"
+	wget -q "$dmenu$latest"
+	mkdir "$dmenu_dir" && tar xf "$latest" -C "$dmenu_dir" --strip-components 1
+	echo "Installing $latest"
+	cp $DMENU_SOURCE $DMENU_DEST
+	cd "$dmenu_dir" && make && sudo make install && make clean && cd ..
+
+	cd $DIR
+}
+
 setup_vim () {
 	if [[ ! -f $VIMRC_SOURCE ]]; then
 		echo -e "\n${CYAN}.vimrc${NC} file does not exist in ${LIGHT_BLUE}$VIMRC_SOURCE${NC}"
@@ -256,12 +277,6 @@ setup_vim () {
 
 	echo -e "Installing ${CYAN}YouCompleteMe${NC} "
 	python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
-}
-
-setup_communitheme () {
-	echo_title "Setting up theme"
-	echo -e "Downloading ${CYAN}communitheme${NC} "
-	sudo snap install communitheme
 }
 
 setup_powerline () {
@@ -370,10 +385,12 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.nautilus.desktop text-ellipsis-limit 1
 	gsettings set org.gnome.nautilus.icon-view text-ellipsis-limit "['1']"
 
-	# Hide ubuntu dash-to-dock
+	# Set all false to hide ubuntu dash-to-dock
 	gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
 	gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-	gsettings set org.gnome.shell.extensions.dash-to-dock intellihide false
+	gsettings set org.gnome.shell.extensions.dash-to-dock intellihide true
+	# dash-to-dock theme
+	gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true
 
 	# Switching to specific workspace
 	gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
@@ -485,24 +502,10 @@ setup_gsettings_favorites () {
 	echo ""
 }
 
-setup_thumbnailer () {
-	if [[ ! -f $TOTEM_SOURCE ]]; then
-		echo -e "\n${CYAN}.totem.thumbnailer${NC} file does not exist at ${LIGHT_BLUE}$TOTEM_SOURCE${NC}"
-		exit 1
-	fi
-	echo -e "Copying ${CYAN}totem.thumbnailer${NC} to ${LIGHT_BLUE}$TOTEM_DEST${NC}"
-	sudo cp $TOTEM_SOURCE $TOTEM_DEST
-}
-
 setup_bashrc () {
 	# Run this script on ".bashrc"
 	printf "\n# Customized script\n" >> $BASHRC
 	printf "source $DOTFILES/bashrc\n\n" >> $BASHRC
-}
-
-setup_git () {
-	git config --global user.email "gentlebuuny@gmail.com"
-	git config --global user.name "hakumaku"
 }
 
 setup_ranger () {
@@ -530,8 +533,34 @@ setup_sxiv () {
 	cp $SXIV_SOURCE $SXIV_DEST
 }
 
+setup_git () {
+	git config --global user.email "gentlebuuny@gmail.com"
+	git config --global user.name "hakumaku"
+}
+
+setup_thumbnailer () {
+	if [[ ! -f $TOTEM_SOURCE ]]; then
+		echo -e "\n${CYAN}.totem.thumbnailer${NC} file does not exist at ${LIGHT_BLUE}$TOTEM_SOURCE${NC}"
+		exit 1
+	fi
+	echo -e "Copying ${CYAN}totem.thumbnailer${NC} to ${LIGHT_BLUE}$TOTEM_DEST${NC}"
+	sudo cp $TOTEM_SOURCE $TOTEM_DEST
+}
+
+setup_communitheme () {
+	echo_title "Setting up theme"
+	echo -e "Downloading ${CYAN}communitheme${NC} "
+	sudo snap install communitheme
+}
+
+replace_twitch_icon () {
+	local dest="Icon=$DOTFILES/twitch_icons/twitch128px.png"
+	dest="${dest//\//\\\/}"
+	sudo sed -i -e 's/Icon=com.vinszent.GnomeTwitch/'"${dest}"'/g' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
+}
+
 place_st_icon () {
-	sudo cp "$DOTFILES/st/st.png" "/usr/share/icons/hicolor/256x256/apps/"
+	cp "$DOTFILES/st/st.desktop" "~/.local/share/applications/"
 }
 
 place_dwm_icon () {
@@ -543,18 +572,20 @@ function_list=(
 	"grapchis driver"
 	"packages"
 	"external_packages"
+	"Suckless utilities"
 	"vim"
-	"communitheme"
 	"powerline"
 	"tmux-theme"
 	"gsettings-desktop"
 	"gsettings-shortcut"
 	"gsettings-favorite"
-	"thumbnailer"
 	"bashrc"
 	"ranger"
 	"sxiv"
+	"thumbnailer"
 	"git config"
+	"communitheme"
+	"replace twitch icon"
 	"place st icon"
 	"place dwm icon"
 )
@@ -575,20 +606,22 @@ while true; do
 		2) setup_graphics;;
 		3) setup_packages;;
 		4) setup_external_packages;;
-		5) setup_vim;;
-		6) setup_communitheme;;
+		5) download_suckless;;
+		6) setup_vim;;
 		7) setup_powerline;;
 		8) setup_tmux_theme;;
 		9) setup_gsettings_desktop;;
 		10) setup_gsettings_shortcut;;
 		11) setup_gsettings_favorites;;
-		12) setup_thumbnailer;;
-		13) setup_bashrc;;
-		14) setup_ranger;;
-		15) setup_sxiv;;
+		12) setup_bashrc;;
+		13) setup_ranger;;
+		14) setup_sxiv;;
+		15) setup_thumbnailer;;
 		16) setup_git;;
-		17) place_st_icon;;
-		18) place_dwm_icon;;
+		17) setup_communitheme;;
+		18) replace_twitch_icon;;
+		19) place_st_icon;;
+		20) place_dwm_icon;;
 		*);;
 	esac
 done

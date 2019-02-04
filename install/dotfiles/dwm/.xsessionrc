@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# feh --bg-fill $HOME/Pictures/wallpaper/nature.jpg
-# setxkbmap -option caps:escape
-# 
-# exec dwm
-

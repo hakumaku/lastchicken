@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Ubuntu with dwm
-Comment=This session logs you into Ubuntu with dwm
-Exec=/usr/local/bin/dwm
-Type=Application
-DesktopNames=ubuntu:dwm

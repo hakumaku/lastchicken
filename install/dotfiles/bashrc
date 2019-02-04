@@ -6,10 +6,8 @@ bind -x '"\C-o": "ranger"'
 alias ls='ls --color -h --group-directories-first'
 alias bashrc="vim ${BASH_SOURCE[0]} -c 'normal zt'"
 alias vimrc="vim $HOME/.vimrc"
-alias xsessionrc="vim $HOME/.xsessionrc"
-alias dwmconfig="vim $HOME/workspace/dwm/dwm*/config.h"
-alias dmenuconfig="vim $HOME/workspace/dmenu/dmenu*/config.h"
-alias stconfig="vim $HOME/workspace/st/st*/config.h"
+alias dmenuconfig="vim $HOME/workspace/dmenu/config.h"
+alias stconfig="vim $HOME/workspace/st/config.h"
 # nvidia-settings -a [gpu:0]/GpuPowerMizerMode=1
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
 alias gif='mpv --loop=8'
