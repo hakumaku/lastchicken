@@ -140,7 +140,7 @@ PIP=(
 )
 
 PPA=(
-	"ubuntu-make (ppa:ubuntu-desktop/ubuntu-make)"
+	"Adapta-GTK-Theme (ppa:tista/adapta)"
 	"SMPlayer (ppa:rvm/smplayer)"
 	# "NNN (ppa:twodopeshaggy/jarun)"
 	"gnome-twitch (ppa:nilarimogard/webupd8)"
