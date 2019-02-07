@@ -22,6 +22,7 @@ call vundle#begin()
 	Plugin 'octol/vim-cpp-enhanced-highlight'
 	Plugin 'junegunn/seoul256.vim'
 	Plugin 'crusoexia/vim-monokai'
+	Plugin 'kaicataldo/material.vim'
 
 	Plugin 'scrooloose/syntastic'
 	Plugin 'tpope/vim-surround'
@@ -371,11 +372,26 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 
 " =====================
+" material
+" https://github.com/kaicataldo/material.vim
+" =====================
+" {{{
+set background=dark
+" 'default' | 'palenight' | 'dark'
+let g:material_theme_style = 'dark'
+let g:airline_theme = 'material'
+" Settings must be set before this line.
+silent! colorscheme material 
+" }}}
+" =====================
+
+
+" =====================
 " vim-monokai
 " https://github.com/crusoexia/vim-monokai
 " =====================
 " {{{
-silent! colorscheme monokai
+" silent! colorscheme monokai
 " }}}
 " =====================
 

@@ -41,6 +41,9 @@ ST_DEST="$HOME/workspace/st/config.h"
 DMENU_SOURCE="$DOTFILES/dmenu/config.h"
 DMENU_DEST="$HOME/workspace/dmenu/config.h"
 
+SMPLAYER_SOURCE="$DOTFILES/smplayer.ini"
+SMPLAYER_DEST="$HOME/.config/smplayer/smplayer.ini"
+
 SOURCE_FILES=(
 	$VIMRC_SOURCE
 	$TMUX_SOURCE
@@ -49,6 +52,7 @@ SOURCE_FILES=(
 	$RANGER_SOURCE
 	$ST_SOURCE
 	$DMENU_SOURCE
+	$SMPLAYER_SOURCE
 )
 DEST_FILES=(
 	$VIMRC_DEST
@@ -58,6 +62,7 @@ DEST_FILES=(
 	$RANGER_DEST
 	$ST_DEST
 	$DMENU_DEST
+	$SMPLAYER_DEST
 )
 
 while getopts 's' opt; do
@@ -580,6 +585,8 @@ function_list=(
 	"gsettings-shortcut"
 	"gsettings-favorite"
 	"bashrc"
+	# This one is out-of-date now.
+	# Manually install this: https://github.com/ranger/ranger
 	"ranger"
 	"sxiv"
 	"thumbnailer"

@@ -87,44 +87,106 @@ unsigned int tabspaces = 8;
 /* background opacity */
 unsigned int alpha = 0xcc;
 
-/* Terminal colors (16 first used in escape sequence) */
+/* Solarized Dark */
+// static const char *colorname[] = {
+//   "#002b36", "#dc322f", "#859900", "#b58900", "#268bd2",
+//   "#6c71c4", "#2aa198", "#93a1a1", "#657b83", "#cb4b16",
+//   "#073642", "#586e75", "#839496", "#eee8d5", "#d33682", "#fdf6e3",
+// };
+
+/* Gruvbox Dark Hard */
+// static const char *colorname[] = {
+//   "#1d2021", "#fb4934", "#b8bb26", "#fabd2f", "#83a598",
+//   "#d3869b", "#8ec07c", "#d5c4a1", "#665c54", "#fe8019",
+//   "#3c3836", "#504945", "#bdae93", "#ebdbb2", "#d65d0e", "#fbf1c7", 
+// };
+
+/* Gruvbox Dark Soft */
+// static const char *colorname[] = {
+//   "#32302f", "#fb4934", "#b8bb26", "#fabd2f", "#83a598",
+//   "#d3869b", "#8ec07c", "#d5c4a1", "#665c54", "#fe8019",
+//   "#3c3836", "#504945", "#bdae93", "#ebdbb2", "#d65d0e", "#fbf1c7", 
+// };
+
+/* Gruvbox Dark Medium */
+// static const char *colorname[] = {
+//   "#282828", "#fb4934", "#b8bb26", "#fabd2f", "#83a598",
+//   "#d3869b", "#8ec07c", "#d5c4a1", "#665c54", "#fe8019",
+//   "#3c3836", "#504945", "#bdae93", "#ebdbb2", "#d65d0e", "#fbf1c7",
+// };
+
+/* Gruvbox Dark Pale */
+// static const char *colorname[] = {
+//   "#262626", "#d75f5f", "#afaf00", "#ffaf00", "#83adad",
+//   "#d485ad", "#85ad85", "#dab997", "#8a8a8a", "#ff8700",
+//   "#3a3a3a", "#4e4e4e", "#949494", "#d5c4a1", "#d65d0e", "#ebdbb2",
+// };
+
+/* Google Dark */
+// static const char *colorname[] = {
+//   "#1d1f21", "#cc342b", "#198844", "#fba922", "#3971ed",
+//   "#a36ac7", "#3971ed", "#c5c8c6", "#969896", "#f96a38",
+//   "#282a2e", "#373b41", "#b4b7b4", "#e0e0e0", "#3971ed", "#ffffff",
+// };
+
+/* Dracula */
+// static const char *colorname[] = {
+//   "#282936", "#ea51b2", "#ebff87", "#00f769", "#62d6e8",
+//   "#b45bcf", "#a1efe4", "#e9e9f4", "#626483", "#b45bcf",
+//   "#3a3c4e", "#4d4f68", "#62d6e8", "#f1f2f8", "#00f769", "#f7f7fb",
+// };
+
+/* Monokai */
+// static const char *colorname[] = {
+//   "#272822", "#f92672", "#a6e22e", "#f4bf75", "#66d9ef",
+//   "#ae81ff", "#a1efe4", "#f8f8f2", "#75715e", "#fd971f",
+//   "#383830", "#49483e", "#a59f85", "#f5f4f1", "#cc6633", "#f9f8f5",
+// };
+
+/* Material */
+// static const char *colorname[] = {
+//   "#263238", "#f07178", "#c3e88d", "#ffcb6b", "#82aaff",
+//   "#c792ea", "#89ddff", "#eeffff", "#546e7a", "#f78c6c",
+//   "#2e3c43", "#314549", "#b2ccd6", "#eeffff", "#ff5370", "#ffffff",
+// };
+
+/* Material Darker (Fixed color of executable file: 11th element) */
 static const char *colorname[] = {
-	/* 8 normal colors */
-	"#073642",
-	"#dc322f",
-	"#859900",
-	"#b58900",
-	"#268bd2",
-	"#d33682",
-	"#2aa198",
-	"#eee8d5",
-
-	/* 8 bright colors */
-	"#002b36",
-	"#cb4b16",
-	"#586e75",
-	"#657b83",
-	"#839496",
-	"#6c71c4",
-	"#93a1a1",
-	"#fdf6e3",
-
-	[255] = 0,
-
-	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#333333",
+  "#212121", "#f07178", "#c3e88d", "#ffcb6b", "#82aaff",
+  "#c792ea", "#89ddff", "#eeffff", "#4a4a4a", "#f78c6c",
+  "#82aaff", "#353535", "#b2ccd6", "#eeffff", "#ff5370", "#ffffff",
 };
 
+/* Material Darker */
+//static const char *colorname[] = {
+//  "#212121", "#f07178", "#c3e88d", "#ffcb6b", "#82aaff",
+//  "#c792ea", "#89ddff", "#eeffff", "#4a4a4a", "#f78c6c",
+//  "#303030", "#353535", "#b2ccd6", "#eeffff", "#ff5370", "#ffffff",
+//};
 
-/*
- * Default colors (colorname index)
- * foreground, background, cursor, reverse cursor
- */
-unsigned int defaultfg = 12;
-unsigned int defaultbg = 8;
-static unsigned int defaultcs = 256;
-static unsigned int defaultrcs = 257;
+/* Material Plaenight */
+// static const char *colorname[] = {
+//   "#292d3e", "#f07178", "#c3e88d", "#ffcb6b", "#82aaff",
+//   "#c792ea", "#89ddff", "#959dcb", "#676e95", "#f78c6c",
+//   "#444267", "#32374d", "#8796b0", "#959dcb", "#ff5370", "#ffffff",
+// };
+
+/* Tomorrow */
+// static const char *colorname[] = {
+//   "#1d1f21", "#cc6666", "#b5bd68", "#f0c674", "#81a2be",
+//   "#b294bb", "#8abeb7", "#c5c8c6", "#969896", "#de935f",
+//   "#282a2e", "#373b41", "#b4b7b4", "#e0e0e0", "#a3685a", "#ffffff",
+// };
+
+/* Tomorrow Night */
+// static const char *colorname[] = {
+//   "#1d1f21", "#cc6666", "#b5bd68", "#f0c674", "#81a2be",
+//   "#b294bb", "#8abeb7", "#c5c8c6", "#969896", "#de935f",
+//   "#282a2e", "#373b41", "#b4b7b4", "#e0e0e0", "#a3685a", "#ffffff",
+// };
+
+unsigned int defaultfg = 7; unsigned int defaultbg = 0;
+static unsigned int defaultcs = 13; static unsigned int defaultrcs = 0;
 
 /*
  * Default shape of cursor

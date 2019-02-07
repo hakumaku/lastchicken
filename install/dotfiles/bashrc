@@ -8,6 +8,7 @@ alias bashrc="vim ${BASH_SOURCE[0]} -c 'normal zt'"
 alias vimrc="vim $HOME/.vimrc"
 alias dmenuconfig="vim $HOME/workspace/dmenu/config.h"
 alias stconfig="vim $HOME/workspace/st/config.h"
+alias loginwallpaper="sudo vim +/#lockDialogGroup /usr/share/gnome-shell/theme/ubuntu.css"
 # nvidia-settings -a [gpu:0]/GpuPowerMizerMode=1
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'
 alias gif='mpv --loop=8'
