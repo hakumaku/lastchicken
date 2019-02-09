@@ -85,7 +85,7 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* background opacity */
-unsigned int alpha = 0xcc;
+unsigned int alpha = 0xdd;
 
 /* Solarized Dark */
 // static const char *colorname[] = {
