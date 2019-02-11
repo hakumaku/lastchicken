@@ -94,6 +94,8 @@ PACKAGE=(
 	"fcitx-hangul" "chrome-gnome-shell" "gufw"
 	"gnome-tweak-tool" "gnome-shell-extensions"
 	"python3-dev" "python3-pip" "python-apt"
+	"htop"
+
 	# blueman
 	# SMPlayer
 	"smplayer" "smtube" "smplayer-themes"
@@ -102,16 +104,10 @@ PACKAGE=(
 	# Suckless Terminal & Dmenu
 	# Comment the line in "config.mk" when install Dwm:
 	# FREETYPEINC = ${X11INC}/freetype2
-	"libx11-dev"
-	"libxext-dev"
-	"libxft2"
-	"libxft-dev"
-	"libxinerama-dev"
-	"libfreetype6-dev"
-	"libfontconfig1-dev"
-	"libpam0g-dev"
-	"libxrandr2"
-	"libxss1"
+	"libx11-dev" "libxext-dev" "libxft-dev"
+	"libxinerama-dev" "libfreetype6-dev"
+	# "libxft2" "libfontconfig1-dev" "libpam0g-dev"
+	# "libxrandr2" "libxss1"
 
 	# Ranger
 	"ranger"
