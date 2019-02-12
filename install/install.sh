@@ -381,7 +381,7 @@ setup_gsettings_shortcut () {
 	# Close window
 	gsettings set org.gnome.desktop.wm.keybindings close "['<Super>Q', '<Alt>F4']"
 	# Disable animation
-	gsettings set org.gnome.desktop.interface enable-animations false
+	gsettings set org.gnome.desktop.interface enable-animations true
 	# Text ellipsis limit
 	gsettings set org.gnome.nautilus.desktop text-ellipsis-limit 1
 	gsettings set org.gnome.nautilus.icon-view text-ellipsis-limit "['1']"
