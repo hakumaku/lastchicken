@@ -28,6 +28,7 @@ call vundle#begin()
 	Plugin 'tpope/vim-surround'
 	Plugin 'raimondi/delimitmate'
 	Plugin 'scrooloose/nerdtree'
+	Plugin 'ryanoasis/vim-devicons'
 	" Plugin 'terryma/vim-multiple-cursors'
 
 	Plugin 'tpope/vim-fugitive'
@@ -439,10 +440,11 @@ let g:airline#extensions#tabline#enabled = 1			" turn on buffer list
 let g:airline#extensions#tabline#show_tab_nr = 1		" Show tab number
 let g:airline#extensions#tabline#tab_nr_type = 1		" Show tab number
 let g:airline#extensions#tabline#fnamemod = ':t'		" Display only file name
-let g:airline_section_b = '%{strftime("%H:%M:%S")}'
 let g:airline#extensions#whitespace#mixed_indent_algo = 1
-let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1	" Show buffer number
+let g:airline_section_b = '%{strftime("%H:%M:%S")}'
+let g:airline_section_y = '%{&fenc} %{WebDevIconsGetFileFormatSymbol()}'
+let g:airline_powerline_fonts = 1
 " let g:airline_theme='light'
 " let g:airline_solarized_bg='dark'
 " }}}
@@ -454,6 +456,17 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1	" Show buffer number
 " =====================
 " {{{
 " let g:user_emmet_leader_key='<Tab>'
+" }}}
+" =====================
+
+" =====================
+" vim-devicons
+" =====================
+" {{{
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_statusline_fileformat_symbols = 1
 " }}}
 " =====================
 

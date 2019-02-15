@@ -315,6 +315,10 @@ sxiv () {
 	cp $SXIV_SOURCE $SXIV_DEST
 }
 
+smplayer() {
+	mkdir $HOME/.config/smplayer && cp $SMPLAYER_SOURCE $SMPLAYER_DEST
+}
+
 git_config () {
 	git config --global user.email "gentlebuuny@gmail.com"
 	git config --global user.name "hakumaku"
@@ -353,6 +357,7 @@ function_list=(
 	"Ranger"
 	"Bashrc"
 	"Sxiv"
+	"Smplayer"
 	"Thumbnailer"
 	"Git Config"
 	"Suru++"
@@ -382,10 +387,11 @@ while true; do
 		9) ranger;;
 		10) bashrc;;
 		11) sxiv;;
-		12) thumbnailer;;
-		13) git_config;;
-		14) suru_plus_icon;;
-		15) twitch_icon;;
+		12) smplayer;;
+		13) thumbnailer;;
+		14) git_config;;
+		15) suru_plus_icon;;
+		16) twitch_icon;;
 		*);;
 	esac
 done
