@@ -80,7 +80,7 @@ PACKAGE=(
 	# blueman
 	"smplayer" "smtube" "smplayer-themes"
 	"rhythmbox" "shotwell" "sxiv"
-	"youtube-dl"
+	"youtube-dl" "w3m-img"
 
 	# adapta gtk theme
 	"adapta-gtk-theme"
@@ -397,8 +397,8 @@ while true; do
 done
 
 printf "%0.s*" {1..50}
-echo "\nPress Super+A, search language, and click to download language packs."
-echo "Reboot and configure Global Config of fcitx-hangul."
+echo -e "\nPress Super+A, search language, and click to download language packs."
+echo -e "Reboot and configure Global Config of fcitx-hangul."
 printf "%0.s*" {1..50}
 echo "\n"
 
