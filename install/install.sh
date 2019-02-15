@@ -22,18 +22,18 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOTFILES="$DIR/dotfiles"
 SRC="${BASH_SOURCE[0]}"
 
-VIMRC_SOURCE="$DOTFILES/.vimrc"
+VIMRC_SOURCE="$DOTFILES/vim/.vimrc"
 VIMRC_DEST="$HOME/.vimrc"
-TMUX_SOURCE="$DOTFILES/.tmux.conf"
+TMUX_SOURCE="$DOTFILES/tmux/.tmux.conf"
 TMUX_DEST="$HOME/.tmux.conf"
-POWERLINE_SOURCE="$DOTFILES/config.json"
+POWERLINE_SOURCE="$DOTFILES/powerline/config.json"
 POWERLINE_DEST="$HOME/.config/powerline/config.json"
 BASHRC="$HOME/.bashrc"
-TOTEM_SOURCE="$DOTFILES/totem.thumbnailer"
+TOTEM_SOURCE="$DOTFILES/gif/totem.thumbnailer"
 TOTEM_DEST="/usr/share/thumbnailers"
-SXIV_SOURCE="$DOTFILES/image-info"
+SXIV_SOURCE="$DOTFILES/sxiv/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
-RANGER_SOURCE="$DOTFILES/rc.conf"
+RANGER_SOURCE="$DOTFILES/ranger/rc.conf"
 RANGER_DEST="$HOME/.config/ranger/rc.conf"
 
 ST_SOURCE="$DOTFILES/st/config.h"
@@ -41,7 +41,7 @@ ST_DEST="$HOME/workspace/st/config.h"
 DMENU_SOURCE="$DOTFILES/dmenu/config.h"
 DMENU_DEST="$HOME/workspace/dmenu/config.h"
 
-SMPLAYER_SOURCE="$DOTFILES/smplayer.ini"
+SMPLAYER_SOURCE="$DOTFILES/smplayer/smplayer.ini"
 SMPLAYER_DEST="$HOME/.config/smplayer/smplayer.ini"
 
 SOURCE_FILES=(
@@ -88,18 +88,19 @@ done
 PACKAGE=(
 	"git" "vim" "vim-gnome"
 	"g++" "curl" "ctags"
-	"gdebi" "valgrind"
+	"gdebi" "valgrind" "htop"
 	"tmux" "screenfetch" "autogen"
 	"automake" "cmake" "snap"
 	"fcitx-hangul" "chrome-gnome-shell" "gufw"
 	"gnome-tweak-tool" "gnome-shell-extensions"
 	"python3-dev" "python3-pip" "python-apt"
-	"htop"
-
 	# blueman
-	# SMPlayer
 	"smplayer" "smtube" "smplayer-themes"
-	"rhythmbox" "shotwell"
+	"rhythmbox" "shotwell" "sxiv"
+	"youtube-dl"
+
+	# adapta gtk theme
+	"adapta-gtk-theme"
 
 	# Suckless Terminal & Dmenu
 	# Comment the line in "config.mk" when install Dwm:
@@ -109,22 +110,13 @@ PACKAGE=(
 	# "libxft2" "libfontconfig1-dev" "libpam0g-dev"
 	# "libxrandr2" "libxss1"
 
-	# Ranger
-	"ranger"
-	# Image viewer on terminal
-	"sxiv"
-	# Powerline-status fonts
-	"fonts-powerline"
-
 	# For thumbnails
 	"ffmpeg" "ffmpegthumbnailer"
+
 	# Laptop power saving utility.
-	"tlp"
+	# "tlp"
 	# The following two are associated with NNN. (https://github.com/jarun/nnn)
 	# "libncursesw5-dev" "moreutils" "nnn"
-
-	# Youtube downloader
-	"youtube-dl"
 
 	# Twitch
 	"gnome-twitch"
@@ -132,7 +124,6 @@ PACKAGE=(
 	"gnome-twitch-player-backend-gstreamer-clutter"
 	"gnome-twitch-player-backend-gstreamer-opengl"
 	"gnome-twitch-player-backend-mpv-opengl"
-
 )
 
 PIP=(
@@ -211,19 +202,19 @@ setup_repository () {
 	sudo apt update -qq -y
 }
 
-setup_graphics () {
+download_graphics () {
 	echo_title "Installing graphics drivers"
 	sudo ubuntu-drivers devices
 	sudo ubuntu-drivers autoinstall
 }
 
-setup_packages () {
+download_packages () {
 	echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
 	print_list 3 "${PACKAGE[@]}"
 	sudo apt install -qq -y ${PACKAGE[@]}
 }
 
-setup_external_packages () {
+download_external_packages () {
 	echo_title "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
 	print_list 1 "${EXTERNAL_PACKAGE[@]}"
 	temp="downloaded.deb"
@@ -248,6 +239,7 @@ download_suckless () {
 	mkdir "$st_dir" && tar xf "$latest" -C "$st_dir" --strip-components 1
 	echo "Installing $latest"
 	cp $ST_SOURCE $ST_DEST
+	cp "$DOTFILES/st/st.desktop" "~/.local/share/applications/"
 	cd "$st_dir" && make && sudo make install && make clean && cd ..
 
 	latest=$( wget -q $dmenu -O - | grep -o "dmenu-\([0-9].\)*tar.gz" | tail -1)
@@ -307,25 +299,22 @@ setup_tmux_theme () {
 	cp $TMUX_SOURCE $TMUX_DEST
 }
 
-setup_gsettings_desktop () {
+gsettings_desktop () {
 	echo_title "gsettings: Desktop"
 	set -x
 	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 	gsettings set org.gnome.desktop.background show-desktop-icons 'false'
-	gsettings set org.gnome.desktop.interface icon-theme 'Suru'
-	gsettings set org.gnome.desktop.interface gtk-theme 'Communitheme'
-	gsettings set org.gnome.desktop.interface cursor-theme 'communitheme'
 	gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 	gsettings set org.gnome.desktop.interface clock-show-date 'true'
 	gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
 	gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
-	gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
+	# gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
 	gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
 	{ set +x; } 2>/dev/null
 	echo ""
 }
 
-setup_gsettings_shortcut () {
+gsettings_shortcut () {
 	echo_title "gsettings: Keyboard shortcuts"
 	set -x
 	gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
@@ -442,7 +431,8 @@ setup_gsettings_shortcut () {
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', \
 		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', \
-		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/' ]"
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', \
+		'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/' ]"
 
 	# custom0: Shutdown
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "Shutdown"
@@ -465,41 +455,46 @@ setup_gsettings_shortcut () {
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ command "st"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/ binding "<Super>Return"
 
-	# custom4: Dmenu
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ name "Dmenu"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ command "dmenu_run"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ binding "<Super>S"
+	# custom4: Ranger
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ name "Ranger"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ command "st -e 'ranger'"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/ binding "<Super>R"
 
-	# custom5: Web browser
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Web browser"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "google-chrome"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>W"
+	# custom5: Dmenu
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Dmenu"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "dmenu_run"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>S"
 
-	# custom6: Music Player
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ name "Music Player"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ command "rhythmbox"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/ binding "<Super>R"
+	# custom6: Web browser
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ name "Web browser"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ command "google-chrome"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/ binding "<Super>W"
 
-	# custom7: Twitch TV
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ name "Twitch"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ command "gnome-twitch"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ binding "<Super>T"
+	# custom7: Music Player
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ name "Music Player"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ command "rhythmbox"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/ binding "<Super>Y"
 
-	# custom8: Steam
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ name "Steam"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ command "steam"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ binding "<Super>G"
+	# custom8: Twitch TV
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ name "Twitch"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ command "gnome-twitch"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/ binding "<Super>T"
 
-	# custom9: nvidia
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ name "Nvidia dmenu"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ command "$DIR/nvidia.sh"
-	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ binding "<Super>semicolon"
+	# custom9: Steam
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ name "Steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ command "steam"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/ binding "<Super>G"
+
+	# custom10: nvidia
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/ name "Nvidia dmenu"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/ command "$DIR/nvidia.sh"
+	gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/ binding "<Super>semicolon"
 
 	{ set +x; } 2>/dev/null
 	echo ""
 }
 
-setup_gsettings_favorites () {
+gsettings_favorites () {
 	echo_title "gsettings: favorites"
 	for app in ${FAVORITE[*]}; do
 		echo -e "'${app}'"
@@ -515,14 +510,22 @@ setup_bashrc () {
 	printf "source $DOTFILES/bashrc\n\n" >> $BASHRC
 }
 
-setup_ranger () {
+download_ranger () {
 	if [[ ! -f $RANGER_SOURCE ]]; then
 		echo -e "\n${CYAN}rc.conf${NC} file does not exist at ${LIGHT_BLUE}$RANGER_SOURCE${NC}"
 		exit 1
 	fi
+	cd $HOME/workspace
+
+	echo "Downloading ranger"
+	git clone -q https://github.com/ranger/ranger && cd ranger
 	echo -e "Copying ${CYAN}rc.conf${NC} to ${LIGHT_BLUE}$RANGER_DEST${NC}"
-	ranger --copy-config=all
 	cp $RANGER_SOURCE $RANGER_DEST
+	cd ranger && python3 ranger.py --copy-config=all && sudo make install
+	echo "Downloading ranger_devicons"
+	git clone -q https://github.com/alexanderjeurissen/ranger_devicons && cd ranger_devicons && sudo make install
+
+	cd $DIR
 }
 
 setup_sxiv () {
@@ -554,24 +557,10 @@ setup_thumbnailer () {
 	sudo cp $TOTEM_SOURCE $TOTEM_DEST
 }
 
-setup_communitheme () {
-	echo_title "Setting up theme"
-	echo -e "Downloading ${CYAN}communitheme${NC} "
-	sudo snap install communitheme
-}
-
 replace_twitch_icon () {
 	local dest="Icon=$DOTFILES/twitch_icons/twitch128px.png"
 	dest="${dest//\//\\\/}"
 	sudo sed -i -e 's/Icon=com.vinszent.GnomeTwitch/'"${dest}"'/g' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
-}
-
-place_st_icon () {
-	cp "$DOTFILES/st/st.desktop" "~/.local/share/applications/"
-}
-
-place_dwm_icon () {
-	sudo cp "$DOTFILES/dwm/dwm.desktop" "/usr/share/xsessions/"
 }
 
 function_list=(
@@ -583,20 +572,15 @@ function_list=(
 	"vim"
 	"powerline"
 	"tmux-theme"
+	"ranger"
 	"gsettings-desktop"
 	"gsettings-shortcut"
 	"gsettings-favorite"
 	"bashrc"
-	# This one is out-of-date now.
-	# Manually install this: https://github.com/ranger/ranger
-	"ranger"
 	"sxiv"
 	"thumbnailer"
 	"git config"
-	"communitheme"
 	"replace twitch icon"
-	"place st icon"
-	"place dwm icon"
 )
 
 clear
@@ -612,25 +596,22 @@ while true; do
 
 	case $input in
 		1) setup_repository;;
-		2) setup_graphics;;
-		3) setup_packages;;
-		4) setup_external_packages;;
+		2) download_graphics;;
+		3) download_packages;;
+		4) download_external_packages;;
 		5) download_suckless;;
 		6) setup_vim;;
 		7) setup_powerline;;
 		8) setup_tmux_theme;;
-		9) setup_gsettings_desktop;;
-		10) setup_gsettings_shortcut;;
-		11) setup_gsettings_favorites;;
-		12) setup_bashrc;;
-		13) setup_ranger;;
+		9) download_ranger;;
+		10) gsettings_desktop;;
+		11) gsettings_shortcut;;
+		12) gsettings_favorites;;
+		13) setup_bashrc;;
 		14) setup_sxiv;;
 		15) setup_thumbnailer;;
 		16) setup_git;;
-		17) setup_communitheme;;
-		18) replace_twitch_icon;;
-		19) place_st_icon;;
-		20) place_dwm_icon;;
+		17) replace_twitch_icon;;
 		*);;
 	esac
 done
