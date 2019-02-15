@@ -15,12 +15,8 @@ function_list=(
 	"Desktop Environment"
 	"Shortcuts"
 	"Favorites"
+	"Theme"
 )
-
-echo_title () {
-	local string=$1
-	echo -e "$string"
-}
 
 # $1: # of columns
 # $2: list
@@ -39,14 +35,20 @@ print_list () {
 }
 
 gsettings_desktop () {
-	echo_title "gsettings: Desktop"
+	echo "gsettings: Desktop"
 	set -x
-	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 	gsettings set org.gnome.desktop.background show-desktop-icons 'false'
 	gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 	gsettings set org.gnome.desktop.interface clock-show-date 'true'
 	gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
+
+	gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme 'false'
+	gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink 'true'
+	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 	gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+	gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
+	gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
+	gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
 	# gsettings get org.gnome.shell.extensions.dash-to-dock min-alpha
 	gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
 	{ set +x; } 2>/dev/null
@@ -54,7 +56,7 @@ gsettings_desktop () {
 }
 
 gsettings_shortcut () {
-	echo_title "gsettings: Keyboard shortcuts"
+	echo "gsettings: Keyboard shortcuts"
 	set -x
 	gsettings set org.gnome.desktop.input-sources xkb-options "['korean:ralt_rctrl', 'caps:escape']"
 	gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
@@ -234,7 +236,7 @@ gsettings_shortcut () {
 }
 
 gsettings_favorites () {
-	echo_title "gsettings: favorites"
+	echo "gsettings: favorites"
 	for app in ${FAVORITE[*]}; do
 		echo -e "'${app}'"
 		gset="${gset:+"${gset}, "}'${app}'"
@@ -243,11 +245,24 @@ gsettings_favorites () {
 	echo ""
 }
 
+apply_theme() {
+	echo "gsettings: theme"
+	set -x
+
+	gsettings set org.gnome.desktop.interface gtk-theme "Adapta-Eta"
+	gsettings set org.gnome.desktop.interface icon-theme "Suru++"
+	gsettings set org.gnome.desktop.interface cursor-theme "DMZ-Black"
+	gsettings set org.gnome.shell.extensions.user-theme name "Adapta-Eta"
+
+	{ set +x; } 2>/dev/null
+	echo ""
+}
+
 clear
 while true; do
-	echo_title "Run functions:"
+	echo "Run functions:"
 	print_list 1 "${function_list[@]}"
-	echo -e -n "Type number: "
+	echo -n "Type number: "
 	read input
 	if [[ -z $input ]]; then
 		echo ""
@@ -258,6 +273,7 @@ while true; do
 		1) gsettings_desktop;;
 		2) gsettings_shortcut;;
 		3) gsettings_favorites;;
+		4) apply_theme;;
 		*);;
 	esac
 done

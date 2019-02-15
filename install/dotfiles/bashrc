@@ -21,9 +21,7 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
 fi
 
 # Powerline-status
-if [ -d "\$HOME/.local/bin" ]; then
-	PATH="\$HOME/.local/bin:\$PATH"
-fi
+PATH="$HOME/.local/bin:$PATH"
 export POWERLINE_COMMAND=powerline
 if [ -f ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh ]; then
 	source ~/.local/lib/python3*/site-packages/powerline/bindings/bash/powerline.sh

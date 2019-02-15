@@ -51,15 +51,15 @@ DEST_FILES=(
 while getopts 's' opt; do
 	case "$opt" in
 		s)
-			echo -e "Synching files..."
+			echo "Synching files..."
 			for (( i=0; i<${#SOURCE_FILES[@]}; i++ )); do
 				file_name=${SOURCE_FILES[$i]##*/}
 				printf "\t%02d. %-12s: " "$(( i + 1 ))" "${file_name}"
-				# echo -e -n "\t$i. ${CYAN}${file_name}${NC}: "
+				# echo -n "\t$i. ${CYAN}${file_name}${NC}: "
 				if cmp -s "${SOURCE_FILES[$i]}" "${DEST_FILES[$i]}"; then
-					echo -e "No change."
+					echo "No change."
 				else
-					echo -e "Modified."
+					echo "Modified."
 					cp ${DEST_FILES[$i]} ${SOURCE_FILES[$i]}
 				fi
 			done
@@ -117,10 +117,10 @@ PIP=(
 PPA=(
 	"Adapta-GTK-Theme (ppa:tista/adapta)"
 	"SMPlayer (ppa:rvm/smplayer)"
-	# "NNN (ppa:twodopeshaggy/jarun)"
 	"gnome-twitch (ppa:nilarimogard/webupd8)"
+	# "NNN (ppa:twodopeshaggy/jarun)"
 )
-PPA_PATTERN="(ppa:[\/a-zA-Z-]+)"
+PPA_PATTERN="(ppa:[\/0-9a-zA-Z-]+)"
 
 EXTERNAL_PACKAGE=(
 	"https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
@@ -128,11 +128,6 @@ EXTERNAL_PACKAGE=(
 )
 
 REMOVED=()
-
-echo_title () {
-	local string=$1
-	echo -e "$string"
-}
 
 # $1: # of columns
 # $2: list
@@ -162,8 +157,8 @@ read_file () {
 	done < "$stream"
 }
 
-setup_repository () {
-	echo_title "The following ${#PPA[@]} PPA(s) wiil be installed:"
+add_apt_repository () {
+	echo "The following ${#PPA[@]} PPA(s) wiil be installed:"
 	print_list 1 "${PPA[@]}"
 	for t in "${PPA[@]}"; do
 		[[ $t =~ $PPA_PATTERN ]]
@@ -172,20 +167,22 @@ setup_repository () {
 	sudo apt update -qq -y
 }
 
-download_graphics () {
-	echo_title "Installing graphics drivers"
+nvidia_driver () {
+	echo "Installing graphics drivers"
+	sudo add-apt-repository -n -y "ppa:graphics-drivers"
+	sudo apt update
 	sudo ubuntu-drivers devices
 	sudo ubuntu-drivers autoinstall
 }
 
-download_packages () {
-	echo_title "The following ${#PACKAGE[@]} package(s) wiil be installed:"
+apt_install () {
+	echo "The following ${#PACKAGE[@]} package(s) wiil be installed:"
 	print_list 3 "${PACKAGE[@]}"
 	sudo apt install -qq -y ${PACKAGE[@]}
 }
 
-download_external_packages () {
-	echo_title "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
+external_program () {
+	echo "The following ${#EXTERNAL_PACKAGE[@]} debian package(s) will be downloaded and installed:"
 	print_list 1 "${EXTERNAL_PACKAGE[@]}"
 	temp="downloaded.deb"
 	for site in ${EXTERNAL_PACKAGE[*]}; do
@@ -195,7 +192,7 @@ download_external_packages () {
 	done
 }
 
-download_suckless () {
+suckless () {
 	cd $HOME/workspace
 	local st="https://dl.suckless.org/st/"
 	local st_dir="${ST_DEST/config.h/}"
@@ -209,7 +206,7 @@ download_suckless () {
 	mkdir "$st_dir" && tar xf "$latest" -C "$st_dir" --strip-components 1
 	echo "Installing $latest"
 	cp $ST_SOURCE $ST_DEST
-	cp "$DOTFILES/st/st.desktop" "~/.local/share/applications/"
+	cp "$DOTFILES/st/st.desktop" "$HOME/.local/share/applications/"
 	cd "$st_dir" && make && sudo make install && make clean && cd ..
 
 	latest=$( wget -q $dmenu -O - | grep -o "dmenu-\([0-9].\)*tar.gz" | tail -1)
@@ -223,82 +220,92 @@ download_suckless () {
 	cd $DIR
 }
 
-setup_vim () {
+vim () {
 	if [[ ! -f $VIMRC_SOURCE ]]; then
-		echo -e "\n.vimrc file does not exist in $VIMRC_SOURCE"
+		echo "\n.vimrc file does not exist in $VIMRC_SOURCE"
 		return 1
 	fi
-	echo_title "Setting up Vim"
-	echo -e "Cloning into Vundle"
+	echo "Setting up Vim"
+	echo "Cloning into Vundle"
 	git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
-	echo -e "Copying .vimrc file to $HOME"
-	sudo cp $VIMRC_SOURCE $VIMRC_DEST
+	echo "Copying .vimrc file to $HOME"
+	cp $VIMRC_SOURCE $VIMRC_DEST
 
-	echo -e "Vundle PluginInstall "
+	echo "Vundle PluginInstall "
 	vim -E +PluginInstall +qall > /dev/null
 
-	echo -e "Installing YouCompleteMe"
+	echo "Installing YouCompleteMe"
 	python3 ~/.vim/bundle/YouCompleteMe/install.py --all > /dev/null 2>&1
 }
 
-setup_powerline () {
+powerline () {
 	if [[ ! -f $POWERLINE_SOURCE ]]; then
-		echo -e "\nconfig.json file does not exist in $POWERLINE_SOURCE"
+		echo "\nconfig.json file does not exist in $POWERLINE_SOURCE"
 		return 1
 	fi
 
-	echo -e "Downloading powerline-status"
+	echo "Downloading powerline-status"
 	for package in ${PIP[*]}; do
 		pip3 install --user -q $package
 	done
 
-	echo -e "Copying configure.json to $POWERLINE_CONFIG"
+	echo "Copying configure.json to $POWERLINE_CONFIG"
 	mkdir $( dirname "$POWERLINE_DEST" ) && cp $POWERLINE_SOURCE $POWERLINE_DEST
+
+	git clone -q https://github.com/powerline/fonts.git --depth=1
+	cd fonts && ./install.sh && cd .. && rm -rf fonts
 }
 
-setup_tmux_theme () {
+tmux_theme () {
 	if [[ ! -f $TMUX_SOURCE ]]; then
-		echo -e "\n.tmux.conf file does not exist at $TMUX_SOURCE"
+		echo "\n.tmux.conf file does not exist at $TMUX_SOURCE"
 		exit 1
 	fi
-	echo -e "Cloning into tmux-themepack"
+	echo "Cloning into tmux-themepack"
 	git clone -q https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
 
-	echo -e "Copying .tmux.conf to $HOME"
+	echo "Copying .tmux.conf to $HOME"
 	cp $TMUX_SOURCE $TMUX_DEST
 }
 
-setup_bashrc () {
+bashrc () {
 	# Run this script on ".bashrc"
 	printf "\n# Customized script\n" >> $BASHRC
 	printf "source $DOTFILES/bashrc\n\n" >> $BASHRC
 }
 
-download_ranger () {
+ranger () {
 	if [[ ! -f $RANGER_SOURCE ]]; then
-		echo -e "\nrc.conf file does not exist at $RANGER_SOURCE"
+		echo "\nrc.conf file does not exist at $RANGER_SOURCE"
 		exit 1
 	fi
 	cd $HOME/workspace
 
 	echo "Downloading ranger"
-	git clone -q https://github.com/ranger/ranger && cd ranger
-	echo -e "Copying rc.conf to $RANGER_DEST"
+	git clone -q https://github.com/ranger/ranger
+	echo "Copying rc.conf to $RANGER_DEST"
+	mkdir ~/.config/ranger
 	cp $RANGER_SOURCE $RANGER_DEST
-	cd ranger && python3 ranger.py --copy-config=all && sudo make install
+	cd ranger && python3 ranger.py --copy-config=all && sudo make install && cd ..
+
 	echo "Downloading ranger_devicons"
-	git clone -q https://github.com/alexanderjeurissen/ranger_devicons && cd ranger_devicons && sudo make install
+	git clone -q https://github.com/alexanderjeurissen/ranger_devicons
+	cd ranger_devicons && make install && cd ..
+
+	echo "Downloading Nerd Font"
+	mkdir NerdFont && cd NerdFont && wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/UbuntuMono.zip
+	find -name '*.zip' -exec sh -c 'unzip -d "${1%.*}" "$1" && cp -a "${1%.*}" ~/.fonts' _ {} \; && fc-cache -fv
 
 	cd $DIR
 }
 
-setup_sxiv () {
+sxiv () {
 	if [[ ! -f $SXIV_SOURCE ]]; then
-		echo -e "\nimage-info file does not exist at $SXIV_SOURCE"
+		echo "\nimage-info file does not exist at $SXIV_SOURCE"
 		exit 1
 	fi
-	echo -e "Copying image-info to $SXIV_DEST"
+	echo "Copying image-info to $SXIV_DEST"
 	if [[ ! -d $HOME/.config/sxiv ]]; then
 		mkdir "$HOME/.config/sxiv"
 	fi
@@ -308,21 +315,27 @@ setup_sxiv () {
 	cp $SXIV_SOURCE $SXIV_DEST
 }
 
-setup_git () {
+git_config () {
 	git config --global user.email "gentlebuuny@gmail.com"
 	git config --global user.name "hakumaku"
 }
 
-setup_thumbnailer () {
+thumbnailer () {
 	if [[ ! -f $TOTEM_SOURCE ]]; then
-		echo -e "\n.totem.thumbnailer file does not exist at $TOTEM_SOURCE"
+		echo "\n.totem.thumbnailer file does not exist at $TOTEM_SOURCE"
 		exit 1
 	fi
-	echo -e "Copying totem.thumbnailer to $TOTEM_DEST"
+	echo "Copying totem.thumbnailer to $TOTEM_DEST"
 	sudo cp $TOTEM_SOURCE $TOTEM_DEST
 }
 
-replace_twitch_icon () {
+suru_plus_icon() {
+	wget -qO- https://raw.githubusercontent.com/gusbemacbe/suru-plus/master/install.sh | sh
+	wget -qO- https://git.io/fhQdI | sh
+	suru-plus-folders -C cyan --theme Suru++
+}
+
+twitch_icon () {
 	local dest="Icon=$DOTFILES/twitch_icons/twitch128px.png"
 	dest="${dest//\//\\\/}"
 	sudo sed -i -e 's/Icon=com.vinszent.GnomeTwitch/'"${dest}"'/g' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
@@ -342,14 +355,15 @@ function_list=(
 	"Sxiv"
 	"Thumbnailer"
 	"Git Config"
+	"Suru++"
 	"Replace Twitch Icon"
 )
 
 clear
 while true; do
-	echo_title "Run functions:"
+	echo "Run functions:"
 	print_list 1 "${function_list[@]}"
-	echo -e -n "Type number: "
+	echo -n "Type number: "
 	read input
 	if [[ -z $input ]]; then
 		echo ""
@@ -357,27 +371,28 @@ while true; do
 	fi
 
 	case $input in
-		1) setup_repository;;
-		2) download_graphics;;
-		3) download_packages;;
-		4) download_external_packages;;
-		5) download_suckless;;
-		6) setup_vim;;
-		7) setup_powerline;;
-		8) setup_tmux_theme;;
-		9) download_ranger;;
-		10) setup_bashrc;;
-		11) setup_sxiv;;
-		12) setup_thumbnailer;;
-		13) setup_git;;
-		14) replace_twitch_icon;;
+		1) add_apt_repository;;
+		2) nvidia_driver;;
+		3) apt_install;;
+		4) external_program;;
+		5) suckless;;
+		6) vim;;
+		7) powerline;;
+		8) tmux_theme;;
+		9) ranger;;
+		10) bashrc;;
+		11) sxiv;;
+		12) thumbnailer;;
+		13) git_config;;
+		14) suru_plus_icon;;
+		15) twitch_icon;;
 		*);;
 	esac
 done
 
 printf "%0.s*" {1..50}
-echo -e "\nPress Super+A, search language, and click to download language packs."
-echo -e "Reboot and configure Global Config of fcitx-hangul."
+echo "\nPress Super+A, search language, and click to download language packs."
+echo "Reboot and configure Global Config of fcitx-hangul."
 printf "%0.s*" {1..50}
-echo -e "\n"
+echo "\n"
 
