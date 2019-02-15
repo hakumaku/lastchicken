@@ -16,6 +16,9 @@ TOTEM_SOURCE="$DOTFILES/gif/totem.thumbnailer"
 TOTEM_DEST="/usr/share/thumbnailers"
 SXIV_SOURCE="$DOTFILES/sxiv/image-info"
 SXIV_DEST="$HOME/.config/sxiv/exec/image-info"
+SXIV_RIFLE_SOURCE="$DOTFILES/sxiv/sxiv-rifle"
+SXIV_RIFLE_DEST="/usr/local/bin/sxiv-rifle"
+
 RANGER_SOURCE="$DOTFILES/ranger/rc.conf"
 RANGER_DEST="$HOME/.config/ranger/rc.conf"
 
@@ -32,6 +35,7 @@ SOURCE_FILES=(
 	$TMUX_SOURCE
 	$POWERLINE_SOURCE
 	$SXIV_SOURCE
+	$SXIV_RIFLE_SOURCE
 	$RANGER_SOURCE
 	$ST_SOURCE
 	$DMENU_SOURCE
@@ -42,6 +46,7 @@ DEST_FILES=(
 	$TMUX_DEST
 	$POWERLINE_DEST
 	$SXIV_DEST
+	$SXIV_RIFLE_DEST
 	$RANGER_DEST
 	$ST_DEST
 	$DMENU_DEST
@@ -307,12 +312,11 @@ sxiv () {
 	fi
 	echo "Copying image-info to $SXIV_DEST"
 	if [[ ! -d $HOME/.config/sxiv ]]; then
-		mkdir "$HOME/.config/sxiv"
-	fi
-	if [[ ! -d $HOME/.config/sxiv/exec ]]; then
-		mkdir "$HOME/.config/sxiv/exec"
+		mkdir "$HOME/.config/sxiv" && mkdir "$HOME/.config/sxiv/exec"
 	fi
 	cp $SXIV_SOURCE $SXIV_DEST
+	sudo cp $SXIV_RIFLE_SOURCE $SXIV_RIFLE_DEST
+	sudo sed -i 's/Exec=sxiv/&-rifle/' /usr/share/applications/sxiv.desktop
 }
 
 smplayer() {
@@ -340,9 +344,9 @@ suru_plus_icon() {
 }
 
 twitch_icon () {
-	local dest="Icon=$DOTFILES/twitch_icons/twitch128px.png"
+	local dest="$DOTFILES/twitch_icons/twitch128px.png"
 	dest="${dest//\//\\\/}"
-	sudo sed -i -e 's/Icon=com.vinszent.GnomeTwitch/'"${dest}"'/g' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
+	sudo sed -i 's/\(Icon=\)com.vinszent.GnomeTwitch/1\'"${dest}"'/' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
 }
 
 function_list=(
