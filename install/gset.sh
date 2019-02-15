@@ -10,6 +10,7 @@ FAVORITE=(
 	"st.desktop"
 	"org.gnome.Nautilus.desktop"
 	"org.gnome.tweaks.desktop"
+	"gnome-control-center.desktop"
 	"nvidia-settings.desktop"
 )
 
