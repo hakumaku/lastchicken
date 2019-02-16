@@ -205,7 +205,7 @@ suckless () {
 	local dmenu_dir="${DMENU_DEST/config.h/}"
 	local latest=""
 
-	latest=$( wget -q $st -O - | grep -o "st-\([0-9].\)*tar.gz" | tail -1)
+	latest=$( wget -q $st -O - | grep -o "st-\([0-9].\)*tar.gz" | sort -V | tail -1 )
 	echo "Downloading" "$latest"
 	wget -q "$st$latest"
 	mkdir "$st_dir" && tar xf "$latest" -C "$st_dir" --strip-components 1
@@ -214,7 +214,7 @@ suckless () {
 	cp "$DOTFILES/st/st.desktop" "$HOME/.local/share/applications/"
 	cd "$st_dir" && make && sudo make install && make clean && cd ..
 
-	latest=$( wget -q $dmenu -O - | grep -o "dmenu-\([0-9].\)*tar.gz" | tail -1)
+	latest=$( wget -q $dmenu -O - | grep -o "dmenu-\([0-9].\)*tar.gz" | sort -V | tail -1 )
 	echo "Downloading" "$latest"
 	wget -q "$dmenu$latest"
 	mkdir "$dmenu_dir" && tar xf "$latest" -C "$dmenu_dir" --strip-components 1
@@ -293,6 +293,17 @@ ranger () {
 	mkdir ~/.config/ranger
 	cp $RANGER_SOURCE $RANGER_DEST
 	cd ranger && python3 ranger.py --copy-config=all && sudo make install && cd ..
+	# Uncomment video preview script
+	sed -i '/# Video$/{
+		n
+		s/# //
+		n
+		s/# //
+		n
+		s/# //
+		n
+		s/# //
+	}' "$HOME/.config/ranger/scope.sh"
 
 	echo "Downloading ranger_devicons"
 	git clone -q https://github.com/alexanderjeurissen/ranger_devicons
@@ -419,5 +430,5 @@ printf "%0.s*" {1..50}
 echo -e "\nPress Super+A, search language, and click to download language packs."
 echo -e "Reboot and configure Global Config of fcitx-hangul."
 printf "%0.s*" {1..50}
-echo "\n"
+echo ""
 
