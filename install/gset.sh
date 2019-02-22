@@ -41,6 +41,7 @@ gsettings_desktop () {
 	echo "gsettings: Desktop"
 	set -x
 	gsettings set org.gnome.desktop.background show-desktop-icons 'false'
+	gsettings set org.gnome.desktop.background picture-options 'scaled'
 	gsettings set org.gnome.desktop.interface show-battery-percentage 'true'
 	gsettings set org.gnome.desktop.interface clock-show-date 'true'
 	gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
