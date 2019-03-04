@@ -197,6 +197,30 @@ external_program () {
 	done
 }
 
+nerd_font () {
+	local fonts=(
+		https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip
+		https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Inconsolata.zip
+		https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/UbuntuMono.zip
+		https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Mononoki.zip
+		https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/AnonymousPro.zip
+	)
+
+	cd $HOME/workspace
+	mkdir nerd-font && cd nerd-font
+	mkdir $HOME/.fonts
+	
+	echo "Downloading Nerd Font"
+	for font in "${fonts[@]}"; do
+		wget -q "$font"
+		font=${font##*/}
+		unzip -d "$HOME/.fonts/${font%.zip}" "$font"
+	done
+	fc-cache -fv
+
+	cd $DIR
+}
+
 suckless () {
 	cd $HOME/workspace
 	local st="https://dl.suckless.org/st/"
@@ -309,10 +333,6 @@ ranger () {
 	git clone -q https://github.com/alexanderjeurissen/ranger_devicons
 	cd ranger_devicons && make install && cd ..
 
-	echo "Downloading Nerd Font"
-	mkdir NerdFont && cd NerdFont && wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/UbuntuMono.zip
-	find -name '*.zip' -exec sh -c 'unzip -d "${1%.*}" "$1" && cp -a "${1%.*}" ~/.fonts' _ {} \; && fc-cache -fv
-
 	cd $DIR
 }
 
@@ -380,6 +400,7 @@ function_list=(
 	"Grapchis Driver"
 	"Packages"
 	"External Packages"
+	"Nerd Fonts"
 	"Suckless Utilities"
 	"Vim"
 	"Powerline"
@@ -410,18 +431,19 @@ while true; do
 		2) nvidia_driver;;
 		3) apt_install;;
 		4) external_program;;
-		5) suckless;;
-		6) vim;;
-		7) powerline;;
-		8) tmux_theme;;
-		9) ranger;;
-		10) bashrc;;
-		11) sxiv;;
-		12) smplayer;;
-		13) thumbnailer;;
-		14) git_config;;
-		15) suru_plus_icon;;
-		16) twitch_icon;;
+		5) nerd_font;;
+		6) suckless;;
+		7) vim;;
+		8) powerline;;
+		9) tmux_theme;;
+		10) ranger;;
+		11) bashrc;;
+		12) sxiv;;
+		13) smplayer;;
+		14) thumbnailer;;
+		15) git_config;;
+		16) suru_plus_icon;;
+		17) twitch_icon;;
 		*);;
 	esac
 done
