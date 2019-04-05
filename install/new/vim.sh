@@ -14,8 +14,8 @@ vim () {
 	fi
 
 	git clone -q https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim &&
-	cp $remote_vimrc $local_vimrc && vim +PluginInstall +qall &> /dev/null &&
-	python3 ~/.vim/bundle/YouCompleteMe/install.py --all &> /dev/null 2>&1
+	cp $remote_vimrc $local_vimrc && vim +PluginInstall +qall &&
+	python3 ~/.vim/bundle/YouCompleteMe/install.py --all
 }
 
 while getopts "is" opt; do
