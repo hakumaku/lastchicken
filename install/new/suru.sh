@@ -6,3 +6,5 @@ suru_plus () {
 	suru-plus-folders -C cyan --theme Suru++
 }
 
+suru_plus
+
