@@ -16,9 +16,10 @@ ranger () {
 		return
 	fi
 
-	git clone -q https://github.com/ranger/ranger "$dir" &&
+	git clone -q https://github.com/ranger/ranger "$dir/ranger" &&
 	mkdir -p "~/.config/ranger" && cp "$remote_rc_conf" "$local_rc_conf" &&
-	(cd "$dir/ranger" && python3 ranger.py --copy-config=all && sudo make install) &&
+	(cd "$dir/ranger" && python3 ranger.py --copy-config=all &&
+		sudo make install) &&
 	# Uncomment video preview script
 	sed -i '/# Video$/{
 		n
@@ -35,8 +36,8 @@ ranger () {
 ranger_devicons () {
 	# $1: install directory
 	local dir="$1"
-	git clone -q https://github.com/alexanderjeurissen/ranger_devicons "$dir" &&
-	(cd "$dir/ranger_devicons" && make install)
+	git clone -q https://github.com/alexanderjeurissen/ranger_devicons\
+		"$dir/ranger_devicons" && (cd "$dir/ranger_devicons" && make install)
 }
 
 while getopts "i:s" opt; do

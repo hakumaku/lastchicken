@@ -16,6 +16,7 @@ while getopts "is" opt; do
 			bash "$dir""/vim.sh" -i
 			bash "$dir""/tmux.sh" -i
 
+			bash "$dir""/adapta.sh"
 			bash "$dir""/suru.sh"
 			python3 "$dir""/gnome.py"
 			bash "$dir""/config.sh" -i
