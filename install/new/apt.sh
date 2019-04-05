@@ -48,6 +48,7 @@ PACKAGE=(
 	"gnome-twitch-player-backend-gstreamer-clutter"
 	"gnome-twitch-player-backend-gstreamer-opengl"
 	"gnome-twitch-player-backend-mpv-opengl"
+	"$(check-language-support)"
 )
 
 EXTERNAL_PACKAGE=(
