@@ -16,5 +16,5 @@ options=(
 	"LC_MEASUREMENT=en_US.UTF-8"
 	"LC_IDENTIFICATION=en_US.UTF-8"
 )
-sudo update-locale "{$options[@]}"
+sudo update-locale "${options[@]}"
 
