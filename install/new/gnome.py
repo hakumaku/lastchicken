@@ -60,7 +60,7 @@ class GnomeInstaller():
         """
         url = cls.GNOME_URL + \
             '/review/download/{}.shell-extension.zip'.format(pk)
-        dirname = cls.INSTALL_DIR + pk
+        dirname = cls.INSTALL_DIR + uuid
 
         try:
             urllib.request.urlretrieve(url, filename)
