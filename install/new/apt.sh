@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PPA=(
-	"ppa:tista/adapta" 					# Adapta gtk theme
+	# "ppa:tista/adapta" 					# Adapta gtk theme
 	"ppa:rvm/smplayer"					# smplayer
 	"ppa:nilarimogard/webupd8"			# gnome-twitch
 	"ppa:umang/indicator-stickynotes"	# indicator-stickynotes
@@ -24,7 +24,7 @@ PACKAGE=(
 	"youtube-dl" "w3m-img" "indicator-stickynotes"
 
 	# adapta gtk theme
-	"adapta-gtk-theme"
+	# "adapta-gtk-theme"
 
 	# Suckless Terminal & Dmenu
 	# Comment the line in "config.mk" when install Dwm:
@@ -59,8 +59,8 @@ EXTERNAL_PACKAGE=(
 for ppa in "${PPA[@]}"; do
 	sudo add-apt-repository -n -y "$ppa"
 done && {
-	sudo apt update &&
-	sudo apt install -qq -y "${PACKAGE[*]}"
+	sudo apt -qq update &&
+	sudo apt -qq -y install ${PACKAGE[*]}
 } && {
 	temp="tmp.deb"
 	for site in ${EXTERNAL_PACKAGE[*]}; do

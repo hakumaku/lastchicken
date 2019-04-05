@@ -65,10 +65,16 @@ class GnomeInstaller():
         try:
             urllib.request.urlretrieve(url, filename)
 
-        except HTTPError:
+        except urllib.error.HTTPError:
+            print('Url: '.format(url))
+            print('uuid: '.format(uuid))
+            print('version: '.format(version))
             print(HTTPError.code)
 
-        except URLError:
+        except urllib.error.URLError:
+            print('Url: '.format(url))
+            print('uuid: '.format(uuid))
+            print('version: '.format(version))
             print(URLError.reason)
 
         pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
