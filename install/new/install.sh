@@ -35,6 +35,7 @@ while getopts "is" opt; do
 			echo "Gnome desktop environment configuration"
 			bash "$dir""/config.sh" -i
 			bash "$dir""/gsettings.sh"
+			bash "$dir""/korean.sh"
 			break;;
 		"s")
 			bash "$dir""/config.sh" -s
