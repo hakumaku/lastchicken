@@ -16,17 +16,20 @@ class GnomeInstaller():
         ).group(1)
 
     @staticmethod
-    def run(pk):
+    def run(extensions):
         """
         Call this function to install gnome shell extensions.
         """
-        info = GnomeInstaller.query(pk)
+        for name, pk in extensions:
+            info = GnomeInstaller.query(pk)
 
-        if not info:
-            print('Could not retrieve meta data of pk({}).'.format(pk))
-            return
+            if not info:
+                print('Could not retrieve meta data of pk({}).'.format(pk))
+                return
 
-        GnomeInstaller.install(*info)
+            GnomeInstaller.install(*info)
+
+        subprocess.run(['gnome-shell', '--replace'])
 
     @classmethod
     def query(cls, pk):
@@ -112,5 +115,5 @@ EXTENSION_ID = (
 
 if __name__ == '__main__':
     for ext in EXTENSION_ID:
-        GnomeInstaller.run(ext[1])
+        GnomeInstaller.run(EXTENSION_ID)
 
