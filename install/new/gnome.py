@@ -69,13 +69,13 @@ class GnomeInstaller():
             print('Url: '.format(url))
             print('uuid: '.format(uuid))
             print('version: '.format(version))
-            print(HTTPError.code)
+            print(urllib.error.HTTPError.code)
 
         except urllib.error.URLError:
             print('Url: '.format(url))
             print('uuid: '.format(uuid))
             print('version: '.format(version))
-            print(URLError.reason)
+            print(urllib.error.URLError.reason)
 
         pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
         with zipfile.ZipFile(filename, 'r') as zf:
@@ -96,34 +96,22 @@ class GnomeInstaller():
         return
 
 # Gnome Shell Extension
-EXTENSION_ID = [
-    # Hide Dash X
-    805,
-    # Hide Activities Button
-    744,
-    # No Title Bar
-    1267,
-    # Dash to Dock
-    307,
-    # User Themes
-    19,
-    # AlternateTab
-    15,
-    # Extensions
-    1036,
-    # OpenWeather
-    750,
-    # Transparent Notifications
-    1080,
-    # Caffeine
-    517,
-    # Todo List
-    162,
-    # Draw On You Screen
-    1683,
-]
+EXTENSION_ID = (
+    (1036, 'Extensions'),
+    (19, 'User Themes'),
+    (805, 'Hide Dash X'),
+    (744, 'Hide Activites Button'),
+    (1267, 'No Title Bar'),
+    (307, 'Dash to Dock'),
+    (15, 'AlternateTab'),
+    (750, 'OpenWeather'),
+    (1080, 'Transparent Notification'),
+    (517, 'Caffeine'),
+    (1683, 'Draw on You screen'),
+)
 
 if __name__ == '__main__':
     for ext in EXTENSION_ID:
-        GnomeInstaller.run(ext)
+        print('Extension name: '.format(ext[1]), end='')
+        GnomeInstaller.run(ext[0])
 
