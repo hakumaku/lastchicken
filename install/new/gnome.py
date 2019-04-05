@@ -51,16 +51,16 @@ class GnomeInstaller():
             print('Unexpected error has occured while auto-matching version.')
             return
 
-        return (uuid, shell_version[v]['version'])
+        return (uuid, shell_version[v]['pk'])
 
     @classmethod
-    def install(cls, uuid, version, filename='temp.zip'):
+    def install(cls, uuid, pk, filename='temp.zip'):
         """
-        Download extension with uuid and version.
+        Download extension with uuid and pk.
         """
         url = cls.GNOME_URL + \
-            '/extension-data/{}.v{}.shell-extension.zip'.format(uuid, version)
-        dirname = cls.INSTALL_DIR + uuid
+            '/review/download/{}.shell-extension.zip'.format(pk)
+        dirname = cls.INSTALL_DIR + pk
 
         try:
             urllib.request.urlretrieve(url, filename)
@@ -68,14 +68,14 @@ class GnomeInstaller():
         except urllib.error.HTTPError:
             print('Url: '.format(url))
             print('uuid: '.format(uuid))
-            print('version: '.format(version))
-            print(urllib.error.HTTPError.code)
+            print('pk: '.format(pk))
+            print(urllib.error.HTTPError)
 
         except urllib.error.URLError:
             print('Url: '.format(url))
             print('uuid: '.format(uuid))
-            print('version: '.format(version))
-            print(urllib.error.URLError.reason)
+            print('pk: '.format(pk))
+            print(urllib.error.URLError)
 
         pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
         with zipfile.ZipFile(filename, 'r') as zf:
@@ -97,21 +97,20 @@ class GnomeInstaller():
 
 # Gnome Shell Extension
 EXTENSION_ID = (
-    (1036, 'Extensions'),
-    (19, 'User Themes'),
-    (805, 'Hide Dash X'),
-    (744, 'Hide Activites Button'),
-    (1267, 'No Title Bar'),
-    (307, 'Dash to Dock'),
-    (15, 'AlternateTab'),
-    (750, 'OpenWeather'),
-    (1080, 'Transparent Notification'),
-    (517, 'Caffeine'),
-    (1683, 'Draw on You screen'),
+    ('Extensions', 1036),
+    ('User Themes', 19),
+    ('Hide Dash X', 805),
+    ('Hide Activites Button', 744),
+    ('No Title Bar', 1267),
+    ('Dash to Dock', 307),
+    ('AlternateTab', 15),
+    ('OpenWeather', 750),
+    ('Transparent Notification', 1080),
+    ('Caffeine', 517),
+    ('Draw on You screen', 1683),
 )
 
 if __name__ == '__main__':
     for ext in EXTENSION_ID:
-        print('Extension name: '.format(ext[1]), end='')
-        GnomeInstaller.run(ext[0])
+        GnomeInstaller.run(ext[1])
 
