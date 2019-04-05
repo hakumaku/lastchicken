@@ -85,7 +85,7 @@ PACKAGE=(
 	# blueman
 	"smplayer" "smtube" "smplayer-themes"
 	"rhythmbox" "shotwell" "sxiv"
-	"youtube-dl" "w3m-img"
+	"youtube-dl" "w3m-img" "indicator-stickynotes"
 
 	# adapta gtk theme
 	"adapta-gtk-theme"
@@ -123,6 +123,7 @@ PPA=(
 	"Adapta-GTK-Theme (ppa:tista/adapta)"
 	"SMPlayer (ppa:rvm/smplayer)"
 	"gnome-twitch (ppa:nilarimogard/webupd8)"
+	"indicator-stickynotes (ppa:umang/indicator-stickynotes)"
 	# "NNN (ppa:twodopeshaggy/jarun)"
 )
 PPA_PATTERN="(ppa:[\/0-9a-zA-Z-]+)"
@@ -209,7 +210,7 @@ nerd_font () {
 	cd $HOME/workspace
 	mkdir nerd-font && cd nerd-font
 	mkdir $HOME/.fonts
-	
+
 	echo "Downloading Nerd Font"
 	for font in "${fonts[@]}"; do
 		wget -q "$font"

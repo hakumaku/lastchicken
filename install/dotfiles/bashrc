@@ -4,6 +4,8 @@ export EDITOR=/usr/bin/vim
 bind -m vi-insert "\C-l":clear-screen
 bind -x '"\C-o": "ranger"'
 alias ls='ls --color -h --group-directories-first'
+alias lst='lsd --group-dirs --tree --color never'
+alias ll='lsd --group-dirs -l --color never'
 # alias ranger="python3 $HOME/workspace/ranger/ranger.py"
 # Move to the directory when exiting.
 # alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR";'

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import subprocess
 import pathlib
 import urllib
@@ -9,7 +7,7 @@ import json
 import requests
 import re
 
-class GnomeSE():
+class GnomeInstaller():
     GNOME_URL = 'https://extensions.gnome.org'
     INSTALL_DIR = str(pathlib.Path.home()) + '/.local/share/gnome-shell/extensions/'
     VERSION = re.search('[a-zA-Z\s]*([\d.]+)*',
@@ -19,17 +17,25 @@ class GnomeSE():
 
     @staticmethod
     def run(pk):
-        uuid, version = GnomeSE.query(pk)
-        GnomeSE.install(uuid, version)
+        """
+        Call this function to install gnome shell extensions.
+        """
+        info = GnomeInstaller.query(pk)
 
-    @staticmethod
-    def query(pk):
+        if not info:
+            print('Could not retrieve meta data of pk({}).'.format(pk))
+            return
+
+        GnomeInstaller.install(*info)
+
+    @classmethod
+    def query(cls, pk):
         """
         Retrieve metadata of the extension with pk.
         """
         # name = name.replace(' ', '%20')
         # query = GNOME_URL + '/extension-query/?search=' + str(name)
-        query = GnomeSE.GNOME_URL + '/extension-info/?pk={}'.format(pk)
+        query = cls.GNOME_URL + '/extension-info/?pk={}'.format(pk)
         ext = requests.get(url=query).json()
 
         uuid = ext.get('uuid')
@@ -38,23 +44,23 @@ class GnomeSE():
 
         if not version:
             print('Recevied empty version', ext.get('name'))
-            return None
+            return
 
-        v = GnomeSE.match_version(version)
+        v = cls.match_version(version)
         if not v:
             print('Unexpected error has occured while auto-matching version.')
-            return None
+            return
 
         return (uuid, shell_version[v]['version'])
 
-    @staticmethod
-    def install(uuid, version, filename='temp.zip'):
+    @classmethod
+    def install(cls, uuid, version, filename='temp.zip'):
         """
         Download extension with uuid and version.
         """
-        url = GnomeSE.GNOME_URL + \
+        url = cls.GNOME_URL + \
             '/extension-data/{}.v{}.shell-extension.zip'.format(uuid, version)
-        dirname = GnomeSE.INSTALL_DIR + uuid
+        dirname = cls.INSTALL_DIR + uuid
 
         try:
             urllib.request.urlretrieve(url, filename)
@@ -71,17 +77,17 @@ class GnomeSE():
         subprocess.run(['gnome-shell-extension-tool', '-e', uuid])
         os.remove(filename)
 
-    @staticmethod
-    def match_version(version_list):
+    @classmethod
+    def match_version(cls, version_list):
         """
         Always select the version less than or equal to the current.
         """
-        versions = sorted(version_list + [ GnomeSE.VERSION ], reverse=True)
+        versions = sorted(version_list + [ cls.VERSION ], reverse=True)
         for i, v in enumerate(versions):
-            if v == GnomeSE.VERSION:
+            if v == cls.VERSION:
                 return versions[i+1]
 
-        return None
+        return
 
 # Gnome Shell Extension
 EXTENSION_ID = [
@@ -110,6 +116,5 @@ EXTENSION_ID = [
 ]
 
 if __name__ == '__main__':
-    for extension in EXTENSION_ID:
-        GnomeSE.run(extension)
+    pass
 

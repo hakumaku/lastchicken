@@ -29,6 +29,8 @@ call vundle#begin()
 	Plugin 'raimondi/delimitmate'
 	Plugin 'scrooloose/nerdtree'
 	Plugin 'ryanoasis/vim-devicons'
+	" Fuzzy Finder (https://github.com/junegunn/fzf)
+	Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 	" Plugin 'terryma/vim-multiple-cursors'
 
 	Plugin 'tpope/vim-fugitive'
@@ -208,7 +210,7 @@ nnoremap <C-j> :m+1<CR>:echo 'Move line down'<CR>
 nnoremap <C-k> :m-2<CR>:echo 'Move line up'<CR>
 " Open.
 nnoremap <C-o> :NERDTreeToggle<CR>:echo @%<CR>
-" Toggle displaying whitespaces.
+" Toggle displaying whitespaces. Mapped to 'ctrl + /'
 nnoremap <C-_> :set nolist!<CR>
 " Insert space in normal mode
 nnoremap <space> i<space><esc>
@@ -224,7 +226,7 @@ vnoremap <C-g> y:call ExactReplace()<CR>
 " ( '+' means it supports, '-' not.)
 " If you are using ubuntu or gnome environment,
 " run 'sudo apt install vim-gnome'
-vnoremap <C-c> "+y
+vnoremap <C-c> "+y:echo 'Yanked to clipboard'<CR>
 inoremap <C-v> <ESC>"+pa
 
 " Cycle through buffers
@@ -482,6 +484,14 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_python_binary_path = '/usr/bin/python3'
 noremap <F5> :YcmForceCompileAndDiagnostics<CR>
+" }}}
+" =====================
+
+
+" =====================
+" fzf
+" =====================
+" {{{
 " }}}
 " =====================
 

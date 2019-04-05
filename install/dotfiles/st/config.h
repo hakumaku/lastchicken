@@ -5,9 +5,16 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-// static char *font = "Inconsolata for Powerline:style=BoldForPowerline:pixelsize=22:antialias=true:autohint=true";
-static char *font = "Source Code Pro for Powerline:style=Bold:pixelsize=19:antialias=true:autohint=true";
-// static char *font = "DejaVu Sans Mono:style=semibold:pixelsize=17:antialias=true:autohint=true";
+
+/*
+ * Glyphs with "Nerd Font Mono" font displays in a really small size. 
+ * e.g) UbuntuMono works, but UbuntoMono Mono does not.
+ */
+// static char *font = "UbuntuMono Nerd Font:style=Bold:pixelsize=19:antialias=true:autohint=true";
+static char *font = "SauceCodePro Nerd Font:style=Bold:pixelsize=19:antialias=true:autohint=true";
+// static char *font = "Inconsolata Nerd Font:style=Bold:pixelsize=19:antialias=true:autohint=true";
+// static char *font = "Anonymice Nerd Font:style=Bold:pixelsize=19:antialias=true:autohint=true";
+// static char *font = "mononoki Nerd Font:style=Bold:pixelsize=19:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*
@@ -18,7 +25,7 @@ static int borderpx = 0;
  * 4: value of shell in /etc/passwd
  * 5: value of shell in config.h
  */
-static char *shell = "/bin/bash";
+static char *shell = "/bin/zsh";
 char *utmp = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
