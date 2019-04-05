@@ -32,36 +32,46 @@ gsettings set org.gnome.desktop.interface clock-show-seconds 'true'
 #
 # Extensions
 #
-SCHEMADIR=$HOME/.local/share/gnome-shell/extensions
+SCHEMADIR="$HOME/.local/share/gnome-shell/extensions"
 
 for dir in $SCHEMADIR/dash-to-dock*; do
-	if [ -e "$dir" ]; then
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock apply-custom-theme 'false'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink 'true'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock customize-alphas true
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
+	if [ -d "$dir" ]; then
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock apply-custom-theme 'false'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink 'true'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock background-opacity 0.3
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock max-alpha 0.2
+
+		# <Super>Q: dash-to-dock
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock hot-keys false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock shortcut-text ""
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock shortcut "[]"
+
+		# Set all false to hide ubuntu dash-to-dock
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock autohide false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.dash-to-dock intellihide true
 	fi
 	break
 done
 
 for dir in $SCHEMADIR/caffeine*; do
-	if [ -e "$dir" ]; then
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.caffeine user-enabled true
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.caffeine enable-fullscreen true
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.caffeine show-indicator true
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.caffeine restore-state true
+	if [ -d "$dir" ]; then
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.caffeine user-enabled true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.caffeine enable-fullscreen true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.caffeine show-indicator true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.caffeine restore-state true
 	fi
 	break
 done
 
 for dir in $SCHEMADIR/no-title-bar*; do
-	if [ -e "$dir" ]; then
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.no-title-bar button-position 'hidden'
-		gsettings --schemadir $dir/schemas set org.gnome.shell.extensions.no-title-bar change-appmenu false
+	if [ -d "$dir" ]; then
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.no-title-bar change-appmenu false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.no-title-bar button-position 'hidden'
 	fi
 	break
 done
@@ -83,10 +93,6 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys home '<Super>e'
 # Disable default bindings.
 # <Super>: overlay key
 gsettings set org.gnome.mutter overlay-key ""
-# <Super>Q: dash-to-dock
-gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
-gsettings set org.gnome.shell.extensions.dash-to-dock shortcut-text ""
-gsettings set org.gnome.shell.extensions.dash-to-dock shortcut "[]"
 # <Super>N: focus-active-notification
 gsettings set org.gnome.shell.keybindings focus-active-notification "[]"
 # <Super>H: Hide window
@@ -134,13 +140,6 @@ gsettings set org.gnome.desktop.interface enable-animations true
 # Text ellipsis limit
 gsettings set org.gnome.nautilus.desktop text-ellipsis-limit 1
 gsettings set org.gnome.nautilus.icon-view text-ellipsis-limit "['1']"
-
-# Set all false to hide ubuntu dash-to-dock
-gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
-gsettings set org.gnome.shell.extensions.dash-to-dock intellihide true
-# dash-to-dock theme
-gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true
 
 # Switching to specific workspace
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
