@@ -22,7 +22,7 @@ thumbnailer () {
 }
 
 twitch_icon () {
-	local icon="$DOTFILES/twitch_icons/twitch128px.png"
+	local icon="$HOME/workspace/lastchicken/install/dotfiles/twitch_icons/twitch128px.png"
 	icon="${icon//\//\\\/}"
 	sudo sed -i 's/\(Icon=\)com.vinszent.GnomeTwitch/1\'"${icon}"'/' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
 }
