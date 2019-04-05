@@ -9,10 +9,10 @@ OPTIONS=(
 	"--disable-mate"
 	"--disable-openbox"
 	# "--enable-gtk_next"
-	"--with-selection_color"
-	"--with-accent_color"
-	"--with-suggestion_color"
-	"--with-destruction_color"
+	# "--with-selection_color"
+	# "--with-accent_color"
+	# "--with-suggestion_color"
+	# "--with-destruction_color"
 )
 
 sudo rm -rf /usr/share/themes/{Adapta,Adapta-Eta,Adapta-Nokto,Adapta-Nokto-Eta}
