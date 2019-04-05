@@ -21,12 +21,6 @@ thumbnailer () {
 	[ -f $TOTEM_SOURCE ] && sudo cp "$REMOTE_TOTEM" "$LOCAL_TOTEM"
 }
 
-twitch_icon () {
-	local icon="$HOME/workspace/lastchicken/install/dotfiles/twitch_icons/twitch128px.png"
-	icon="${icon//\//\\\/}"
-	sudo sed -i 's/\(Icon=\)com.vinszent.GnomeTwitch/1\'"${icon}"'/' /usr/share/applications/com.vinszent.GnomeTwitch.desktop
-}
-
 git_config () {
 	git config --global user.email "gentlebuuny@gmail.com"
 	git config --global user.name "hakumaku"
@@ -37,7 +31,6 @@ while getopts "is" opt; do
 		"i")
 			smplayer
 			thumbnailer
-			twitch_icon
 			git_config
 			break;;
 		"s")
