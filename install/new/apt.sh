@@ -19,7 +19,7 @@ PACKAGE=(
 	"gnome-tweak-tool" "gnome-shell-extensions"
 	"python3-dev" "python3-pip" "python-apt"
 	# blueman
-	"smplayer" "smtube" "smplayer-themes"
+	"smplayer" "smtube" "smplayer-themes" "smplayer-skins"
 	"rhythmbox" "shotwell" "sxiv"
 	"youtube-dl" "w3m-img" "indicator-stickynotes"
 
