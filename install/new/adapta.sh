@@ -14,5 +14,5 @@ sudo apt -qq -y install autoconf automake inkscape libgdk-pixbuf2.0-dev \
 	libglib2.0-dev libxml2-utils pkg-config sassc parallel &&
 git clone -q https://github.com/adapta-project/adapta-gtk-theme \
 	"$DIR/adapta-gtk-theme" && (cd "$DIR/adapta-gtk-theme" &&
-	./autogen.sh --prefix=/usr "$OPTIONS" && make && sudo make install)
+	./autogen.sh --prefix=/usr $OPTIONS && make && sudo make install)
 
