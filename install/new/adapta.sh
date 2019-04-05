@@ -35,5 +35,5 @@ rm -rf ~/.themes/{Adapta,Adapta-Eta,Adapta-Nokto,Adapta-Nokto-Eta}
 sudo apt -qq -y install "${DEPS[@]}" &&
 git clone -q https://github.com/adapta-project/adapta-gtk-theme \
 	"$DIR/adapta-gtk-theme" && (cd "$DIR/adapta-gtk-theme" &&
-	./autogen.sh --prefix=/usr "${OPTIONS[@]}" && make && sudo make install)
+	./autogen.sh --prefix=/usr "${OPTIONS[@]}" && make && sudo make install &> /dev/null)
 
