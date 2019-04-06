@@ -112,6 +112,5 @@ EXTENSION_ID = (
 )
 
 if __name__ == '__main__':
-    for ext in EXTENSION_ID:
-        GnomeInstaller.run(EXTENSION_ID)
+    GnomeInstaller.run(EXTENSION_ID)
 
