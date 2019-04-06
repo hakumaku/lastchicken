@@ -231,7 +231,7 @@ inoremap <C-v> <ESC>"+pa
 
 " Cycle through buffers
 nnoremap <tab> :bn<CR>
-nnoremap <delete> :bd<CR>
+nnoremap <BS> :bd<CR>
 
 " Set command line arguments
 nnoremap <F4> :call SetCLA()<CR>
