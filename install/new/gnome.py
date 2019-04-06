@@ -29,8 +29,6 @@ class GnomeInstaller():
 
             GnomeInstaller.install(*info)
 
-        subprocess.run(['gnome-shell', '--replace'])
-
     @classmethod
     def query(cls, pk):
         """
