@@ -2,6 +2,7 @@
 
 LOCAL_ST_CONFIG="$HOME/workspace/st/config.h"
 REMOTE_ST_CONFIG="$HOME/workspace/lastchicken/install/dotfiles/st/config.h"
+ST_DESKTOP="$HOME/workspace/lastchicken/install/dotfiles/st/st.desktop"
 
 LOCAL_DMENU_CONFIG="$HOME/workspace/dmenu/config.h"
 REMOTE_DMENU_CONFIG="$HOME/workspace/lastchicken/install/dotfiles/dmenu/config.h"
@@ -40,7 +41,8 @@ suckless_terminal () {
 		return
 	fi
 
-	install "$dir" "$config" "$url" "$package"
+	install "$dir" "$config" "$url" "$package" &&
+	cp "$ST_DESKTOP" "$HOME/.local/share/applications"
 }
 
 dmenu () {
