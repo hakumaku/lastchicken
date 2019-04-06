@@ -2,7 +2,7 @@
 
 im-config -n fcitx
 options=(
-	"LANG"
+	"LANG=en_US.UTF-8"
 	"LC_CTYPE=en_US.UTF-8"
 	"LC_NUMERIC=en_US.UTF-8"
 	"LC_TIME=en_US.UTF-8"
