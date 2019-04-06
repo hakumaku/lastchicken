@@ -76,6 +76,38 @@ for dir in $SCHEMADIR/no-title-bar*; do
 	break
 done
 
+for dir in $SCHEMADIR/openweather*; do
+	if [ -d "$dir" ]; then
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather weather-provider 'openweathermap'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather center-forecast false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather days-forecast 2
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather unit 'celsius'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather geolocation-provider 'openstreetmaps'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather menu-alignment 75.0
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather actual-city 0
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather use-default-owm-key true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather show-text-in-panel true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather show-comment-in-panel false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather location-text-length 0
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather position-in-panel 'right'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather appid-fc ''
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather refresh-interval-forecast 3600
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather city '37.5666791,126.9782914>서울, 대한민국 >-1'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather appid ''
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather translate-condition true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather refresh-interval-current 600
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather use-text-on-buttons false
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather wind-direction true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather use-symbolic-icons true
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather pressure-unit 'hPa'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather geolocation-appid-mapquest ''
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather decimal-places 1
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather wind-speed-unit 'm/s'
+		gsettings --schemadir "$dir/schemas" set org.gnome.shell.extensions.openweather show-comment-in-forecast true
+	fi
+	break
+done
+
 #
 # Theme
 # 
